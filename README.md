@@ -17,7 +17,7 @@ Core data service for product definitions, versions, features, parameters, and r
 
 This service owns product definitions, versions, features, parameters, and related product records. Its controllers expose typed record operations; services and repositories apply the local persistence and lifecycle behavior. Domain and experience services compose those operations into customer or staff journeys.
 
-The governed definition foundation provides typed profile rules and native storage integrity. Its native tables remain unavailable by default. Operational lifecycle APIs, product observations, customer offers and the staff wizard require further integration; definitions remain NOT_ADMITTED.
+The governed definition foundation provides typed profile rules, native storage integrity and a current-authorized account-tariff metadata read boundary. See [governed definition reads](docs/governed-product-definition-reads.md) for trust, database and source-dependency requirements. Authoring, review, publication, operational admission, customer offers and the staff wizard remain separate work; definitions remain NOT_ADMITTED.
 
 ## Business ownership and supported journeys
 

@@ -4,7 +4,7 @@ Product Management owns the product record and its governed definition. Domain s
 
 ## Supported definition profiles
 
-The typed rules cover account tariffs, fixed-rate installment loans, and term property-and-casualty insurance. They validate exact monetary representations and explicit profile conventions. They do not turn an arbitrary legacy configuration string into an approved customer price. See the [definition rules](../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/) and [typed contracts](../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/).
+The typed rules cover account tariffs, fixed-rate installment loans, and term property-and-casualty insurance. They validate exact monetary representations and explicit profile conventions. They do not turn an arbitrary legacy configuration string into an approved customer price. See the [definition rules](../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/) and [typed contracts](../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/).
 
 Keep customer-facing terms separate from internal costs. Public and cost revisions have distinct heads, counters, digests, and history. Public responses must not disclose cost data or reveal its completeness through public counters or errors. Submitting public terms and approving the combined public/private selection are different operations; the pure review rules express those boundaries. A functioning authorized lifecycle API and terminal wizard are still required to expose them.
 
@@ -43,3 +43,5 @@ On migration failure, inspect the applied Flyway version and required guard-role
 The native application store, same-connection authorization context, current tenant/issuer/resource policy, lifecycle/CAS and immutable action receipts, SQL profile-shape parity, public/private read projection, product-owner observation API, pricing execution, generated-SDK workflows, and staff wizard remain separate deliveries. Current customer LegalEntity records do not authorize a bank or insurer to issue a product. Exact issuer authority and downstream operational admission must come from their actual owners.
 
 Customer simulation, accepted offers, contracts, account/card origination, lending, policy issuance, and financial accounting each need their own current authority and retained owner outcomes. Missing integration must be reported explicitly; it cannot become a synthetic approval.
+
+Read-only serving for retained account-tariff metadata is described in [governed definition reads](governed-product-definition-reads.md). It does not create the authorized lifecycle or operational admission described above.
