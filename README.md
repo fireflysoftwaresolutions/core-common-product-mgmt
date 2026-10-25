@@ -19,6 +19,8 @@ This service owns product definitions, versions, features, parameters, and relat
 
 The governed definition foundation provides typed profile rules, native storage integrity and a current-authorized account-tariff metadata read boundary. See [governed definition reads](docs/governed-product-definition-reads.md) for trust, database and source-dependency requirements. Authoring, review, publication, operational admission, customer offers and the staff wizard remain separate work; definitions remain NOT_ADMITTED.
 
+The [card enrollment capability contracts](docs/card-enrollment-capability.md) define an explicit purpose and conservative policy for comparing supplied product facts. They return NOT_OFFERED or UNKNOWN; governed CARD support and an authenticated owner producer remain prerequisites for enrollment.
+
 ## Business ownership and supported journeys
 
 Store product master data consumed by catalog publication, eligibility, pricing, and origination flows.
