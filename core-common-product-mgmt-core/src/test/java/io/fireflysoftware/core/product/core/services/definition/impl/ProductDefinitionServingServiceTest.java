@@ -125,13 +125,17 @@ class ProductDefinitionServingServiceTest {
     }
 
     void normalRows() {
-        when(versions.findByProductVersionIdAndProductId(any(), any()))
+        when(versions.findByTenantIdAndRootIdAndProductVersionIdAndProductIdAndPublicationId(
+                        any(), any(), any(), any(), any()))
                 .thenAnswer(
                         invocation ->
                                 Mono.just(
                                         new ProductDefinitionVersionIdentity(
+                                                invocation.getArgument(2),
                                                 invocation.getArgument(0),
-                                                invocation.getArgument(1))));
+                                                invocation.getArgument(1),
+                                                invocation.getArgument(3),
+                                                invocation.getArgument(4))));
         when(context.open(eq(TENANT), eq(ROOT), anyLong(), anyLong()))
                 .thenReturn(
                         Mono.defer(
@@ -309,8 +313,8 @@ class ProductDefinitionServingServiceTest {
     }
 
     @Test
-    void wrongVersionParentMissingVersionAndWrongReturnedVersionIdentityAreUnavailable() {
-        for (int mismatch = 0; mismatch < 4; mismatch++) {
+    void wrongVersionParentMissingVersionAndWrongReturnedScopedIdentityAreUnavailable() {
+        for (int mismatch = 0; mismatch < 7; mismatch++) {
             normalRows();
             permits = 2;
             events.clear();
@@ -334,24 +338,57 @@ class ProductDefinitionServingServiceTest {
                     .thenReturn(
                             Mono.just(
                                     new ProductDefinitionPublicationControl(
-                                            PUBLICATION, TENANT, ROOT, "CURRENT", 0)));
+                                            PUBLICATION, TENANT, ROOT, "ACTIVE", 0)));
             Mono<ProductDefinitionVersionIdentity> result =
                     switch (mismatch) {
                         case 0 ->
                                 Mono.just(
                                         new ProductDefinitionVersionIdentity(
-                                                versionId, UUID.randomUUID()));
+                                                versionId,
+                                                TENANT,
+                                                ROOT,
+                                                UUID.randomUUID(),
+                                                PUBLICATION));
                         case 1 -> Mono.empty();
                         case 2 ->
                                 Mono.just(
                                         new ProductDefinitionVersionIdentity(
-                                                UUID.randomUUID(), PRODUCT));
+                                                UUID.randomUUID(),
+                                                TENANT,
+                                                ROOT,
+                                                PRODUCT,
+                                                PUBLICATION));
+                        case 3 ->
+                                Mono.just(
+                                        new ProductDefinitionVersionIdentity(
+                                                versionId,
+                                                UUID.randomUUID(),
+                                                ROOT,
+                                                PRODUCT,
+                                                PUBLICATION));
+                        case 4 ->
+                                Mono.just(
+                                        new ProductDefinitionVersionIdentity(
+                                                versionId,
+                                                TENANT,
+                                                UUID.randomUUID(),
+                                                PRODUCT,
+                                                PUBLICATION));
+                        case 5 ->
+                                Mono.just(
+                                        new ProductDefinitionVersionIdentity(
+                                                versionId,
+                                                TENANT,
+                                                ROOT,
+                                                PRODUCT,
+                                                UUID.randomUUID()));
                         default ->
                                 Mono.error(
                                         new DataAccessResourceFailureException(
                                                 "permission denied SELECT private_schema secret"));
                     };
-            when(versions.findByProductVersionIdAndProductId(versionId, PRODUCT))
+            when(versions.findByTenantIdAndRootIdAndProductVersionIdAndProductIdAndPublicationId(
+                            TENANT, ROOT, versionId, PRODUCT, PUBLICATION))
                     .thenReturn(result);
             status(service().readPublication(TENANT, ROOT, PUBLICATION), 503);
             assertThat(events).contains("rollback").doesNotContain("commit");

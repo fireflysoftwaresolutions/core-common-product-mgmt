@@ -16,8 +16,13 @@ class ProductDefinitionReadMappingTest {
             throws Exception {
         check(
                 "ProductDefinitionVersionIdentity",
-                "product_version",
-                List.of("product_version_id", "product_id"));
+                "product_definition_version_identity",
+                List.of(
+                        "product_version_id",
+                        "tenant_id",
+                        "root_id",
+                        "product_id",
+                        "publication_id"));
         check(
                 "ProductDefinitionRoot",
                 "product_definition_root",

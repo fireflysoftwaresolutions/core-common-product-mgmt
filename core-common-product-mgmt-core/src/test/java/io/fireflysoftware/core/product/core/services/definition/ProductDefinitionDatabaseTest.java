@@ -32,8 +32,15 @@ import java.util.concurrent.*;
 
 @Testcontainers
 class ProductDefinitionDatabaseTest {
+    private static final String OWNER_TAG =
+            System.getProperty(
+                    "product.definition.native.owner-tag",
+                    "pc-lifecycle-original-" + UUID.randomUUID());
     private static final String PASSWORD = UUID.randomUUID().toString();
     private static final String RUNTIME_PASSWORD = UUID.randomUUID().toString();
+    private static final String READER_PASSWORD = UUID.randomUUID().toString();
+    private static final String COMMAND_PASSWORD = UUID.randomUUID().toString();
+    private static ProductDefinitionCommandDatabaseFixture commands;
 
     @Container
     static final PostgreSQLContainer postgres =
@@ -41,6 +48,8 @@ class ProductDefinitionDatabaseTest {
                     .withDatabaseName("synthetic_product_definitions")
                     .withUsername("definition_bootstrap")
                     .withPassword(PASSWORD)
+                    .withLabel("firefly.qualification.owner", OWNER_TAG)
+                    .withCommand("postgres", "-c", "log_min_error_statement=panic")
                     .withCreateContainerCmdModifier(
                             c ->
                                     c.getHostConfig()
@@ -66,11 +75,19 @@ class ProductDefinitionDatabaseTest {
                     "product_definition_history",
                     "product_definition_audit",
                     "product_definition_outbox",
-                    "product_definition_cost_outbox");
+                    "product_definition_cost_outbox",
+                    "product_definition_submission",
+                    "product_definition_review_decision",
+                    "product_definition_version_identity");
 
     static Connection owner() throws Exception {
         return DriverManager.getConnection(
                 postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword());
+    }
+
+    private static Connection legacy() throws Exception {
+        return DriverManager.getConnection(
+                postgres.getJdbcUrl(), "definition_runtime", RUNTIME_PASSWORD);
     }
 
     @BeforeAll
@@ -79,10 +96,24 @@ class ProductDefinitionDatabaseTest {
                 var s = c.createStatement()) {
             s.execute(
                     "CREATE ROLE firefly_product_definition_guard NOLOGIN NOSUPERUSER NOBYPASSRLS;"
-                            + " CREATE ROLE firefly_product_definition_serving NOLOGIN NOSUPERUSER NOBYPASSRLS;"
-                            + " CREATE ROLE definition_runtime LOGIN PASSWORD '"
+                        + " CREATE ROLE firefly_product_definition_serving NOLOGIN NOSUPERUSER"
+                        + " NOBYPASSRLS; CREATE ROLE firefly_product_definition_commands NOLOGIN"
+                        + " NOSUPERUSER NOBYPASSRLS; CREATE ROLE definition_runtime LOGIN PASSWORD"
+                        + " '"
                             + RUNTIME_PASSWORD
-                            + "' NOSUPERUSER NOBYPASSRLS");
+                            + "' NOSUPERUSER NOBYPASSRLS;"
+                            + " CREATE ROLE definition_reader LOGIN PASSWORD '"
+                            + READER_PASSWORD
+                            + "' NOSUPERUSER NOBYPASSRLS;"
+                            + " CREATE ROLE definition_commands LOGIN PASSWORD '"
+                            + COMMAND_PASSWORD
+                            + "' NOSUPERUSER NOBYPASSRLS; GRANT firefly_product_definition_serving"
+                            + " TO definition_reader; GRANT firefly_product_definition_commands TO"
+                            + " definition_commands; REVOKE ALL ON DATABASE"
+                            + " synthetic_product_definitions FROM PUBLIC; GRANT CONNECT ON"
+                            + " DATABASE synthetic_product_definitions TO"
+                            + " definition_runtime,definition_reader,definition_commands; REVOKE"
+                            + " CREATE ON SCHEMA public FROM PUBLIC");
         }
         Flyway.configure()
                 .dataSource(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword())
@@ -96,6 +127,21 @@ class ProductDefinitionDatabaseTest {
                         + " definition_runtime; GRANT SELECT,INSERT,UPDATE,DELETE ON ALL TABLES IN"
                         + " SCHEMA public TO definition_runtime");
         }
+        commands =
+                new ProductDefinitionCommandDatabaseFixture(
+                        new ProductDefinitionCommandDatabaseFixture.Settings(
+                                "127.0.0.1",
+                                postgres.getMappedPort(5432),
+                                postgres.getDatabaseName(),
+                                "definition_reader",
+                                READER_PASSWORD,
+                                "definition_commands",
+                                COMMAND_PASSWORD));
+    }
+
+    @AfterAll
+    static void closeCommandFixture() {
+        if (commands != null) commands.close();
     }
 
     @Test
@@ -162,28 +208,99 @@ class ProductDefinitionDatabaseTest {
 
     @Test
     void freshProductAndBothSectionHeadsCanBeCreatedInOneTransaction() throws Exception {
-        try (var c = owner()) {
-            c.setAutoCommit(false);
-            try {
-                var seed = definition(c, product(c, true));
-                assertThat(count(c, "product_definition_root", seed.root())).isEqualTo(1);
-                assertThat(count(c, "product_definition_revision", seed.root())).isEqualTo(1);
-                assertThat(count(c, "product_definition_cost_revision", seed.root())).isEqualTo(1);
-                c.commit();
-            } finally {
-                c.rollback();
+        var product = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        var call =
+                commands.holdCreate(
+                        product.tenant(),
+                        product.root(),
+                        product.id(),
+                        category(),
+                        ProductDefinitionCommandDatabaseFixture.Stage.AFTER_EVIDENCE);
+        var completed = call.result().toFuture();
+        try (var inspector = owner()) {
+            var held = call.gate().reached().block(Duration.ofSeconds(5));
+            assertThat(held).isNotNull();
+            assertThat(held.backendPid()).isPositive();
+            assertThat(held.nativeTransaction()).isNotBlank();
+            assertThat(held.readOnly()).isFalse();
+            assertThat(held.root()).isEqualTo(product.root());
+            assertThat(held.revision()).isNotNull();
+            assertThat(held.cost()).isNotNull();
+            assertThat(productCount(inspector, product.id())).isZero();
+            assertThat(count(inspector, "product_definition_root", product.root())).isZero();
+            assertThat(count(inspector, "product_definition_revision", product.root())).isZero();
+            assertThat(count(inspector, "product_definition_cost_revision", product.root()))
+                    .isZero();
+            call.gate().release();
+            var receipt = completed.get(5, TimeUnit.SECONDS);
+            assertThat(receipt.revisionId()).isEqualTo(held.revision());
+            assertThat(productCount(inspector, product.id())).isEqualTo(1);
+            assertThat(count(inspector, "product_definition_root", product.root())).isEqualTo(1);
+            assertThat(count(inspector, "product_definition_revision", product.root()))
+                    .isEqualTo(1);
+            assertThat(count(inspector, "product_definition_cost_revision", product.root()))
+                    .isEqualTo(1);
+        } finally {
+            call.gate().release();
+            if (!completed.isDone()) completed.cancel(true);
+        }
+    }
+
+    @Test
+    void ordinaryMappedCallbackFailureRollsBackTheCompleteAdmittedCreate() throws Exception {
+        var product = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        var call =
+                commands.holdCreate(
+                        product.tenant(),
+                        product.root(),
+                        product.id(),
+                        category(),
+                        ProductDefinitionCommandDatabaseFixture.Stage.AFTER_EVIDENCE);
+        var completed = call.result().toFuture();
+        try {
+            assertThat(call.gate().reached().block(Duration.ofSeconds(5))).isNotNull();
+            call.gate().fail(new IllegalStateException("Owned ordinary callback failure"));
+            assertThatThrownBy(() -> completed.get(5, TimeUnit.SECONDS))
+                    .isInstanceOfSatisfying(
+                            ExecutionException.class,
+                            error ->
+                                    assertThat(error.getCause())
+                                            .isInstanceOfSatisfying(
+                                                    org.springframework.web.server
+                                                            .ResponseStatusException.class,
+                                                    status ->
+                                                            assertThat(status.getStatusCode())
+                                                                    .isEqualTo(
+                                                                            org.springframework.http
+                                                                                    .HttpStatus
+                                                                                    .SERVICE_UNAVAILABLE)));
+            try (var inspector = owner()) {
+                assertThat(productCount(inspector, product.id())).isZero();
+                for (String table : NATIVE_TABLES)
+                    assertThat(count(inspector, table, product.root())).as(table).isZero();
+                for (String table : List.of("operation_claim", "native_command", "row_witness")) {
+                    try (var query =
+                            inspector.prepareStatement(
+                                    "SELECT count(*) FROM firefly_product_definition_private."
+                                            + table
+                                            + " WHERE root_id=?")) {
+                        query.setObject(1, product.root());
+                        try (var rows = query.executeQuery()) {
+                            assertThat(rows.next()).isTrue();
+                            assertThat(rows.getInt(1)).as(table).isZero();
+                        }
+                    }
+                }
             }
+        } finally {
+            call.gate().fail(new IllegalStateException("Owned fixture cleanup"));
+            if (!completed.isDone()) completed.cancel(true);
         }
     }
 
     @Test
     void unscopedRuntimeCannotReadRealPublicOrPrivateRows() throws Exception {
-        Seed seed;
-        try (var c = owner()) {
-            c.setAutoCommit(false);
-            seed = definition(c, product(c, true));
-            c.commit();
-        }
+        Seed seed = admittedDefinition(category()).seed();
         try (var c =
                 DriverManager.getConnection(
                         postgres.getJdbcUrl(), "definition_runtime", RUNTIME_PASSWORD)) {
@@ -197,16 +314,42 @@ class ProductDefinitionDatabaseTest {
     @Test
     void committedLegacyProductCannotBeAdoptedAsANewGovernedProduct() throws Exception {
         Product legacy;
-        try (var c = owner()) {
+        try (var c = legacy()) {
             legacy = product(c);
         }
-        try (var c = owner()) {
+        try (var c = legacy()) {
             c.setAutoCommit(false);
             try {
-                assertThatThrownBy(() -> definition(c, legacy))
+                String beforeLegacy =
+                        rowText(
+                                c,
+                                "SELECT to_jsonb(p)::text FROM public.product p WHERE product_id=?",
+                                legacy.id());
+                assertThatThrownBy(
+                                () ->
+                                        commands.create(
+                                                        legacy.tenant(),
+                                                        legacy.root(),
+                                                        legacy.id(),
+                                                        categoryOf(legacy),
+                                                        java.time.Instant.now().plusSeconds(300))
+                                                .block(Duration.ofSeconds(8)))
                         .isInstanceOfSatisfying(
-                                SQLException.class,
-                                e -> assertThat(e.getSQLState()).isEqualTo("23514"));
+                                org.springframework.web.server.ResponseStatusException.class,
+                                error ->
+                                        assertThat(error.getStatusCode())
+                                                .isEqualTo(
+                                                        org.springframework.http.HttpStatus
+                                                                .CONFLICT));
+                assertThat(ownedRootCount(legacy.root())).isZero();
+                assertThat(productCount(c, legacy.id())).isEqualTo(1);
+                assertThat(
+                                rowText(
+                                        c,
+                                        "SELECT to_jsonb(p)::text FROM public.product p WHERE"
+                                                + " product_id=?",
+                                        legacy.id()))
+                        .isEqualTo(beforeLegacy);
             } finally {
                 c.rollback();
             }
@@ -216,20 +359,46 @@ class ProductDefinitionDatabaseTest {
     @Test
     void noOpUpdateDoesNotTurnACommittedLegacyProductIntoANewInsert() throws Exception {
         Product legacy;
-        try (var c = owner()) {
+        try (var c = legacy()) {
             legacy = product(c);
         }
-        try (var c = owner()) {
+        try (var c = legacy()) {
             c.setAutoCommit(false);
             try {
                 execute(
                         c,
                         "UPDATE public.product SET product_name=product_name WHERE product_id=?",
                         legacy.id());
-                assertThatThrownBy(() -> definition(c, legacy))
+                String beforeLegacy =
+                        rowText(
+                                c,
+                                "SELECT to_jsonb(p)::text FROM public.product p WHERE product_id=?",
+                                legacy.id());
+                assertThatThrownBy(
+                                () ->
+                                        commands.create(
+                                                        legacy.tenant(),
+                                                        legacy.root(),
+                                                        legacy.id(),
+                                                        categoryOf(legacy),
+                                                        java.time.Instant.now().plusSeconds(300))
+                                                .block(Duration.ofSeconds(8)))
                         .isInstanceOfSatisfying(
-                                SQLException.class,
-                                e -> assertThat(e.getSQLState()).isEqualTo("23514"));
+                                org.springframework.web.server.ResponseStatusException.class,
+                                error ->
+                                        assertThat(error.getStatusCode())
+                                                .isEqualTo(
+                                                        org.springframework.http.HttpStatus
+                                                                .CONFLICT));
+                assertThat(ownedRootCount(legacy.root())).isZero();
+                assertThat(productCount(c, legacy.id())).isEqualTo(1);
+                assertThat(
+                                rowText(
+                                        c,
+                                        "SELECT to_jsonb(p)::text FROM public.product p WHERE"
+                                                + " product_id=?",
+                                        legacy.id()))
+                        .isEqualTo(beforeLegacy);
             } finally {
                 c.rollback();
             }
@@ -241,7 +410,13 @@ class ProductDefinitionDatabaseTest {
         try (var c = owner()) {
             c.setAutoCommit(false);
             try {
-                var seed = definition(c, product(c, true));
+                var seed = admittedDefinition(category()).seed();
+                String before =
+                        rowText(
+                                c,
+                                "SELECT to_jsonb(r)::text FROM public.product_definition_revision r"
+                                        + " WHERE root_id=?",
+                                seed.root());
                 var replacement =
                         DefinitionProfiles.canonical(
                                 ProfileFixtures.changed(
@@ -258,7 +433,20 @@ class ProductDefinitionDatabaseTest {
                                                 seed.root()))
                         .isInstanceOfSatisfying(
                                 SQLException.class,
-                                e -> assertThat(e.getSQLState()).isEqualTo("23514"));
+                                e -> {
+                                    assertThat(e.getSQLState()).isEqualTo("PD503");
+                                    assertThat(e.getMessage())
+                                            .contains("PRODUCT_NATIVE_RUNTIME_UNAVAILABLE");
+                                });
+                c.rollback();
+                assertThat(
+                                rowText(
+                                        c,
+                                        "SELECT to_jsonb(r)::text FROM"
+                                                + " public.product_definition_revision r WHERE"
+                                                + " root_id=?",
+                                        seed.root()))
+                        .isEqualTo(before);
             } finally {
                 c.rollback();
             }
@@ -267,11 +455,10 @@ class ProductDefinitionDatabaseTest {
 
     @Test
     void legacyProductMutationCannotRewriteManagedIdentityOrTerms() throws Exception {
-        try (var c = owner()) {
+        try (var c = legacy()) {
             c.setAutoCommit(false);
             try {
-                var product = product(c, true);
-                definition(c, product);
+                var product = admittedDefinition(category()).product();
                 assertThatThrownBy(
                                 () ->
                                         execute(
@@ -291,7 +478,7 @@ class ProductDefinitionDatabaseTest {
 
     @Test
     void unmanagedProductsRetainIdentityUpdateDeleteAndIdReuseBehavior() throws Exception {
-        try (var c = owner()) {
+        try (var c = legacy()) {
             c.setAutoCommit(false);
             try {
                 var product = product(c);
@@ -383,7 +570,13 @@ class ProductDefinitionDatabaseTest {
         try (var c = owner()) {
             c.setAutoCommit(false);
             try {
-                var seed = definition(c, product(c, true));
+                var seed = admittedDefinition(category()).seed();
+                String before =
+                        rowText(
+                                c,
+                                "SELECT to_jsonb(r)::text FROM"
+                                    + " public.product_definition_cost_revision r WHERE root_id=?",
+                                seed.root());
                 var replacement =
                         CostRules.canonical(
                                 CostRulesTest.costs("account").replace("12345", "54321"),
@@ -400,7 +593,20 @@ class ProductDefinitionDatabaseTest {
                                                 seed.root()))
                         .isInstanceOfSatisfying(
                                 SQLException.class,
-                                e -> assertThat(e.getSQLState()).isEqualTo("23514"));
+                                e -> {
+                                    assertThat(e.getSQLState()).isEqualTo("PD503");
+                                    assertThat(e.getMessage())
+                                            .contains("PRODUCT_NATIVE_RUNTIME_UNAVAILABLE");
+                                });
+                c.rollback();
+                assertThat(
+                                rowText(
+                                        c,
+                                        "SELECT to_jsonb(r)::text FROM"
+                                                + " public.product_definition_cost_revision r WHERE"
+                                                + " root_id=?",
+                                        seed.root()))
+                        .isEqualTo(before);
             } finally {
                 c.rollback();
             }
@@ -412,7 +618,13 @@ class ProductDefinitionDatabaseTest {
         try (var c = owner()) {
             c.setAutoCommit(false);
             try {
-                var seed = definition(c, product(c, true));
+                var seed = admittedDefinition(category()).seed();
+                String before =
+                        rowText(
+                                c,
+                                "SELECT to_jsonb(r)::text FROM public.product_definition_root r"
+                                        + " WHERE root_id=?",
+                                seed.root());
                 assertThatThrownBy(
                                 () ->
                                         execute(
@@ -423,7 +635,19 @@ class ProductDefinitionDatabaseTest {
                                                 seed.root()))
                         .isInstanceOfSatisfying(
                                 SQLException.class,
-                                e -> assertThat(e.getSQLState()).isEqualTo("23514"));
+                                e -> {
+                                    assertThat(e.getSQLState()).isEqualTo("PD503");
+                                    assertThat(e.getMessage())
+                                            .contains("PRODUCT_NATIVE_RUNTIME_UNAVAILABLE");
+                                });
+                c.rollback();
+                assertThat(
+                                rowText(
+                                        c,
+                                        "SELECT to_jsonb(r)::text FROM"
+                                            + " public.product_definition_root r WHERE root_id=?",
+                                        seed.root()))
+                        .isEqualTo(before);
             } finally {
                 c.rollback();
             }
@@ -442,11 +666,10 @@ class ProductDefinitionDatabaseTest {
                 "relationship-related"
             })
     void legacyChildrenCannotAddTermsToEitherManagedEndpoint(String child) throws Exception {
-        try (var c = owner()) {
+        try (var c = legacy()) {
             c.setAutoCommit(false);
             try {
-                var managed = product(c, true);
-                definition(c, managed);
+                var managed = admittedDefinition(category()).product();
                 if (child.startsWith("relationship")) {
                     var other = product(c);
                     execute(
@@ -509,8 +732,7 @@ class ProductDefinitionDatabaseTest {
         try (var c = owner()) {
             c.setAutoCommit(false);
             try {
-                var managed = product(c, true);
-                definition(c, managed);
+                var managed = admittedDefinition(category()).product();
                 var other = UUID.randomUUID();
                 execute(
                         c,
@@ -544,15 +766,15 @@ class ProductDefinitionDatabaseTest {
             throws Exception {
         var ancestor = UUID.randomUUID();
         var leaf = UUID.randomUUID();
-        try (var c = owner()) {
+        try (var connection = owner()) {
             execute(
-                    c,
+                    connection,
                     "INSERT INTO public.product_category(product_category_id,category_name)"
                             + " VALUES(?,?)",
                     ancestor,
                     "Synthetic root classification");
             execute(
-                    c,
+                    connection,
                     "INSERT INTO"
                         + " public.product_category(product_category_id,parent_category_id,category_name)"
                         + " VALUES(?,?,?)",
@@ -560,85 +782,80 @@ class ProductDefinitionDatabaseTest {
                     ancestor,
                     "Synthetic leaf classification");
         }
+        var product = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
         try (var holder = owner();
-                var worker = owner();
                 var inspector = owner()) {
             holder.setAutoCommit(false);
-            worker.setAutoCommit(false);
-            int pid;
-            try (var s = worker.createStatement();
-                    var rs = s.executeQuery("SELECT pg_backend_pid()")) {
-                assertThat(rs.next()).isTrue();
-                pid = rs.getInt(1);
-            }
-            try (var s =
+            try (var query =
                     holder.prepareStatement(
-                            "SELECT product_category_id FROM public.product_category"
-                                    + " WHERE product_category_id=? FOR NO KEY UPDATE")) {
-                s.setObject(1, holdLeaf ? leaf : ancestor);
-                try (var rs = s.executeQuery()) {
-                    assertThat(rs.next()).isTrue();
+                            "SELECT product_category_id FROM public.product_category WHERE"
+                                    + " product_category_id=? FOR NO KEY UPDATE")) {
+                query.setObject(1, holdLeaf ? leaf : ancestor);
+                try (var rows = query.executeQuery()) {
+                    assertThat(rows.next()).isTrue();
                 }
             }
-            var executor = Executors.newSingleThreadExecutor();
-            var future =
-                    executor.submit(
-                            () -> {
-                                try {
-                                    var product = product(worker, true, leaf);
-                                    var result = definition(worker, product);
-                                    worker.commit();
-                                    return result;
-                                } catch (Exception e) {
-                                    worker.rollback();
-                                    throw e;
-                                }
-                            });
+            var completed =
+                    commands.create(
+                                    product.tenant(),
+                                    product.root(),
+                                    product.id(),
+                                    leaf,
+                                    java.time.Instant.now().plusSeconds(300))
+                            .toFuture();
             try {
                 boolean waiting = false;
                 long deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos();
-                while (!waiting && !future.isDone() && System.nanoTime() < deadline) {
-                    try (var s =
-                            inspector.prepareStatement(
-                                    "SELECT wait_event_type,query FROM pg_catalog.pg_stat_activity"
-                                            + " WHERE pid=?")) {
-                        s.setInt(1, pid);
-                        try (var rs = s.executeQuery()) {
-                            if (rs.next() && "Lock".equals(rs.getString(1))) {
-                                assertThat(rs.getString(2))
-                                        .startsWith("INSERT INTO public.product(");
-                                waiting = true;
-                            }
+                while (!waiting && !completed.isDone() && System.nanoTime() < deadline) {
+                    try (var query =
+                                    inspector.prepareStatement(
+                                            "SELECT pid,query FROM pg_catalog.pg_stat_activity"
+                                                + " WHERE usename='definition_commands' AND"
+                                                + " wait_event_type='Lock' AND state='active' LIMIT"
+                                                + " 2");
+                            var rows = query.executeQuery()) {
+                        if (rows.next()) {
+                            assertThat(rows.getInt(1)).isPositive();
+                            assertThat(rows.getString(2))
+                                    .contains("begin_product_definition_command");
+                            assertThat(rows.next()).isFalse();
+                            waiting = true;
                         }
                     }
                     if (!waiting) Thread.sleep(10);
                 }
                 assertThat(waiting)
-                        .as("native Product INSERT waits on every ancestor before its FK checks")
+                        .as(
+                                "native command admission waits on every ancestor before Product FK"
+                                        + " SQL")
                         .isTrue();
+                assertThat(productCount(inspector, product.id())).isZero();
                 holder.commit();
-                assertThat(future.get(5, TimeUnit.SECONDS)).isNotNull();
+                assertThat(completed.get(5, TimeUnit.SECONDS)).isNotNull();
+                assertThat(count(inspector, "product_definition_root", product.root()))
+                        .isEqualTo(1);
             } finally {
                 holder.rollback();
-                try {
-                    future.get(5, TimeUnit.SECONDS);
-                } finally {
-                    executor.shutdownNow();
-                    assertThat(executor.awaitTermination(5, TimeUnit.SECONDS)).isTrue();
-                }
+                if (!completed.isDone()) completed.cancel(true);
             }
         }
     }
 
     @Test
     void uncommittedNewParentCannotAuthorizeLegacyChildCreation() throws Exception {
-        try (var parent = owner();
-                var child = owner()) {
-            parent.setAutoCommit(false);
+        var product = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        var parent =
+                commands.holdCreate(
+                        product.tenant(),
+                        product.root(),
+                        product.id(),
+                        category(),
+                        ProductDefinitionCommandDatabaseFixture.Stage.AFTER_EVIDENCE);
+        var completed = parent.result().toFuture();
+        try (var child = owner()) {
             child.setAutoCommit(false);
             try {
-                var managed = product(parent, true);
-                definition(parent, managed);
+                assertThat(parent.gate().reached().block(Duration.ofSeconds(5))).isNotNull();
                 assertThatThrownBy(
                                 () ->
                                         execute(
@@ -646,12 +863,13 @@ class ProductDefinitionDatabaseTest {
                                                 "INSERT INTO"
                                                     + " public.product_configuration(product_id,config_type,config_key,config_value)"
                                                     + " VALUES(?,'PRICING','unsealed-fee','1')",
-                                                managed.id()))
+                                                product.id()))
                         .isInstanceOfSatisfying(
                                 SQLException.class,
-                                e -> assertThat(e.getSQLState()).isEqualTo("23503"));
+                                error -> assertThat(error.getSQLState()).isEqualTo("23503"));
                 child.rollback();
-                parent.commit();
+                parent.gate().release();
+                assertThat(completed.get(5, TimeUnit.SECONDS)).isNotNull();
                 assertThatThrownBy(
                                 () ->
                                         execute(
@@ -659,89 +877,166 @@ class ProductDefinitionDatabaseTest {
                                                 "INSERT INTO"
                                                     + " public.product_configuration(product_id,config_type,config_key,config_value)"
                                                     + " VALUES(?,'PRICING','unsealed-fee','1')",
-                                                managed.id()))
+                                                product.id()))
                         .isInstanceOfSatisfying(
                                 SQLException.class,
-                                e -> assertThat(e.getSQLState()).isEqualTo("23514"));
+                                error -> assertThat(error.getSQLState()).isEqualTo("23514"));
             } finally {
-                parent.rollback();
                 child.rollback();
+                parent.gate().release();
+                if (!completed.isDone()) completed.cancel(true);
             }
         }
     }
 
     @Test
     void sameTransactionLegacyChildrenCannotBeAdoptedIntoNativeDefinition() throws Exception {
-        try (var c = owner()) {
-            c.setAutoCommit(false);
-            try {
-                var managed = product(c, true);
-                execute(
-                        c,
-                        "INSERT INTO"
-                            + " public.product_configuration(product_id,config_type,config_key,config_value)"
-                            + " VALUES(?,'PRICING','unsealed-fee','1')",
-                        managed.id());
-                assertThatThrownBy(() -> definition(c, managed))
-                        .isInstanceOfSatisfying(
-                                SQLException.class,
-                                e -> assertThat(e.getSQLState()).isEqualTo("23514"));
-            } finally {
-                c.rollback();
+        Product legacy;
+        try (var connection = legacy()) {
+            connection.setAutoCommit(false);
+            legacy = product(connection);
+            execute(
+                    connection,
+                    "INSERT INTO"
+                        + " public.product_configuration(product_id,config_type,config_key,config_value)"
+                        + " VALUES(?,'PRICING','unsealed-fee','1')",
+                    legacy.id());
+            connection.commit();
+        }
+        try (var inspector = owner()) {
+            String before =
+                    rowText(
+                            inspector,
+                            "SELECT to_jsonb(p)::text FROM public.product p WHERE product_id=?",
+                            legacy.id());
+            assertThatThrownBy(
+                            () ->
+                                    commands.create(
+                                                    legacy.tenant(),
+                                                    legacy.root(),
+                                                    legacy.id(),
+                                                    categoryOf(legacy),
+                                                    java.time.Instant.now().plusSeconds(300))
+                                            .block(Duration.ofSeconds(8)))
+                    .isInstanceOfSatisfying(
+                            org.springframework.web.server.ResponseStatusException.class,
+                            error ->
+                                    assertThat(error.getStatusCode())
+                                            .isEqualTo(
+                                                    org.springframework.http.HttpStatus.CONFLICT));
+            assertThat(count(inspector, "product_definition_root", legacy.root())).isZero();
+            assertThat(
+                            rowText(
+                                    inspector,
+                                    "SELECT to_jsonb(p)::text FROM public.product p WHERE"
+                                            + " product_id=?",
+                                    legacy.id()))
+                    .isEqualTo(before);
+            try (var statement =
+                    inspector.prepareStatement(
+                            "SELECT count(*) FROM public.product_configuration WHERE"
+                                    + " product_id=?")) {
+                statement.setObject(1, legacy.id());
+                try (var rows = statement.executeQuery()) {
+                    assertThat(rows.next()).isTrue();
+                    assertThat(rows.getInt(1)).isEqualTo(1);
+                }
             }
         }
     }
 
     @Test
     void skippedNativeInsertCannotRetroactivelyProveLegacyInsertWasNative() throws Exception {
-        try (var c = owner()) {
-            c.setAutoCommit(false);
-            try {
-                var legacy = product(c);
-                scope(c, legacy);
-                execute(
-                        c,
-                        "INSERT INTO"
-                            + " public.product(product_id,tenant_id,product_category_id,product_type,product_name,product_code,product_status)"
-                            + " SELECT"
-                            + " product_id,tenant_id,product_category_id,product_type,product_name,product_code,product_status"
-                            + " FROM public.product WHERE product_id=? ON CONFLICT(product_id) DO"
-                            + " NOTHING",
-                        legacy.id());
-                assertThatThrownBy(() -> definition(c, legacy))
-                        .isInstanceOfSatisfying(
-                                SQLException.class,
-                                e -> assertThat(e.getSQLState()).isEqualTo("23514"));
-            } finally {
-                c.rollback();
+        Product legacy;
+        try (var connection = legacy()) {
+            connection.setAutoCommit(false);
+            legacy = product(connection);
+            try (var statement =
+                    connection.prepareStatement(
+                            "INSERT INTO"
+                                + " public.product(product_id,tenant_id,product_category_id,product_type,product_name,product_code,product_status)"
+                                + " SELECT"
+                                + " product_id,tenant_id,product_category_id,product_type,product_name,product_code,product_status"
+                                + " FROM public.product WHERE product_id=? ON CONFLICT(product_id)"
+                                + " DO NOTHING")) {
+                statement.setObject(1, legacy.id());
+                assertThat(statement.executeUpdate()).isZero();
             }
+            connection.commit();
+        }
+        try (var inspector = owner()) {
+            String before =
+                    rowText(
+                            inspector,
+                            "SELECT to_jsonb(p)::text FROM public.product p WHERE product_id=?",
+                            legacy.id());
+            assertThatThrownBy(
+                            () ->
+                                    commands.create(
+                                                    legacy.tenant(),
+                                                    legacy.root(),
+                                                    legacy.id(),
+                                                    categoryOf(legacy),
+                                                    java.time.Instant.now().plusSeconds(300))
+                                            .block(Duration.ofSeconds(8)))
+                    .isInstanceOfSatisfying(
+                            org.springframework.web.server.ResponseStatusException.class,
+                            error ->
+                                    assertThat(error.getStatusCode())
+                                            .isEqualTo(
+                                                    org.springframework.http.HttpStatus.CONFLICT));
+            assertThat(count(inspector, "product_definition_root", legacy.root())).isZero();
+            assertThat(
+                            rowText(
+                                    inspector,
+                                    "SELECT to_jsonb(p)::text FROM public.product p WHERE"
+                                            + " product_id=?",
+                                    legacy.id()))
+                    .isEqualTo(before);
+            assertThat(
+                            rowText(
+                                    inspector,
+                                    "SELECT native_root_id::text FROM"
+                                        + " firefly_product_definition_private.product_birth WHERE"
+                                        + " product_id=?",
+                                    legacy.id()))
+                    .isNull();
         }
     }
 
     @Test
     void nativeProductCategoryChangeCannotReuseItsOriginalAncestorProof() throws Exception {
-        try (var c = owner()) {
-            c.setAutoCommit(false);
+        var admitted = admittedDefinition(category());
+        UUID replacement = category();
+        try (var connection = legacy()) {
+            connection.setAutoCommit(false);
+            String before =
+                    rowText(
+                            connection,
+                            "SELECT to_jsonb(p)::text FROM public.product p WHERE product_id=?",
+                            admitted.product().id());
             try {
-                var candidate = product(c, true);
-                var replacement = UUID.randomUUID();
-                execute(
-                        c,
-                        "INSERT INTO public.product_category(product_category_id,category_name)"
-                                + " VALUES(?,?)",
-                        replacement,
-                        "Different synthetic classification");
-                execute(
-                        c,
-                        "UPDATE public.product SET product_category_id=? WHERE product_id=?",
-                        replacement,
-                        candidate.id());
-                assertThatThrownBy(() -> definition(c, candidate))
+                assertThatThrownBy(
+                                () ->
+                                        execute(
+                                                connection,
+                                                "UPDATE public.product SET product_category_id=?"
+                                                        + " WHERE product_id=?",
+                                                replacement,
+                                                admitted.product().id()))
                         .isInstanceOfSatisfying(
                                 SQLException.class,
-                                e -> assertThat(e.getSQLState()).isEqualTo("23514"));
+                                error -> assertThat(error.getSQLState()).isEqualTo("23514"));
+                connection.rollback();
+                assertThat(
+                                rowText(
+                                        connection,
+                                        "SELECT to_jsonb(p)::text FROM public.product p WHERE"
+                                                + " product_id=?",
+                                        admitted.product().id()))
+                        .isEqualTo(before);
             } finally {
-                c.rollback();
+                connection.rollback();
             }
         }
     }
@@ -752,17 +1047,23 @@ class ProductDefinitionDatabaseTest {
             throws Exception {
         var ancestor = UUID.randomUUID();
         var leaf = UUID.randomUUID();
-        try (var c = owner()) {
-            categories(c, ancestor, leaf);
+        try (var connection = owner()) {
+            categories(connection, ancestor, leaf);
         }
-        try (var nativeCreate = owner();
-                var legacy = owner();
+        var product = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        var parent =
+                commands.holdCreate(
+                        product.tenant(),
+                        product.root(),
+                        product.id(),
+                        leaf,
+                        ProductDefinitionCommandDatabaseFixture.Stage.AFTER_EVIDENCE);
+        var committed = parent.result().toFuture();
+        try (var legacy = owner();
                 var inspector = owner()) {
-            nativeCreate.setAutoCommit(false);
             legacy.setAutoCommit(false);
-            var managed = product(nativeCreate, true, leaf);
-            var seed = definition(nativeCreate, managed);
-            var sql =
+            assertThat(parent.gate().reached().block(Duration.ofSeconds(5))).isNotNull();
+            String sql =
                     delete
                             ? "DELETE FROM public.product_category WHERE product_category_id=?"
                             : "UPDATE public.product_category SET parent_category_id=NULL WHERE"
@@ -776,9 +1077,9 @@ class ProductDefinitionDatabaseTest {
                                     execute(legacy, sql, delete ? ancestor : leaf);
                                     legacy.commit();
                                     return (SQLException) null;
-                                } catch (SQLException e) {
+                                } catch (SQLException error) {
                                     legacy.rollback();
-                                    return e;
+                                    return error;
                                 }
                             });
             try {
@@ -788,25 +1089,29 @@ class ProductDefinitionDatabaseTest {
                                         future,
                                         pid,
                                         delete ? "DELETE FROM" : "UPDATE public.product_category"))
-                        .as("legacy mutation waits on the native category observation")
+                        .as("legacy mutation waits on actual command category observation")
                         .isTrue();
-                nativeCreate.commit();
+                parent.gate().release();
+                assertThat(committed.get(5, TimeUnit.SECONDS)).isNotNull();
                 var rejected = future.get(5, TimeUnit.SECONDS);
                 assertThat((Object) rejected).isNotNull();
                 assertThat(rejected.getSQLState()).isEqualTo("23514");
-                assertThat(count(inspector, "product_definition_root", seed.root())).isEqualTo(1);
-                try (var s =
+                assertThat(count(inspector, "product_definition_root", product.root()))
+                        .isEqualTo(1);
+                try (var query =
                         inspector.prepareStatement(
                                 "SELECT parent_category_id FROM public.product_category WHERE"
                                         + " product_category_id=?")) {
-                    s.setObject(1, leaf);
-                    try (var rs = s.executeQuery()) {
-                        assertThat(rs.next()).isTrue();
-                        assertThat(rs.getObject(1, UUID.class)).isEqualTo(ancestor);
+                    query.setObject(1, leaf);
+                    try (var rows = query.executeQuery()) {
+                        assertThat(rows.next()).isTrue();
+                        assertThat(rows.getObject(1, UUID.class)).isEqualTo(ancestor);
                     }
                 }
             } finally {
-                nativeCreate.rollback();
+                parent.gate().release();
+                legacy.rollback();
+                if (!committed.isDone()) committed.cancel(true);
                 try {
                     future.get(5, TimeUnit.SECONDS);
                 } finally {
@@ -814,6 +1119,9 @@ class ProductDefinitionDatabaseTest {
                     assertThat(executor.awaitTermination(5, TimeUnit.SECONDS)).isTrue();
                 }
             }
+        } finally {
+            parent.gate().release();
+            if (!committed.isDone()) committed.cancel(true);
         }
     }
 
@@ -821,60 +1129,52 @@ class ProductDefinitionDatabaseTest {
     void ancestorCascadeWinningBeforeNativeCreateLeavesNoPartialProductOrRoot() throws Exception {
         var ancestor = UUID.randomUUID();
         var leaf = UUID.randomUUID();
-        var candidate = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
-        try (var c = owner()) {
-            categories(c, ancestor, leaf);
+        var product = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        try (var connection = owner()) {
+            categories(connection, ancestor, leaf);
         }
         try (var legacy = owner();
-                var nativeCreate = owner();
                 var inspector = owner()) {
             legacy.setAutoCommit(false);
-            nativeCreate.setAutoCommit(false);
             execute(
                     legacy,
                     "DELETE FROM public.product_category WHERE product_category_id=?",
                     ancestor);
-            int pid = backendPid(nativeCreate);
-            var executor = Executors.newSingleThreadExecutor();
-            var future =
-                    executor.submit(
-                            () -> {
-                                try {
-                                    product(nativeCreate, true, leaf, candidate);
-                                    definition(nativeCreate, candidate);
-                                    nativeCreate.commit();
-                                    return (SQLException) null;
-                                } catch (SQLException e) {
-                                    nativeCreate.rollback();
-                                    return e;
-                                }
-                            });
+            var completed =
+                    commands.create(
+                                    product.tenant(),
+                                    product.root(),
+                                    product.id(),
+                                    leaf,
+                                    java.time.Instant.now().plusSeconds(300))
+                            .toFuture();
             try {
-                assertThat(waitForLock(inspector, future, pid, "INSERT INTO public.product("))
-                        .as("native waits before leaf FK when ancestor cascade owns the first lock")
+                assertThat(waitForCommandLock(inspector, completed))
+                        .as(
+                                "admission waits before Product FK SQL when ancestor cascade owns"
+                                        + " first lock")
                         .isTrue();
                 legacy.commit();
-                var rejected = future.get(5, TimeUnit.SECONDS);
-                assertThat((Object) rejected).isNotNull();
-                assertThat(rejected.getSQLState()).isEqualTo("23514");
-                assertThat(count(inspector, "product_definition_root", candidate.root())).isZero();
-                try (var s =
-                        inspector.prepareStatement(
-                                "SELECT count(*) FROM public.product WHERE product_id=?")) {
-                    s.setObject(1, candidate.id());
-                    try (var rs = s.executeQuery()) {
-                        assertThat(rs.next()).isTrue();
-                        assertThat(rs.getInt(1)).isZero();
-                    }
-                }
+                assertThatThrownBy(() -> completed.get(5, TimeUnit.SECONDS))
+                        .isInstanceOfSatisfying(
+                                ExecutionException.class,
+                                error ->
+                                        assertThat(error.getCause())
+                                                .isInstanceOfSatisfying(
+                                                        org.springframework.web.server
+                                                                .ResponseStatusException.class,
+                                                        status ->
+                                                                assertThat(status.getStatusCode())
+                                                                        .isEqualTo(
+                                                                                org.springframework
+                                                                                        .http
+                                                                                        .HttpStatus
+                                                                                        .CONFLICT)));
+                assertThat(count(inspector, "product_definition_root", product.root())).isZero();
+                assertThat(productCount(inspector, product.id())).isZero();
             } finally {
                 legacy.rollback();
-                try {
-                    future.get(5, TimeUnit.SECONDS);
-                } finally {
-                    executor.shutdownNow();
-                    assertThat(executor.awaitTermination(5, TimeUnit.SECONDS)).isTrue();
-                }
+                if (!completed.isDone()) completed.cancel(true);
             }
         }
     }
@@ -928,18 +1228,25 @@ class ProductDefinitionDatabaseTest {
         long key = UUID.randomUUID().getMostSignificantBits();
         var worker = Executors.newSingleThreadExecutor();
         Future<String> future = null;
-        try (var parent = owner();
-                var gate = owner();
+        var managed = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        var parent =
+                commands.holdCreate(
+                        managed.tenant(),
+                        managed.root(),
+                        managed.id(),
+                        category(),
+                        ProductDefinitionCommandDatabaseFixture.Stage.AFTER_EVIDENCE);
+        var parentCommit = parent.result().toFuture();
+        try (var gate = owner();
                 var observer = owner();
+                var ordinarySetup = legacy();
                 var child =
                         DriverManager.getConnection(
                                 postgres.getJdbcUrl(), "definition_runtime", RUNTIME_PASSWORD)) {
-            var ordinary = product(observer);
-            var other = product(observer);
-            if (update) insertLegacyChild(observer, kind, row, ordinary.id(), other.id());
-            parent.setAutoCommit(false);
-            var managed = product(parent, true);
-            definition(parent, managed);
+            var ordinary = product(ordinarySetup);
+            var other = product(ordinarySetup);
+            if (update) insertLegacyChild(ordinarySetup, kind, row, ordinary.id(), other.id());
+            assertThat(parent.gate().reached().block(Duration.ofSeconds(5))).isNotNull();
             String condition = "NEW.product_id='" + managed.id() + "'::uuid";
             if (kind.startsWith("relationship")) {
                 condition += " OR NEW.related_product_id='" + managed.id() + "'::uuid";
@@ -1014,9 +1321,10 @@ class ProductDefinitionDatabaseTest {
                                         update ? "UPDATE public." : "INSERT INTO public."))
                         .as(
                                 "child passed the production BEFORE guard and reached the pre-FK"
-                                    + " scheduling barrier")
+                                        + " scheduling barrier")
                         .isTrue();
-                parent.commit();
+                parent.gate().release();
+                assertThat(parentCommit.get(5, TimeUnit.SECONDS)).isNotNull();
                 try (var s = gate.createStatement()) {
                     s.execute("SELECT pg_advisory_unlock(" + key + ")");
                 }
@@ -1029,7 +1337,7 @@ class ProductDefinitionDatabaseTest {
                     assertThat(outcome)
                             .as(
                                     "snapshot isolation must fail closed, not accept a stale"
-                                        + " binding view")
+                                            + " binding view")
                             .isIn("23514", "23503", "40001");
                 }
                 try (var s =
@@ -1067,7 +1375,8 @@ class ProductDefinitionDatabaseTest {
                     }
                 }
             } finally {
-                parent.rollback();
+                parent.gate().release();
+                if (!parentCommit.isDone()) parentCommit.cancel(true);
                 try (var s = gate.createStatement()) {
                     s.execute("SELECT pg_advisory_unlock(" + key + ")");
                 }
@@ -1080,6 +1389,8 @@ class ProductDefinitionDatabaseTest {
                 }
             }
         } finally {
+            parent.gate().release();
+            if (!parentCommit.isDone()) parentCommit.cancel(true);
             worker.shutdownNow();
             assertThat(worker.awaitTermination(10, TimeUnit.SECONDS)).isTrue();
         }
@@ -1216,6 +1527,28 @@ class ProductDefinitionDatabaseTest {
                 "Synthetic leaf classification");
     }
 
+    private static boolean waitForCommandLock(Connection inspector, Future<?> completed)
+            throws Exception {
+        long deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos();
+        while (!completed.isDone() && System.nanoTime() < deadline) {
+            try (var query =
+                            inspector.prepareStatement(
+                                    "SELECT pid,query FROM pg_catalog.pg_stat_activity WHERE"
+                                            + " usename='definition_commands' AND"
+                                            + " wait_event_type='Lock' AND state='active' LIMIT 2");
+                    var rows = query.executeQuery()) {
+                if (rows.next()) {
+                    assertThat(rows.getInt(1)).isPositive();
+                    assertThat(rows.getString(2)).contains("begin_product_definition_command");
+                    assertThat(rows.next()).isFalse();
+                    return true;
+                }
+            }
+            Thread.sleep(10);
+        }
+        return false;
+    }
+
     private static int backendPid(Connection c) throws Exception {
         try (var s = c.createStatement();
                 var rs = s.executeQuery("SELECT pg_backend_pid()")) {
@@ -1245,41 +1578,96 @@ class ProductDefinitionDatabaseTest {
         return false;
     }
 
+    private record Admitted(Product product, Seed seed) {}
+
+    private static UUID category() throws Exception {
+        UUID id = UUID.randomUUID();
+        try (var connection = owner()) {
+            execute(
+                    connection,
+                    "INSERT INTO public.product_category(product_category_id,category_name,level)"
+                            + " VALUES(?,?,0)",
+                    id,
+                    "Owned ordinary account category");
+        }
+        return id;
+    }
+
+    private static int ownedRootCount(UUID root) throws Exception {
+        try (var inspector = owner()) {
+            return count(inspector, "product_definition_root", root);
+        }
+    }
+
+    private static String rowText(Connection connection, String query, UUID key) throws Exception {
+        try (var statement = connection.prepareStatement(query)) {
+            statement.setObject(1, key);
+            try (var rows = statement.executeQuery()) {
+                assertThat(rows.next()).isTrue();
+                String value = rows.getString(1);
+                assertThat(rows.next()).isFalse();
+                return value;
+            }
+        }
+    }
+
+    private static UUID categoryOf(Product product) throws Exception {
+        try (var connection = owner();
+                var statement =
+                        connection.prepareStatement(
+                                "SELECT product_category_id FROM public.product WHERE"
+                                        + " product_id=?")) {
+            statement.setObject(1, product.id());
+            try (var rows = statement.executeQuery()) {
+                assertThat(rows.next()).isTrue();
+                return rows.getObject(1, UUID.class);
+            }
+        }
+    }
+
+    private static int productCount(Connection connection, UUID product) throws Exception {
+        try (var statement =
+                connection.prepareStatement(
+                        "SELECT count(*) FROM public.product WHERE product_id=?")) {
+            statement.setObject(1, product);
+            try (var rows = statement.executeQuery()) {
+                assertThat(rows.next()).isTrue();
+                return rows.getInt(1);
+            }
+        }
+    }
+
+    private static Admitted admittedDefinition(UUID category) {
+        var product = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        var receipt =
+                commands.create(
+                                product.tenant(),
+                                product.root(),
+                                product.id(),
+                                category,
+                                java.time.Instant.now().plusSeconds(300))
+                        .block(Duration.ofSeconds(8));
+        var cost =
+                commands.currentCost(product.tenant(), product.root()).block(Duration.ofSeconds(8));
+        assertThat(receipt).isNotNull();
+        assertThat(cost).isNotNull();
+        return new Admitted(
+                product, new Seed(product.root(), receipt.revisionId(), cost.costRevisionId()));
+    }
+
     private record Product(UUID tenant, UUID id, UUID root) {}
 
     private record Seed(UUID root, UUID revision, UUID cost) {}
 
     private static Product product(Connection c) throws Exception {
-        return product(c, false);
-    }
-
-    private static Product product(Connection c, boolean nativeCreate) throws Exception {
         var category = UUID.randomUUID();
+        var product = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
         execute(
                 c,
                 "INSERT INTO public.product_category(product_category_id,category_name)"
                         + " VALUES(?,?)",
                 category,
                 "Synthetic definition fixture");
-        return product(c, nativeCreate, category);
-    }
-
-    private static Product product(Connection c, boolean nativeCreate, UUID category)
-            throws Exception {
-        var product = new Product(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
-        return product(c, nativeCreate, category, product);
-    }
-
-    private static Product product(
-            Connection c, boolean nativeCreate, UUID category, Product product) throws Exception {
-        if (nativeCreate) scope(c, product);
-        else {
-            try (var s = c.createStatement()) {
-                s.execute(
-                        "SELECT"
-                            + " pg_catalog.set_config('firefly.product_definition.purpose','',true)");
-            }
-        }
         execute(
                 c,
                 "INSERT INTO"
@@ -1288,73 +1676,9 @@ class ProductDefinitionDatabaseTest {
                 product.id(),
                 product.tenant(),
                 category,
-                "Synthetic governed current account",
+                "Synthetic ordinary legacy product",
                 ProfileFixtures.load("account").at("/common/code").asText());
         return product;
-    }
-
-    private static Seed definition(Connection c, Product product) throws Exception {
-        scope(c, product);
-        var seed = new Seed(product.root(), UUID.randomUUID(), UUID.randomUUID());
-        var raw = ProfileFixtures.load("account").toString();
-        var publicTerms = DefinitionProfiles.canonical(raw);
-        var privateCosts = CostRules.canonical(CostRulesTest.costs("account"), raw);
-        execute(
-                c,
-                "INSERT INTO public.product_definition_root(root_id,tenant_id,product_id,"
-                        + "product_code,business_area,profile_code,profile_version,phase,"
-                        + "public_state_version,public_head) VALUES(?,?,?,?,'BANKING',"
-                        + "'ACCOUNT_TARIFF_V1',1,'DRAFT',0,?)",
-                seed.root(),
-                product.tenant(),
-                product.id(),
-                ProfileFixtures.load("account").at("/common/code").asText(),
-                seed.revision());
-        execute(
-                c,
-                "INSERT INTO public.product_definition_revision(revision_id,tenant_id,root_id,"
-                    + "canonical_definition,public_digest,encoding_version,actor_issuer,actor_id)"
-                    + " VALUES(?,?,?,?,?,?,'https://synthetic.example.test','maker-public')",
-                seed.revision(),
-                product.tenant(),
-                seed.root(),
-                publicTerms.json(),
-                publicTerms.digest(),
-                DefinitionCanonical.ENCODING);
-        execute(
-                c,
-                "INSERT INTO public.product_definition_cost_revision(cost_revision_id,tenant_id,"
-                    + "root_id,canonical_cost,cost_digest,encoding_version,actor_issuer,actor_id)"
-                    + " VALUES(?,?,?,?,?,?,'https://synthetic.example.test','maker-private')",
-                seed.cost(),
-                product.tenant(),
-                seed.root(),
-                privateCosts.json(),
-                privateCosts.digest(),
-                DefinitionCanonical.ENCODING);
-        execute(
-                c,
-                "INSERT INTO public.product_definition_control(root_id,tenant_id,cost_head,"
-                        + "cost_state_version) VALUES(?,?,?,0)",
-                seed.root(),
-                product.tenant(),
-                seed.cost());
-        return seed;
-    }
-
-    private static void scope(Connection c, Product product) throws Exception {
-        try (var s =
-                c.prepareStatement(
-                        "SELECT"
-                            + " pg_catalog.set_config('firefly.product_definition.purpose','CREATE',true),"
-                            + "pg_catalog.set_config('firefly.product_definition.tenant_id',?,true),"
-                            + "pg_catalog.set_config('firefly.product_definition.root_id',?,true),"
-                            + "pg_catalog.set_config('firefly.product_definition.product_id',?,true)")) {
-            s.setString(1, product.tenant().toString());
-            s.setString(2, product.root().toString());
-            s.setString(3, product.id().toString());
-            try (var ignored = s.executeQuery()) {}
-        }
     }
 
     private static void execute(Connection c, String sql, Object... values) throws Exception {

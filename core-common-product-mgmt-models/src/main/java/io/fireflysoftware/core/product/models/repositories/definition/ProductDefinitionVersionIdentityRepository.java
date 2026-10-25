@@ -10,6 +10,11 @@ import java.util.UUID;
 
 public interface ProductDefinitionVersionIdentityRepository
         extends Repository<ProductDefinitionVersionIdentity, UUID> {
-    Mono<ProductDefinitionVersionIdentity> findByProductVersionIdAndProductId(
-            UUID productVersionId, UUID productId);
+    Mono<ProductDefinitionVersionIdentity>
+            findByTenantIdAndRootIdAndProductVersionIdAndProductIdAndPublicationId(
+                    UUID tenantId,
+                    UUID rootId,
+                    UUID productVersionId,
+                    UUID productId,
+                    UUID publicationId);
 }

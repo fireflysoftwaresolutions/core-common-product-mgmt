@@ -17,7 +17,7 @@ Core data service for product definitions, versions, features, parameters, and r
 
 This service owns product definitions, versions, features, parameters, and related product records. Its controllers expose typed record operations; services and repositories apply the local persistence and lifecycle behavior. Domain and experience services compose those operations into customer or staff journeys.
 
-The governed definition foundation provides typed profile rules, native storage integrity and a current-authorized account-tariff metadata read boundary. See [governed definition reads](docs/governed-product-definition-reads.md) for trust, database and source-dependency requirements. Authoring, review, publication, operational admission, customer offers and the staff wizard remain separate work; definitions remain NOT_ADMITTED.
+Governed definitions provide typed profile rules, native storage integrity, current-authorized account-tariff reads, and staff commands for draft creation, editing, submission, selection review, publication, and withdrawal. Public terms and private costs have separate histories and access boundaries. See [governed definitions](docs/governed-product-definitions.md), [metadata reads](docs/governed-product-definition-reads.md), and [publication deployment](docs/publication-metadata-deployment.md) for the supported account-tariff lifecycle, required authority, and database roles. Published metadata remains NOT_ADMITTED for financial operations; customer offers, downstream origination, pricing execution, and the staff wizard require their own integrations.
 
 The [card enrollment capability contracts](docs/card-enrollment-capability.md) define an explicit purpose and conservative policy for comparing supplied product facts. They return NOT_OFFERED or UNKNOWN; governed CARD support and an authenticated owner producer remain prerequisites for enrollment.
 
@@ -74,7 +74,7 @@ Runtime integration remains gated on the service configuration and selected adap
 
 **Verification and recovery.** Run the complete selected test class and inspect its Surefire result: zero failures/errors and at least one executed test are required. A skipped or zero-test build is not evidence. Compare the assertions with the owning DTO/service before extending the request. For a runtime run, separately configure authentication/entitlements and the exact downstream endpoints, migrate/seed disposable owner stores, and reread the returned identifier; these unit/contract fixtures do not establish those prerequisites.
 
-**Execution evidence.** Source checked against the linked test and local declarations. The documentation worker has not run this repository test or the full service. The excerpt is retained from the existing test; mock, in-memory, or local HTTP fixture results are not live-provider acceptance.
+**Validation boundary.** This excerpt comes from the linked test and documents its repository contract. Run the selected class against the matching source and dependencies. Mock, in-memory, or local HTTP fixture results do not establish live-provider acceptance.
 
 Source of this example: [ProductServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImplTest.java), [ProductMapper](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductMapper.java), [ProductStatusEnum](core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/enums/ProductStatusEnum.java), [Product](core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/Product.java), [ProductRepository](core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/ProductRepository.java).
 
@@ -112,7 +112,7 @@ Legacy product/configuration APIs remain separate from immutable governed defini
 | [ProductRelationship](core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductRelationship.java) | `productRelationshipId`, `productId`, `relatedProductId`, `relationshipType`, `description` |
 | [ProductVersion](core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductVersion.java) | `productVersionId`, `productId`, `versionNumber`, `versionDescription`, `effectiveDate` |
 
-The [data contract reference](docs/openplatform/reference.md#data-contracts) indexes **25 DTO, record, or entity declarations** and their fields. Read DTO validation annotations together with service logic and migrations; a field's presence does not establish that every endpoint accepts it.
+The [data contract reference](docs/openplatform/reference.md#data-contracts) indexes DTO, record, and entity declarations and their fields. Read DTO validation annotations together with service logic and migrations; a field's presence does not establish that every endpoint accepts it.
 
 Use the authentication and authorization behavior actually enforced by the deployed entry point. Tenant, party, distributor, and staff identifiers carry business scope; they must not be accepted as proof of identity. Preserve validation and downstream errors rather than mapping an unavailable dependency to a successful business result.
 
@@ -122,10 +122,10 @@ Examples of locally enforced failure or access behavior:
 | --- | --- |
 | `new RuntimeException("Error parsing product marketing_features JSON", e);` | [ProductMapper](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductMapper.java) |
 | `new RuntimeException("Error serialising product marketing_features", e);` | [ProductMapper](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductMapper.java) |
-| `new IllegalArgumentException("COST_DEFINITION_INVALID");` | [CostRules](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRules.java) |
-| `new IllegalStateException("SHA-256 unavailable", e);` | [DefinitionCanonical](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonical.java) |
-| `new IllegalArgumentException("DEFINITION_SHAPE");` | [DefinitionCanonical](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonical.java) |
-| `new IllegalArgumentException("CHECKER_IDENTITY_REQUIRED");` | [DefinitionReviewRules](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRules.java) |
+| `new IllegalArgumentException("COST_DEFINITION_INVALID");` | [CostRules](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/CostRules.java) |
+| `new IllegalStateException("SHA-256 unavailable", e);` | [DefinitionCanonical](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/DefinitionCanonical.java) |
+| `new IllegalArgumentException("DEFINITION_SHAPE");` | [DefinitionCanonical](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/DefinitionCanonical.java) |
+| `new IllegalArgumentException("CHECKER_IDENTITY_REQUIRED");` | [DefinitionReviewRules](core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/DefinitionReviewRules.java) |
 
 The [security and failure reference](docs/openplatform/reference.md#security-and-failure-evidence) links local authorization annotations, status mappings, and exception sites. Framework or gateway policy is additional to this local inventory; verify the deployed filter chain and caller entitlements before integration.
 
@@ -137,7 +137,7 @@ For a project-specific provider, implement the existing typed boundary and selec
 
 ## Configuration and local setup
 
-Runtime configuration sources: [openapi.yml](core-common-product-mgmt-sdk/src/main/resources/api-spec/openapi.yml), [openapi.yml](core-common-product-mgmt-sdk/src/main/resources/openapi.yml), [ProductManagementApplication.java](core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/ProductManagementApplication.java), [application.yaml](core-common-product-mgmt-web/src/main/resources/application.yaml).
+Runtime configuration sources: [openapi.yml](core-common-product-mgmt-sdk/src/main/resources/openapi.yml), [ProductManagementApplication.java](core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/ProductManagementApplication.java), [application.yaml](core-common-product-mgmt-web/src/main/resources/application.yaml).
 
 | Environment variable or property | Declared fallback |
 | --- | --- |
@@ -193,7 +193,7 @@ Run against disposable local infrastructure first. Supply endpoint/database vari
 
 Locally declared build plugins: `maven-compiler-plugin`, `maven-resources-plugin`, `openapi-generator-maven-plugin`, `spring-boot-maven-plugin`. Inherited checks remain governed by the parent POM.
 
-The checkout contains **21 test source/resource files**. See the [test source index](docs/openplatform/reference.md#test-sources) for coverage locations. This inventory is not evidence that those tests passed.
+The checkout includes unit, contract, security, SDK, and native-storage test sources. See the [test source index](docs/openplatform/reference.md#test-sources) for coverage locations. This inventory is not evidence that those tests passed.
 
 CI definitions: [maven-central.yml](.github/workflows/maven-central.yml), [release.yml](.github/workflows/release.yml).
 
@@ -201,22 +201,22 @@ CI definitions: [maven-central.yml](.github/workflows/maven-central.yml), [relea
 
 On failure, retain the request and business record identifiers, inspect the owning controller/service and downstream status, then verify the current persisted state before retrying. Distinguish invalid input, denied access, missing records, and unavailable infrastructure. Avoid replaying a financial or externally visible action until its prior effect is known. For persistent modules, review the migration history and use the deployment rollback procedure; do not erase records to recover a failed request.
 
-Database evolution is represented by 18 migration files in [core-common-product-mgmt-models/src/main/resources/db/migration](core-common-product-mgmt-models/src/main/resources/db/migration/). Review the last applied migration and the owning entity before diagnosing a schema mismatch.
+Database evolution is represented by the ordered migrations in [core-common-product-mgmt-models/src/main/resources/db/migration](core-common-product-mgmt-models/src/main/resources/db/migration/). Review the last applied migration and the owning entity before diagnosing a schema mismatch.
 
 Existing test scenarios provide concrete starting points for failure reproduction:
 
-- `getCategoryById_Success` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java)
-- `getCategoryById_NotFound` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java)
-- `create_Success` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java)
-- `createCategory_RootCategory_Success` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java)
-- `createCategory_Error` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java)
-- `update_Success` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java)
-- `updateCategory_CircularReference_SelfParent` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java)
-- `updateCategory_NotFound` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java)
+- `getCategoryById_Success` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/ProductCategoryServiceImplTest.java)
+- `getCategoryById_NotFound` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/ProductCategoryServiceImplTest.java)
+- `create_Success` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/ProductCategoryServiceImplTest.java)
+- `createCategory_RootCategory_Success` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/ProductCategoryServiceImplTest.java)
+- `createCategory_Error` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/ProductCategoryServiceImplTest.java)
+- `update_Success` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/ProductCategoryServiceImplTest.java)
+- `updateCategory_CircularReference_SelfParent` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/ProductCategoryServiceImplTest.java)
+- `updateCategory_NotFound` — [ProductCategoryServiceImplTest](core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/ProductCategoryServiceImplTest.java)
 
 ## Compatibility and validation boundaries
 
-Match consumers to the actual producer/OpenAPI and declared parent/BOM. This native storage checkpoint adds no operational definition API or handwritten SDK. Existing mutable pricing rows do not establish an approved customer quote, assessed fees or financial admission. Normal SDK generation remains separate from this storage verification.
+Match consumers to the actual producer/OpenAPI and declared parent/BOM. Staff metadata commands and read APIs use the original OpenAPI producer and generated SDK. Their lifecycle does not establish an approved customer quote, assessed fees, account opening, coverage issuance, or financial admission. Existing mutable pricing rows do not replace governed approval or downstream operational authority.
 
 Platform and framework coordinates are enumerated in the [build reference](docs/openplatform/reference.md#build-and-dependencies). Keep the API/SDK and parent/BOM release line aligned; an omitted dependency version is managed upstream, not independently pinned here.
 
@@ -230,4 +230,8 @@ Contributions should describe the affected business contract, update its tests a
 
 Use is governed by the repository [license](LICENSE).
 
-<!-- Maintained by .github/scripts/documentation/generate.py and curated.json. Edit editorial inputs, then regenerate. -->
+<!-- Source reference and inventory are generated; keep this repository guide aligned with the governed feature guides. -->
+
+## Publication metadata deployment
+
+See [publication metadata deployment](docs/publication-metadata-deployment.md) for staged V21 ownership preparation, dedicated reader and installer identities, configuration boundaries, and joint qualification prerequisites.

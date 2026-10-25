@@ -1,6 +1,7 @@
 package io.fireflysoftware.core.product.interfaces.dtos.definition;
 
 import io.fireflysoftware.core.product.interfaces.dtos.definition.DefinitionContracts.Common;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -12,7 +13,9 @@ public final class AccountTariffServingContracts {
         NOT_ADMITTED
     }
 
-    public record ReadObservation(Instant databaseRecordedAt, Instant admissionValidUntil) {}
+    public record ReadObservation(
+            @Schema(ref = "#/components/schemas/FireflyInstant") Instant databaseRecordedAt,
+            @Schema(ref = "#/components/schemas/FireflyInstant") Instant admissionValidUntil) {}
 
     public record PublicDefinition(Common common, AccountTariffTerms terms) {}
 
@@ -32,13 +35,13 @@ public final class AccountTariffServingContracts {
             String phase,
             Integer publicStateVersion,
             UUID publicHead,
-            Instant createdAt) {}
+            @Schema(ref = "#/components/schemas/FireflyInstant") Instant createdAt) {}
 
     public record RetainedRevision(
             UUID revisionId,
             RetainedDefinition definition,
             SourcePublication sourcePublication,
-            Instant createdAt) {}
+            @Schema(ref = "#/components/schemas/FireflyInstant") Instant createdAt) {}
 
     public record RetainedPublication(
             UUID publicationId,
@@ -46,7 +49,7 @@ public final class AccountTariffServingContracts {
             UUID revisionId,
             UUID productVersionId,
             RetainedDefinition definition,
-            Instant createdAt) {}
+            @Schema(ref = "#/components/schemas/FireflyInstant") Instant createdAt) {}
 
     public record PublicationControl(String state, Integer stateVersion) {}
 

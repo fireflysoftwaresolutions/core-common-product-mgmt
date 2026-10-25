@@ -21,19 +21,27 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * Minimal Spring Boot application used only during the Maven build to expose
- * the OpenAPI spec via Springdoc. It scans the production controllers so that
- * Springdoc discovers their {@code @RestController} annotations and
- * {@code @OpenAPIDefinition} metadata.
+ * Minimal Spring Boot application used only during the Maven build to expose the OpenAPI spec via
+ * Springdoc. It scans the production controllers so that Springdoc discovers their
+ * {@code @RestController} annotations and {@code @OpenAPIDefinition} metadata.
  *
- * <p>This class lives under {@code src/test/java} and is never packaged into
- * the production artifact. It is activated by the {@code generate-openapi}
- * Maven profile with {@code useTestClasspath=true}.
+ * <p>This class lives under {@code src/test/java} and is never packaged into the production
+ * artifact. It is activated by the {@code generate-openapi} Maven profile with {@code
+ * useTestClasspath=true}.
  */
 @EnableOpenApiGen
 @ComponentScan(basePackages = "io.fireflysoftware.core.product.web.controllers")
 public class OpenApiGenApplication {
     public static void main(String[] args) {
-        SpringApplication.run(OpenApiGenApplication.class, args);
+        var application = new SpringApplication(OpenApiGenApplication.class);
+        application.setDefaultProperties(
+                java.util.Map.of(
+                        "product.definitions.commands.enabled",
+                        "true",
+                        "product.definitions.publication-read.enabled",
+                        "true",
+                        "firefly.openapi.instant-scalar.enabled",
+                        "true"));
+        application.run(args);
     }
 }

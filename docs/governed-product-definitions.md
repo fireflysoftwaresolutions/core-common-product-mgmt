@@ -6,7 +6,7 @@ Product Management owns the product record and its governed definition. Domain s
 
 The typed rules cover account tariffs, fixed-rate installment loans, and term property-and-casualty insurance. They validate exact monetary representations and explicit profile conventions. They do not turn an arbitrary legacy configuration string into an approved customer price. See the [definition rules](../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/) and [typed contracts](../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/).
 
-Keep customer-facing terms separate from internal costs. Public and cost revisions have distinct heads, counters, digests, and history. Public responses must not disclose cost data or reveal its completeness through public counters or errors. Submitting public terms and approving the combined public/private selection are different operations; the pure review rules express those boundaries. A functioning authorized lifecycle API and terminal wizard are still required to expose them.
+Keep customer-facing terms separate from internal costs. Public and cost revisions have distinct heads, counters, digests, and history. Public responses must not disclose cost data or reveal its completeness through public counters or errors. Submitting public terms and approving the combined public/private selection are different operations; the pure review rules express those boundaries. The staff lifecycle API exposes these operations through dedicated command, review, cost, and publication boundaries. The terminal wizard remains a separate integration.
 
 ## Storage and deployment prerequisites
 
@@ -38,10 +38,29 @@ That selected command checks native storage; it does not exercise a new HTTP API
 
 On migration failure, inspect the applied Flyway version and required guard-role attributes. On `23514`, retain the operation identifiers and inspect the exact Product/root/category selection and whether a legacy path touched a governed Product. On transaction serialization or foreign-key failure, retry only after checking the current authoritative source and original operation identity. Do not delete binding/history rows, relabel an old Product as newly created, or weaken constraints to recover.
 
-## Integration work still required
+## Staff metadata lifecycle
 
-The native application store, same-connection authorization context, current tenant/issuer/resource policy, lifecycle/CAS and immutable action receipts, SQL profile-shape parity, public/private read projection, product-owner observation API, pricing execution, generated-SDK workflows, and staff wizard remain separate deliveries. Current customer LegalEntity records do not authorize a bank or insurer to issue a product. Exact issuer authority and downstream operational admission must come from their actual owners.
+The command prefix is `/api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands`. Commands are disabled by default and require `product.definitions.commands.enabled=true` plus the configured trusted issuer, audience, JWKS endpoint, and current resource policy. The supported creation path validates a complete account-tariff draft; typed loan and insurance rules do not imply equivalent origination or staff creation workflows.
 
-Customer simulation, accepted offers, contracts, account/card origination, lending, policy issuance, and financial accounting each need their own current authority and retained owner outcomes. Missing integration must be reported explicitly; it cannot become a synthetic approval.
+| POST suffix | Intent | Required scopes |
+| --- | --- | --- |
+| `/draft` | Create a draft | `product:definitions:write`, `product:definitions:cost:write` |
+| `/public-revision` | Edit public terms | `product:definitions:write` |
+| `/private-cost` | Edit private costs | `product:definitions:cost:write` |
+| `/submission` | Submit public terms | `product:definitions:write` |
+| `/selection/approve` | Approve the submitted public/private selection | `product:definitions:review`, `product:definitions:cost:read` |
+| `/selection/reject` | Reject the submitted selection | `product:definitions:review`, `product:definitions:cost:read` |
+| `/publication` | Publish the reviewed selection | `product:definitions:publish` |
+| `/publication/withdraw` | Withdraw a publication | `product:definitions:withdraw` |
 
-Read-only serving for retained account-tariff metadata is described in [governed definition reads](governed-product-definition-reads.md). It does not create the authorized lifecycle or operational admission described above.
+A scope alone is insufficient. The dedicated stateless bearer chain and configured `product-definition-human-staff-v1` profile bind the verified principal, tenant, root, target, and current policy to the requested action. Policy is checked around completed database work and rechecked for commands. Missing authority fails closed. Read [deployment prerequisites](publication-metadata-deployment.md) before enabling these routes; database context is a trusted application projection, not PostgreSQL verification of a JWT.
+
+The native store uses mapped repositories and a transaction-bound connection. Optimistic comparisons protect current heads and selection identities. The durable action ledger binds the full original operation intent; a retry reauthorizes the caller and resolves the retained outcome instead of treating a generic HTTP idempotency cache as authority. Action completion and receipt visibility are separate facts. Do not change an operation's meaning while reusing its identifier.
+
+Staff reads use the same tenant/root prefix with `/staff-review/selection/current`, `/staff-review/selections/{submissionId}`, `/staff-cost/current`, `/staff-publication/readiness`, and `/staff-publication/current`. Cost, review, readiness, and published terms have different authorization and projection requirements. Responses use private, non-cacheable handling and do not expose internal cost data through public terms. Inspect the generated SDK and [source reference](openplatform/reference.md#http-operations) for request and response contracts.
+
+## Remaining operational integrations
+
+Metadata publication remains **NOT_ADMITTED** for financial operations. Pricing execution, customer simulation, accepted offers, contracts, account/card origination, lending, policy issuance, financial accounting, and the terminal wizard each require their own current authority and retained owner outcomes. Customer LegalEntity records do not authorize a bank or insurer to issue a product. Exact issuer authority and downstream operational admission must come from their actual owners.
+
+Read-only account-tariff serving is described in [governed definition reads](governed-product-definition-reads.md). CARD capability remains conservative as described in [card enrollment capability](card-enrollment-capability.md). Missing integration must be reported explicitly; it cannot become synthetic approval.

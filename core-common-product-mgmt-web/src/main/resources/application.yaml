@@ -19,8 +19,9 @@ spring:
 
   flyway:
     enabled: true
-    baseline-on-migrate: true
-    repair-on-migrate: true
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    clean-disabled: true
     locations: classpath:db/migration
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=${DB_SSL_MODE}
     user: ${FLYWAY_USERNAME:${DB_USERNAME}}
@@ -74,6 +75,9 @@ logging:
     org.flywaydb: DEBUG
 
 firefly:
+  openapi:
+    instant-scalar:
+      enabled: true
   security:
     resource-server:
       issuer: ${PRODUCT_DEFINITION_ISSUER:}

@@ -116,8 +116,12 @@ public final class ProductDefinitionServingServiceImpl implements ProductDefinit
     private Mono<Void> versionParent(
             ProductDefinitionRoot root, ProductDefinitionPublication publication) {
         require(publication.productVersionId() != null);
-        return versions.findByProductVersionIdAndProductId(
-                        publication.productVersionId(), root.productId())
+        return versions.findByTenantIdAndRootIdAndProductVersionIdAndProductIdAndPublicationId(
+                        root.tenantId(),
+                        root.rootId(),
+                        publication.productVersionId(),
+                        root.productId(),
+                        publication.publicationId())
                 .switchIfEmpty(Mono.error(unavailable()))
                 .flatMap(
                         version -> {
@@ -125,8 +129,12 @@ public final class ProductDefinitionServingServiceImpl implements ProductDefinit
                                     Objects.equals(
                                                     version.productVersionId(),
                                                     publication.productVersionId())
+                                            && Objects.equals(version.productId(), root.productId())
+                                            && Objects.equals(version.tenantId(), root.tenantId())
+                                            && Objects.equals(version.rootId(), root.rootId())
                                             && Objects.equals(
-                                                    version.productId(), root.productId()));
+                                                    version.publicationId(),
+                                                    publication.publicationId()));
                             return Mono.empty();
                         });
     }
