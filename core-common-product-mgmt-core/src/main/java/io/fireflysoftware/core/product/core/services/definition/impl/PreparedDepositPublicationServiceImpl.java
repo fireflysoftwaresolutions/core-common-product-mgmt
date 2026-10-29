@@ -102,7 +102,9 @@ public final class PreparedDepositPublicationServiceImpl implements PreparedDepo
         String fingerprint=DefinitionCanonical.hash("product-definition-selection-v1",DefinitionCanonical.encode(DefinitionCanonical.tree(selection)));
         require(fingerprint.equals(row.selectionFingerprint()));window.remaining();
         return new PreparedDepositPublication(request.scope(),window.publisher,row.productId(),row.reviewId(),selection,fingerprint,definition,canonical.json(),
-                request.intentDigest(),request.versionNumber(),request.resources(),original,window.observedAt,window.cap);
+                request.intentDigest(),request.versionNumber(),request.resources(),original,window.observedAt,window.cap,
+                new PreparedDepositPublication.NativePreparation(window.contextId,window.requestDigest,
+                    window.actorUntil,window.permitUntil,window.requestUntil.toEpochMilli()));
     }
 
     private static Mono<Void> live(DepositPublicationPreparationRepository repo, UUID context, Window window) {
@@ -115,9 +117,13 @@ public final class PreparedDepositPublicationServiceImpl implements PreparedDepo
         final ProductDefinitionLifecycleContracts.Actor publisher;
         final Instant start,requestUntil;
         final long before;
+        final long actorUntil,permitUntil;
+        UUID contextId;
+        String requestDigest;
         Instant observedAt,cap;
         Window(R2dbcOperationBudget original,Admission admission) {
             this.original=original;publisher=new ProductDefinitionLifecycleContracts.Actor(admission.principal().issuer(),admission.principal().subject());
+            actorUntil=admission.actorExpiresAtEpochMillis();permitUntil=admission.validUntilEpochMillis();
             start=clock.instant();before=nanos.getAsLong();
             requestUntil=earliest(start.plus(original.remaining()),start.plusSeconds(30)).truncatedTo(ChronoUnit.MILLIS);
             require(admission.validUntilEpochMillis()<=admission.actorExpiresAtEpochMillis()
@@ -145,6 +151,7 @@ public final class PreparedDepositPublicationServiceImpl implements PreparedDepo
             long offset=Math.subtractExact(callBefore,before);require(offset>=0);
             cap=earliest(cap,earliest(Instant.ofEpochMilli(until),start.plusNanos(Math.addExact(offset,lifetime))))
                 .truncatedTo(ChronoUnit.MILLIS);remaining();
+            contextId=value.contextId();requestDigest=value.requestDigest();
         }
     }
     private static Instant earliest(Instant a,Instant b){return a.isBefore(b)?a:b;}

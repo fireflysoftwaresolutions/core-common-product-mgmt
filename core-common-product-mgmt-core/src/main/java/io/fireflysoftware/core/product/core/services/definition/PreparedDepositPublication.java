@@ -13,6 +13,15 @@ public record PreparedDepositPublication(
         UUID productId, UUID reviewId, Selection selection, String selectionFingerprint,
         ProductDefinition definition, String canonicalDefinition, String intentDigest, long versionNumber,
         PreparedDepositPublicationService.Resources resources, R2dbcOperationBudget originalBudget,
-        Instant observedAt, Instant effectiveUntil) {
+        Instant observedAt, Instant effectiveUntil, NativePreparation nativePreparation) {
+    public record NativePreparation(UUID contextId, String requestDigest,
+            long actorUntilMillis, long permitUntilMillis, long requestUntilMillis) {
+        public NativePreparation {
+            if(contextId==null || contextId.equals(new UUID(0,0)) || requestDigest==null
+                    || !requestDigest.matches("[0-9a-f]{64}") || actorUntilMillis<1
+                    || permitUntilMillis<1 || requestUntilMillis<1)
+                throw new IllegalArgumentException("Exact original native preparation required");
+        }
+    }
     @Override public String toString() { return "PreparedDepositPublication"; }
 }

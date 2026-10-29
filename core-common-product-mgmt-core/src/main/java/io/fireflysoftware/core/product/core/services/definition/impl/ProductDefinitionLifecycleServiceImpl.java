@@ -30,12 +30,14 @@ public final class ProductDefinitionLifecycleServiceImpl
     private final Clock clock;
     private final LongSupplier nanos;
     private final boolean boundedMode;
+    private final PreparedDepositPublicationService preparation;
+    private final DepositAccountDocumentReferenceResolver documentReferences;
 
     private record Frame(
             Parsed parsed,
             Admission admission,
             NativeAdmission nativeAdmission,
-            ProductDefinitionCommandResources resources) {}
+            ProductDefinitionCommandResources resources, PreparedDepositPublication prepared) {}
 
     private record Effect(Receipt receipt, UUID costEventReference, String selectionFingerprint) {}
 
@@ -53,10 +55,30 @@ public final class ProductDefinitionLifecycleServiceImpl
         this(authorization, persistence, backend, clock, nanos, true);
     }
 
+    public ProductDefinitionLifecycleServiceImpl(
+            ProductDefinitionCommandAuthorization authorization,
+            ProductDefinitionCommandPersistence persistence, GovernedDefinitionProfile backend,
+            Clock clock, LongSupplier nanos, PreparedDepositPublicationService preparation,
+            DepositAccountDocumentReferenceResolver documentReferences) {
+        this(authorization,persistence,backend,clock,nanos,true,Objects.requireNonNull(preparation),
+            Objects.requireNonNull(documentReferences));
+        if(backend!=GovernedDefinitionProfile.DEPOSIT_ACCOUNT)
+            throw new IllegalArgumentException("Deposit publication collaborators require deposit backend");
+    }
+
     private ProductDefinitionLifecycleServiceImpl(
             ProductDefinitionCommandAuthorization authorization,
             ProductDefinitionCommandPersistence persistence, GovernedDefinitionProfile backend,
             Clock clock, LongSupplier nanos, boolean boundedMode) {
+        this(authorization,persistence,backend,clock,nanos,boundedMode,null,null);
+    }
+
+    private ProductDefinitionLifecycleServiceImpl(
+            ProductDefinitionCommandAuthorization authorization,
+            ProductDefinitionCommandPersistence persistence, GovernedDefinitionProfile backend,
+            Clock clock, LongSupplier nanos, boolean boundedMode, PreparedDepositPublicationService preparation,
+            DepositAccountDocumentReferenceResolver documentReferences) {
+        this.preparation=preparation;this.documentReferences=documentReferences;
         this.authorization=Objects.requireNonNull(authorization);
         this.persistence=Objects.requireNonNull(persistence);this.backend=Objects.requireNonNull(backend);
         this.clock=Objects.requireNonNull(clock);this.nanos=Objects.requireNonNull(nanos);this.boundedMode=boundedMode;
@@ -77,10 +99,8 @@ public final class ProductDefinitionLifecycleServiceImpl
                 var requested=new ProductDefinitionCommandAuthorization.Scope(value.tenantId(),value.rootId(),value.operationId(),command,parsed.instruction().targetId());
                 return authorization.authorize(requested).switchIfEmpty(Mono.error(unavailable())).flatMap(admission->{
                     require(requested.equals(admission.scope()));
-                    // The exact approved snapshot is currently loaded inside SQL. Remote current
-                    // observations require an outside-SQL pre-read and native revalidation first.
                     if(backend==GovernedDefinitionProfile.DEPOSIT_ACCOUNT && command==ProductDefinitionCommand.PUBLISH)
-                        return Mono.error(unavailable());
+                        return depositPublication(parsed,admission,requestBudget,before);
                     var window=ProductDefinitionLifecycleWindow.start(observedAt,before,admission.actorExpiresAtEpochMillis(),admission.validUntilEpochMillis(),clock,nanos);
                     var resources=ProductDefinitionCommandResources.fresh(command);
                     var failures=new ProductDefinitionBoundedErrors();
@@ -101,6 +121,50 @@ public final class ProductDefinitionLifecycleServiceImpl
                 });
             }).timeout(requestBudget.remaining());
         })).onErrorMap(ProductDefinitionLifecycleServiceImpl::safe);
+    }
+
+    private Mono<Receipt> depositPublication(Parsed parsed,Admission publisher,
+            R2dbcOperationBudget original,long beforePreparation) {
+        if(preparation==null || documentReferences==null)return Mono.error(unavailable());
+        var resources=ProductDefinitionCommandResources.fresh(ProductDefinitionCommand.PUBLISH);
+        var stable=new PreparedDepositPublicationService.Resources(resources.actionId(),resources.publicationId(),
+            resources.productVersionId(),resources.historyId(),resources.auditId(),resources.publicEventId());
+        return preparation.prepare(parsed,stable,original).switchIfEmpty(Mono.error(unavailable())).flatMap(prepared->{
+            require(stable.equals(prepared.resources()) && parsed.intentDigest().equals(prepared.intentDigest()));
+            var attempt=new DepositPublicationAttempt(prepared,original,publisher,beforePreparation,clock,nanos);
+            return Flux.fromIterable(attempt.documents()).concatMap(document->Mono.defer(()->{
+                long before=nanos.getAsLong();attempt.remaining();
+                return documentReferences.verify(attempt.target(document),original,attempt.effectiveUntil())
+                    .switchIfEmpty(Mono.error(unavailable())).timeout(attempt.ownerRemaining())
+                    .doOnNext(observation->attempt.observe(document,observation,before));
+            })).then(Mono.defer(()->authorization.reauthorize(publisher).timeout(attempt.remaining())))
+                .then(Mono.defer(()->{
+                    attempt.remaining();var failures=new ProductDefinitionBoundedErrors();
+                    return persistence.executePublication(original,root->{
+                        root.narrow(attempt.narrowed());long before=nanos.getAsLong();
+                        var scope=parsed.instruction().scope();
+                        Supplier<Mono<NativeAdmission>> begin=()->persistence.publicationAdmission().begin(
+                            scope.tenantId(),scope.rootId(),scope.operationId(),prepared.nativePreparation().contextId(),
+                            attempt.evidence(),publisher.principal().issuer(),publisher.principal().subject(),
+                            publisher.actorExpiresAtEpochMillis(),publisher.validUntilEpochMillis(),parsed.canonicalIntent(),
+                            parsed.intentDigest(),ProductDefinitionCommandPlan.encode(parsed,resources,backend));
+                        Supplier<Mono<Void>> permission=()->Mono.defer(()->{
+                            attempt.remaining();return authorization.reauthorize(publisher).timeout(attempt.remaining())
+                                .then(Mono.fromRunnable(attempt::remaining));
+                        });
+                        return failures.capture(command(parsed,publisher,resources,begin,nativeAdmission->{
+                            require(!Boolean.TRUE.equals(nativeAdmission.replay()));
+                            return persistence.productDefinitionCommandNativeRepository().admission(nativeAdmission.commandId())
+                                .switchIfEmpty(Mono.error(unavailable())).flatMap(stamp->{
+                                    attempt.observeNative(stamp,nativeAdmission.commandRecordedAt(),before);
+                                    root.narrow(attempt.narrowed());return Mono.empty();
+                                });
+                        },permission,prepared));
+                    }).onErrorMap(RootTransactionException.class,error->failures.resolve(error,attempt::narrowed))
+                        .flatMap(receipt->{attempt.remaining();return authorization.reauthorize(publisher).timeout(attempt.remaining())
+                            .then(Mono.defer(()->{attempt.remaining();return Mono.just(receipt);}));});
+                })).timeout(attempt.remaining());
+        });
     }
 
     private Mono<Receipt> executeLegacy(
@@ -176,19 +240,26 @@ public final class ProductDefinitionLifecycleServiceImpl
     private Mono<Receipt> command(Parsed parsed,Admission admission,ProductDefinitionCommandResources resources,
             Function<NativeAdmission,Mono<Void>> narrow) {
         var scope=parsed.instruction().scope();
-        return persistence.productDefinitionCommandNativeRepository().begin(
-                scope.tenantId(),scope.rootId(),scope.operationId(),parsed.instruction().command().name(),
-                admission.principal().issuer(),admission.principal().subject(),admission.actorExpiresAtEpochMillis(),admission.validUntilEpochMillis(),
-                backend.policyProfile(),parsed.canonicalIntent(),parsed.intentDigest(),ProductDefinitionCommandPlan.encode(parsed,resources,backend))
-            .switchIfEmpty(Mono.error(unavailable())).flatMap(nativeAdmission->{
-                validateNative(nativeAdmission,resources);
-                return narrow.apply(nativeAdmission).then(Mono.defer(()->{
-                    var frame=new Frame(parsed,admission,nativeAdmission,resources);
-                    return truth(persistence.productDefinitionCommandNativeRepository().isCurrent(nativeAdmission.commandId()))
-                        .then(Mono.defer(()->Boolean.TRUE.equals(nativeAdmission.replay())?replay(frame):fresh(frame)))
-                        .flatMap(receipt->truth(persistence.productDefinitionCommandNativeRepository().finish(nativeAdmission.commandId())).thenReturn(receipt));
-                }));
-            });
+        return command(parsed,admission,resources,()->persistence.productDefinitionCommandNativeRepository().begin(
+            scope.tenantId(),scope.rootId(),scope.operationId(),parsed.instruction().command().name(),
+            admission.principal().issuer(),admission.principal().subject(),admission.actorExpiresAtEpochMillis(),admission.validUntilEpochMillis(),
+            backend.policyProfile(),parsed.canonicalIntent(),parsed.intentDigest(),ProductDefinitionCommandPlan.encode(parsed,resources,backend)),
+            narrow,()->Mono.empty(),null);
+    }
+
+    private Mono<Receipt> command(Parsed parsed,Admission admission,ProductDefinitionCommandResources resources,
+            Supplier<Mono<NativeAdmission>> begin,Function<NativeAdmission,Mono<Void>> narrow,
+            Supplier<Mono<Void>> permission,PreparedDepositPublication prepared) {
+        return Mono.defer(begin).switchIfEmpty(Mono.error(unavailable())).flatMap(nativeAdmission->{
+            validateNative(nativeAdmission,resources);
+            return narrow.apply(nativeAdmission).then(Mono.defer(()->permission.get())).then(Mono.defer(()->{
+                var frame=new Frame(parsed,admission,nativeAdmission,resources,prepared);
+                return truth(persistence.productDefinitionCommandNativeRepository().isCurrent(nativeAdmission.commandId()))
+                    .then(Mono.defer(()->Boolean.TRUE.equals(nativeAdmission.replay())?replay(frame):fresh(frame)))
+                    .flatMap(receipt->Mono.defer(permission).then(truth(persistence.productDefinitionCommandNativeRepository()
+                        .finish(nativeAdmission.commandId()))).thenReturn(receipt));
+            }));
+        });
     }
 
     private static void validateNative(
@@ -1514,8 +1585,20 @@ public final class ProductDefinitionLifecycleServiceImpl
                                                                                                                 cost,
                                                                                                                 request
                                                                                                                         .reviewId())
-                                                                                                        .flatMap(
-                                                                                                                approved ->
+                                                                                                                                                                            .doOnNext(approved->{
+                                                                        if(frame.prepared()!=null) {
+                                                                            var prepared=frame.prepared();
+                                                                            var selected=new ProductDefinitionLifecycleContracts.Selection(scope.tenantId(),scope.rootId(),
+                                                                                approved.submission().submissionId(),revision.revisionId(),revision.publicDigest(),
+                                                                                root.publicStateVersion(),cost.costRevisionId(),cost.costDigest(),control.costStateVersion());
+                                                                            if(!prepared.productId().equals(root.productId()) || !prepared.reviewId().equals(approved.review().reviewId())
+                                                                                    || !prepared.selection().equals(selected)
+                                                                                    || !prepared.selectionFingerprint().equals(approved.privateReview().selectionFingerprint())
+                                                                                    || !prepared.canonicalDefinition().equals(revision.canonicalDefinition()))throw conflict();
+                                                                        }
+                                                                    })
+                                                                    .flatMap(
+                                                                            approved ->
                                                                                                                         persistence
                                                                                                                                 .lifecyclePublicationControlRepository()
                                                                                                                                 .countByTenantIdAndRootIdAndState(

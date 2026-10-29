@@ -7,6 +7,7 @@ import io.r2dbc.spi.ConnectionFactory;
 import org.fireflyframework.security.rs.ResourceServerProperties;
 import org.fireflyframework.security.spi.*;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -24,6 +25,7 @@ public class DepositAccountConfiguration {
     public DepositAccountRuntime depositAccountRuntime(ProductDefinitionCommandProperties commands,DepositAccountProperties properties,
             ResourceServerProperties trust,SecurityContextPort principals,@Qualifier("productDefinitionCommandPolicy") PolicyDecisionPort policies,
             ConnectionFactory readFactory,R2dbcConverter converter,ApplicationContext context,
+            ObjectProvider<DepositAccountDocumentReferenceResolver> documentReferences,
             @Qualifier("productDefinitionReadConnectionSource") ProductDefinitionReadConnectionSource ownerSource){
         if(!commands.isEnabled())throw new IllegalStateException("PRODUCT_COMMAND_CONFIGURATION_REQUIRED");
         try{ProductDefinitionBoundedPools.credentials(commands.getUsername(),commands.getPassword());}
@@ -34,7 +36,7 @@ public class DepositAccountConfiguration {
         Clock clock=Clock.systemUTC();LongSupplier nanos=System::nanoTime;
         var authority=new ProductDefinitionCommandAuthorizationImpl(principals,policies,clock,Set.of(trust.getIssuer()),properties.getPolicyProfile(),backend);
         var pool=ProductDefinitionBoundedPools.create("product-definition-deposit",readFactory,ownerSource,commands.getUsername(),commands.getPassword());
-        try{return new DepositAccountRuntime(new io.fireflysoftware.core.product.models.repositories.definition.lifecycle.ProductDefinitionCommandPersistence(pool,converter,context,true),authority,clock,nanos);}
+        try{return new DepositAccountRuntime(new io.fireflysoftware.core.product.models.repositories.definition.lifecycle.ProductDefinitionCommandPersistence(pool,converter,context,true),authority,clock,nanos,documentReferences.getIfAvailable());}
         catch(RuntimeException invalid){pool.dispose();throw new IllegalStateException("PRODUCT_DEPOSIT_RUNTIME_UNAVAILABLE");}
     }
 }

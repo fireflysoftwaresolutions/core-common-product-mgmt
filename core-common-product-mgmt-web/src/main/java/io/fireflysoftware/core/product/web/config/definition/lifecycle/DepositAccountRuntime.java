@@ -14,8 +14,14 @@ public final class DepositAccountRuntime implements AutoCloseable {
     private final ProductDefinitionCostReadService costs;
     private final ProductDefinitionReviewReadService reviews;
     public DepositAccountRuntime(ProductDefinitionCommandPersistence persistence,ProductDefinitionCommandAuthorizationImpl authority,Clock clock,LongSupplier nanos){
+        this(persistence,authority,clock,nanos,null);
+    }
+    public DepositAccountRuntime(ProductDefinitionCommandPersistence persistence,ProductDefinitionCommandAuthorizationImpl authority,
+            Clock clock,LongSupplier nanos,DepositAccountDocumentReferenceResolver documentReferences){
         this.persistence=Objects.requireNonNull(persistence);var backend=GovernedDefinitionProfile.DEPOSIT_ACCOUNT;
-        commands=new ProductDefinitionLifecycleServiceImpl(authority,persistence,backend,clock,nanos);
+        commands=documentReferences==null?new ProductDefinitionLifecycleServiceImpl(authority,persistence,backend,clock,nanos)
+            :new ProductDefinitionLifecycleServiceImpl(authority,persistence,backend,clock,nanos,
+                new PreparedDepositPublicationServiceImpl(authority,persistence,clock,nanos),documentReferences);
         costs=new ProductDefinitionCostReadServiceImpl(authority,persistence,backend,clock,nanos);
         reviews=new ProductDefinitionReviewReadServiceImpl(authority,persistence,backend,clock,nanos);
     }

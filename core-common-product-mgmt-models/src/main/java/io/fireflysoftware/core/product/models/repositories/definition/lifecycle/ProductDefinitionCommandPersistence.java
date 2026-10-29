@@ -44,6 +44,7 @@ public final class ProductDefinitionCommandPersistence implements AutoCloseable 
     private final ProductDefinitionReviewReadNativeRepository reviewReadNative;
     private final DepositPublicationPreparationRepository publicationPreparation;
     private final DepositPublicationPreparationSnapshotRepository publicationPreparationSnapshots;
+    private final DepositPublicationAdmissionRepository publicationAdmission;
     private final TransactionalOperator readTransactions;
     private final LifecycleActionRepository lifecycleActionRepository;
     private final LifecycleActionPrivateRepository lifecycleActionPrivateRepository;
@@ -62,7 +63,7 @@ public final class ProductDefinitionCommandPersistence implements AutoCloseable 
     private final R2dbcTransactionManager manager;
     private final TransactionalOperator transactions;
     private final BoundedRootTransaction bounded;
-    private final DefaultTransactionDefinition boundedCommand, boundedRead, boundedPreparation;
+    private final DefaultTransactionDefinition boundedCommand, boundedRead, boundedPreparation, boundedPublication;
     private final ProductDefinitionDraftRepository drafts;
     private final ProductDefinitionCostControlRepository costs;
 
@@ -112,6 +113,7 @@ public final class ProductDefinitionCommandPersistence implements AutoCloseable 
         reviewReadNative = factory.getRepository(ProductDefinitionReviewReadNativeRepository.class);
         publicationPreparation = factory.getRepository(DepositPublicationPreparationRepository.class);
         publicationPreparationSnapshots = factory.getRepository(DepositPublicationPreparationSnapshotRepository.class);
+        publicationAdmission = factory.getRepository(DepositPublicationAdmissionRepository.class);
         manager = new R2dbcTransactionManager(transactionFactory);
         manager.setEnforceReadOnly(true);
         var readDefinition = new DefaultTransactionDefinition();
@@ -143,6 +145,8 @@ public final class ProductDefinitionCommandPersistence implements AutoCloseable 
         boundedPreparation.setName("product-definition-deposit-publication-preparation");
         // Native admission metadata is inserted; business repositories remain projection-only.
         boundedPreparation.setReadOnly(false);
+        boundedPublication=new DefaultTransactionDefinition(boundedPreparation);
+        boundedPublication.setName("product-definition-deposit-publication");
     }
 
     public boolean boundedTransactions() {
@@ -166,12 +170,24 @@ public final class ProductDefinitionCommandPersistence implements AutoCloseable 
         });
     }
 
+    public <T> Mono<T> executePublication(R2dbcOperationBudget originalBudget,
+            Function<RootTransactionScope,Mono<T>> work) {
+        return Mono.defer(()->{
+            if(bounded==null)return Mono.error(new IllegalStateException("PRODUCT_BOUNDED_PERSISTENCE_REQUIRED"));
+            return bounded.execute(originalBudget,boundedPublication,work).map(RootCompletion::value);
+        });
+    }
+
     public ProductDefinitionReviewReadNativeRepository reviewReadNative() {
         return reviewReadNative;
     }
 
     public DepositPublicationPreparationRepository publicationPreparation() {
         return publicationPreparation;
+    }
+
+    public DepositPublicationAdmissionRepository publicationAdmission() {
+        return publicationAdmission;
     }
 
     public DepositPublicationPreparationSnapshotRepository publicationPreparationSnapshots() {

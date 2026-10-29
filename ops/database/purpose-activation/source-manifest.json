@@ -69,6 +69,41 @@
       "positivePublicationEnabled": false,
       "snapshotRead": "SECURITY_BARRIER_SECURITY_INVOKER_VIEW_DERIVED_SPRING_DATA",
       "rawSessionCommitDeadlineRequirement": "OPEN_SET_CONSTRAINTS_EARLY_FIRING_NOT_PREVENTED"
+    },
+    "V25__Deposit_Publication_Admission.sql": {
+      "sha256": "ba7dbc5df33f670aea3e22a826229384e83eaa6dadf06944f4fca01d693b3bea",
+      "bytes": 45093,
+      "basePublicHead": "4b1b8384809517629a45df44a95d23d1bf1b80f6",
+      "stagedPath": "ops/database/purpose-activation/V25__Deposit_Publication_Admission.sql",
+      "declaredFunctions": [
+        "firefly_product_definition_private.deposit_publication_activation_allowed",
+        "firefly_product_definition_private.pending_deposit_publication",
+        "firefly_product_definition_private.deposit_publication_command_until",
+        "public.begin_product_definition_deposit_publication",
+        "public.begin_product_definition_command",
+        "firefly_product_definition_private.current_command",
+        "firefly_product_definition_private.verify_complete",
+        "public.product_definition_command_admission"
+      ],
+      "executionApproved": false,
+      "nativeInstalled": false,
+      "physicalTransaction": "READ_WRITE_REPEATABLE_READ_TWO_DISTINCT_ROOTS_SAME_ORIGINAL_BUDGET",
+      "positivePublicationEnabled": false,
+      "sourceActivationFence": "PRIVATE_PREDICATE_RETURNS_FALSE",
+      "ordinaryPersistence": "SPRING_DATA_ASSIGNED_INSERTS_AND_AFFECTED_ROW_CAS",
+      "separateDeadlineCuts": [
+        "ORIGINAL_ACTOR",
+        "ORIGINAL_PERMIT",
+        "ORIGINAL_REQUEST",
+        "PREPARATION",
+        "CURRENT_ACTOR",
+        "CURRENT_PERMIT",
+        "OWNER_EFFECTIVE"
+      ],
+      "rawSessionCommitDeadlineRequirement": "OPEN_SET_CONSTRAINTS_EARLY_FIRING_AND_PHYSICAL_COMMIT_WAITS",
+      "rawSavepointLifetimeRequirement": "OPEN",
+      "historicalPublicationVisibility": "UNCHANGED_SEPARATE_FRESH_SERVING_AUTHORITY_REQUIRED",
+      "historicalEffectRecovery": "REFUSED_UNQUALIFIED"
     }
   },
   "automaticActivationImplemented": false,
