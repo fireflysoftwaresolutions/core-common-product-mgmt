@@ -48,6 +48,27 @@
       ],
       "executionApproved": false,
       "nativeInstalled": false
+    },
+    "V24__Deposit_Publication_Preparation.sql": {
+      "sha256": "53628776a8e1b7c5ddb0685344e24b16d90cd409b5eb38af80323cdf7030efd8",
+      "bytes": 29128,
+      "basePublicHead": "61f154adb953ad20e45eeed12a3f46403ffa413a",
+      "stagedPath": "ops/database/purpose-activation/V24__Deposit_Publication_Preparation.sql",
+      "declaredFunctions": [
+        "public.product_definition_deposit_publish_preparation_runtime_allowed",
+        "firefly_product_definition_private.current_deposit_publication_preparation",
+        "public.open_product_definition_deposit_publish_preparation",
+        "public.product_definition_deposit_publish_preparation_matches",
+        "public.assert_product_definition_deposit_publish_preparation_live",
+        "public.product_definition_deposit_publish_preparation_complete",
+        "public.product_definition_preparation_business_writes_allowed"
+      ],
+      "executionApproved": false,
+      "nativeInstalled": false,
+      "physicalTransaction": "READ_WRITE_REPEATABLE_READ_NATIVE_METADATA_ONLY",
+      "positivePublicationEnabled": false,
+      "snapshotRead": "SECURITY_BARRIER_SECURITY_INVOKER_VIEW_DERIVED_SPRING_DATA",
+      "rawSessionCommitDeadlineRequirement": "OPEN_SET_CONSTRAINTS_EARLY_FIRING_NOT_PREVENTED"
     }
   },
   "automaticActivationImplemented": false,
