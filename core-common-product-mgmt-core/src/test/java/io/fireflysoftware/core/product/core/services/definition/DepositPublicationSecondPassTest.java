@@ -10,7 +10,16 @@ import io.fireflysoftware.core.product.models.repositories.definition.lifecycle.
 
 /** Source contracts only. No native owner admission, publication or financial effect is qualified. */
 class DepositPublicationSecondPassTest {
-    static Path root(){return Path.of(System.getProperty("product.reference.source-root",System.getProperty("user.dir"))).toAbsolutePath();}
+    static Path root(){
+        var configured=System.getProperty("product.reference.source-root");
+        if(configured!=null)return Path.of(configured).toAbsolutePath();
+        var root=Path.of(System.getProperty("user.dir")).toAbsolutePath();
+        if(!Files.isDirectory(root.resolve("ops/database/purpose-activation"))
+                && root.getFileName()!=null && root.getFileName().toString().equals("core-common-product-mgmt-core")
+                && Files.isRegularFile(root.resolve("pom.xml")) && Files.isRegularFile(root.resolve("../pom.xml"))
+                && Files.isDirectory(root.resolve("../ops/database/purpose-activation")))root=root.getParent();
+        return root;
+    }
     @Test void lifecycleHostsTheConcretePreparationAndOwnerCoordinator() {
         assertDoesNotThrow(()->Class.forName("io.fireflysoftware.core.product.core.services.definition.impl.ProductDefinitionLifecycleServiceImpl")
             .getConstructor(ProductDefinitionCommandAuthorization.class,ProductDefinitionCommandPersistence.class,
