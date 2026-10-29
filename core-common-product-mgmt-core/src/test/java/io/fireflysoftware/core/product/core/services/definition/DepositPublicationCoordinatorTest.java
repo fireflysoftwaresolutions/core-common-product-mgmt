@@ -48,7 +48,7 @@ class DepositPublicationCoordinatorTest {
     final class Fixture implements AutoCloseable {
         final AtomicLong tick=new AtomicLong();final java.util.function.LongSupplier nanos=tick::get;
         final Clock clock=Clock.fixed(NOW,ZoneOffset.UTC);final List<String> order=new ArrayList<>();
-        final Driver driver=new Driver();final ConnectionPool pool=new ConnectionPool(ConnectionPoolConfiguration.builder(driver).initialSize(0).maxSize(1).build());
+        final Driver driver=new Driver();final ConnectionPool pool=new ConnectionPool(ConnectionPoolConfiguration.builder(driver).allocatorSubscribeOn(reactor.core.scheduler.Schedulers.immediate()).initialSize(0).maxSize(1).build());
         final GenericApplicationContext context=new GenericApplicationContext();
         final ProductDefinitionCommandPersistence persistence;
         final Parsed parsed;final PublishBody request;final DefinitionProfiles.Canonical publicValue;
@@ -133,17 +133,18 @@ class DepositPublicationCoordinatorTest {
         final class Driver implements ConnectionFactory {
             int creates,begins,commits,rollbacks,writes;boolean active,closed;Map<String,Object> evidence;UUID action;
             final List<String> statements=new ArrayList<>();final Set<String> inserted=new LinkedHashSet<>();
+            final Set<Thread> callbacks=java.util.concurrent.ConcurrentHashMap.newKeySet();
             public ConnectionFactoryMetadata getMetadata(){return ()->"PostgreSQL";}
-            public org.reactivestreams.Publisher<? extends Connection> create(){return Mono.fromSupplier(()->{creates++;return proxy(Connection.class,(p,m,a)->switch(m.getName()){
+            public org.reactivestreams.Publisher<? extends Connection> create(){return Mono.fromSupplier(()->{callbacks.add(Thread.currentThread());creates++;return proxy(Connection.class,(p,m,a)->switch(m.getName()){
                 case "isAutoCommit"->!active;case "getTransactionIsolationLevel"->IsolationLevel.READ_COMMITTED;
                 case "getMetadata"->proxy(ConnectionMetadata.class,(x,n,z)->n.getName().equals("getDatabaseProductName")?"PostgreSQL":"17");
                 case "toString"->"ControlledPublicationLease";case "hashCode"->System.identityHashCode(p);case "equals"->p==a[0];
-                case "beginTransaction"->Mono.fromRunnable(()->{begins++;active=true;var definition=(TransactionDefinition)a[0];
+                case "beginTransaction"->Mono.fromRunnable(()->{callbacks.add(Thread.currentThread());begins++;active=true;var definition=(TransactionDefinition)a[0];
                     assertFalse(Boolean.TRUE.equals(definition.getAttribute(TransactionDefinition.READ_ONLY)));
                     assertEquals(IsolationLevel.REPEATABLE_READ,definition.getAttribute(TransactionDefinition.ISOLATION_LEVEL));order.add("begin"+begins);});
-                case "commitTransaction"->Mono.fromRunnable(()->{commits++;active=false;order.add("commit"+commits);});
-                case "rollbackTransaction"->Mono.fromRunnable(()->{rollbacks++;active=false;order.add("rollback");});
-                case "close"->Mono.fromRunnable(()->closed=true);case "validate"->Mono.just(!closed);case "createStatement"->statement((String)a[0]);
+                case "commitTransaction"->Mono.fromRunnable(()->{callbacks.add(Thread.currentThread());commits++;active=false;order.add("commit"+commits);});
+                case "rollbackTransaction"->Mono.fromRunnable(()->{callbacks.add(Thread.currentThread());rollbacks++;active=false;order.add("rollback");});
+                case "close"->Mono.fromRunnable(()->{callbacks.add(Thread.currentThread());closed=true;});case "validate"->Mono.just(!closed);case "createStatement"->statement((String)a[0]);
                 default->Mono.empty();});});}
             Statement statement(String sql){var bindings=new TreeMap<Integer,Object>();return proxy(Statement.class,(p,m,a)->{
                 if(m.getName().equals("bind")){bindings.put((Integer)a[0],a[1]);return p;}
@@ -198,6 +199,11 @@ class DepositPublicationCoordinatorTest {
                     default->throw new UnsupportedOperationException(m.getName());});}
         }
         public void close(){context.close();pool.disposeLater().block(Duration.ofSeconds(1));}
+    }
+    @Test void synchronousControlledDriverCallbacksFinishOnTheSubscribingThread(){
+        var caller=Thread.currentThread();var f=new Fixture();
+        try(f){assertNotNull(f.execute().block());assertEquals(2,f.driver.commits);}
+        assertEquals(Set.of(caller),f.driver.callbacks);
     }
     @Test void preparationCommitsBeforeOwnersAndSecondPassRetainsActualMappedAtomicWrites(){try(var f=new Fixture()){
         try{assertNotNull(f.execute().block());}catch(RuntimeException failure){throw new AssertionError("Controlled driver order "+f.order,failure);}assertEquals(2,f.driver.begins);assertEquals(2,f.driver.commits);assertEquals(0,f.driver.rollbacks);
