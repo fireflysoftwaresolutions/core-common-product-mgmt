@@ -113,13 +113,15 @@ final class DefinitionEnvelopeRules {
         }
         unique(r.documents(), 1, 50, DocumentRequirement::code, "/common/requirements/documents");
         boolean contract = false;
+        boolean opaqueDocuments=("INSURANCE".equals(c.businessArea()) && "TERM_PC_INSURANCE_V1".equals(c.profileCode()))
+                || ("BANKING".equals(c.businessArea()) && "DEPOSIT_ACCOUNT_V1".equals(c.profileCode()));
         for (var doc : r.documents()) {
             String path = "/common/requirements/documents";
             code(doc.documentType(), path + "/documentType");
             require(doc.mandatory() != null, path + "/mandatory");
-            reference(doc.template(), "DOCUMENT_TEMPLATE", path + "/template");
-            reference(doc.issuer(), "DOCUMENT_ISSUER", path + "/issuer");
-            reference(doc.layout(), "DOCUMENT_LAYOUT", path + "/layout");
+            documentReference(doc.template(), "DOCUMENT_TEMPLATE", path + "/template", opaqueDocuments);
+            documentReference(doc.issuer(), "DOCUMENT_ISSUER", path + "/issuer", opaqueDocuments);
+            documentReference(doc.layout(), "DOCUMENT_LAYOUT", path + "/layout", opaqueDocuments);
             DefinitionRules.text(doc.locale(), 50, path + "/locale");
             try {
                 new Locale.Builder().setLanguageTag(doc.locale()).build();

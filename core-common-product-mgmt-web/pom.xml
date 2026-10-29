@@ -14,6 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <document-issuer-sdk.version>26.10.6</document-issuer-sdk.version>
         <!-- Enable OpenAPI generation (profile inherited from firefly-parent) -->
         <openapi.gen.skip>false</openapi.gen.skip>
         <openapi.gen.mainClass>io.fireflysoftware.core.product.web.openapi.OpenApiGenApplication</openapi.gen.mainClass>
@@ -36,6 +37,12 @@
         <dependency>
             <groupId>io.fireflysoftware</groupId>
             <artifactId>core-common-product-mgmt-interfaces</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.fireflysoftware</groupId>
+            <artifactId>core-common-config-mgmt-sdk</artifactId>
+            <version>${document-issuer-sdk.version}</version>
         </dependency>
 
         <!-- Common Libraries -->

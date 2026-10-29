@@ -11,19 +11,33 @@ import org.springframework.web.server.ResponseStatusException;
 
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
+import java.time.*;
+import java.util.function.LongSupplier;
+import org.fireflyframework.core.transaction.R2dbcOperationBudget;
+import org.fireflyframework.core.transaction.RootTransactionException;
 import java.util.*;
 
 public final class ProductDefinitionReviewReadServiceImpl
         implements ProductDefinitionReviewReadService {
     private final ProductDefinitionReviewAuthorization authorization;
     private final ProductDefinitionCommandPersistence persistence;
+    private final GovernedDefinitionProfile backend;
+    private final Clock clock;
+    private final LongSupplier nanos;
+    private final boolean boundedMode;
 
-    public ProductDefinitionReviewReadServiceImpl(
-            ProductDefinitionReviewAuthorization authorization,
-            ProductDefinitionCommandPersistence persistence) {
-        this.authorization = Objects.requireNonNull(authorization);
-        this.persistence = Objects.requireNonNull(persistence);
+    public ProductDefinitionReviewReadServiceImpl(ProductDefinitionReviewAuthorization authorization,ProductDefinitionCommandPersistence persistence) {
+        this(authorization,persistence,GovernedDefinitionProfile.ACCOUNT_TARIFF,Clock.systemUTC(),System::nanoTime,false);
+    }
+    public ProductDefinitionReviewReadServiceImpl(ProductDefinitionReviewAuthorization authorization,ProductDefinitionCommandPersistence persistence,
+            GovernedDefinitionProfile backend,Clock clock,LongSupplier nanos) {
+        this(authorization,persistence,backend,clock,nanos,true);
+    }
+    private ProductDefinitionReviewReadServiceImpl(ProductDefinitionReviewAuthorization authorization,ProductDefinitionCommandPersistence persistence,
+            GovernedDefinitionProfile backend,Clock clock,LongSupplier nanos,boolean boundedMode) {
+        this.authorization=Objects.requireNonNull(authorization);this.persistence=Objects.requireNonNull(persistence);
+        this.backend=Objects.requireNonNull(backend);this.clock=Objects.requireNonNull(clock);this.nanos=Objects.requireNonNull(nanos);this.boundedMode=boundedMode;
+        if(boundedMode && (authorization.definitionProfile()!=backend || !persistence.boundedTransactions()))throw new IllegalArgumentException("Matching bounded product backend required");
     }
 
     public Mono<ProductDefinitionReviewSelectionView> readSelection(
@@ -35,7 +49,35 @@ public final class ProductDefinitionReviewReadServiceImpl
         return read(ProductDefinitionReviewAuthorization.Scope.current(tenant, root));
     }
 
-    private Mono<ProductDefinitionReviewSelectionView> read(
+    private Mono<ProductDefinitionReviewSelectionView> read(ProductDefinitionReviewAuthorization.Scope scope) {
+        return boundedMode?readBounded(scope):readLegacy(scope);
+    }
+    private Mono<ProductDefinitionReviewSelectionView> readBounded(ProductDefinitionReviewAuthorization.Scope requested) {
+        return ProductDefinitionCommandTransactionBoundary.outsideSql(()->Mono.defer(()->{
+            Instant observed=clock.instant();long before=nanos.getAsLong();
+            var request=R2dbcOperationBudget.observed(observed,observed.plusSeconds(30),before,Duration.ofSeconds(30),clock,nanos);
+            return authorization.authorize(requested).switchIfEmpty(Mono.error(unavailable())).flatMap(admission->{
+                require(requested.equals(admission.scope()));var actor=admission.principal();
+                var window=ProductDefinitionLifecycleWindow.start(observed,before,admission.actorExpiresAtEpochMillis(),admission.validUntilEpochMillis(),clock,nanos);
+                var failures=new ProductDefinitionBoundedErrors();
+                return persistence.executeBounded(window.budget(),true,scope->{
+                    long nativeBefore=nanos.getAsLong();var nativeReads=persistence.reviewReadNative();
+                    var opened=requested.target()==ProductDefinitionReviewAuthorization.Target.CURRENT
+                        ?nativeReads.openCurrent(requested.tenantId(),requested.rootId(),actor.issuer(),actor.subject(),admission.actorExpiresAtEpochMillis(),admission.validUntilEpochMillis(),backend.policyProfile())
+                        :nativeReads.open(requested.tenantId(),requested.rootId(),requested.submissionId(),actor.issuer(),actor.subject(),admission.actorExpiresAtEpochMillis(),admission.validUntilEpochMillis(),backend.policyProfile());
+                    return failures.capture(opened.switchIfEmpty(Mono.error(unavailable())).flatMap(context->nativeReads.admission(context.contextId())
+                        .switchIfEmpty(Mono.error(unavailable())).flatMap(stamp->{
+                            require(context.contextId()!=null && stamp.recordedAt()!=null && stamp.recordedAt().equals(context.recordedAt()) && stamp.dbNowMillis()!=null && stamp.admissionUntilMillis()!=null);
+                            scope.narrow(window.observe(stamp.recordedAt(),stamp.dbNowMillis(),stamp.admissionUntilMillis(),nativeBefore));
+                            return live(context.contextId(),requested.target()).then(Mono.defer(()->snapshot(requested,context.recordedAt())))
+                                .flatMap(view->live(context.contextId(),requested.target()).thenReturn(view));
+                        })));
+                }).onErrorMap(RootTransactionException.class,error->failures.resolve(error,window::budget)).flatMap(view->{window.budget().remaining();return authorization.reauthorize(admission).timeout(window.budget().remaining())
+                    .then(Mono.defer(()->{window.budget().remaining();return Mono.just(view);}));});
+            }).timeout(request.remaining());
+        })).onErrorMap(ProductDefinitionCommandErrors::safe);
+    }
+    private Mono<ProductDefinitionReviewSelectionView> readLegacy(
             ProductDefinitionReviewAuthorization.Scope scope) {
         return ProductDefinitionCommandTransactionBoundary.outsideSql(
                         () ->
@@ -142,7 +184,7 @@ public final class ProductDefinitionReviewReadServiceImpl
             ProductDefinitionReviewAuthorization.Scope scope, Instant time) {
         var tenant = scope.tenantId();
         var root = scope.rootId();
-        return ProductDefinitionPrivateReadSnapshots.head(persistence, tenant, root)
+        return ProductDefinitionPrivateReadSnapshots.head(persistence, tenant, root, backend)
                 .flatMap(
                         head -> {
                             if (!"IN_REVIEW".equals(head.root().phase())) throw conflict();

@@ -39,9 +39,7 @@ public final class ProductDefinitionLifecycleRules {
                 DefinitionProfiles.canonical(
                         DefinitionCanonical.tree(command.definition()).toString());
         var common = DefinitionProfiles.decode(definition.json()).common();
-        if (!"BANKING".equals(common.businessArea())
-                || !"ACCOUNT_TARIFF_V1".equals(common.profileCode()))
-            throw invalid("PRODUCT_DEFINITION_ACCOUNT_PROFILE_REQUIRED");
+        GovernedDefinitionProfile.from(common);
         var cost =
                 CostRules.canonical(
                         DefinitionCanonical.tree(command.cost()).toString(), definition.json());

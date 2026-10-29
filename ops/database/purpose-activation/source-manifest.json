@@ -1,0 +1,55 @@
+{
+  "status": "STAGED_SOURCE_ONLY_NOT_DEFAULT_FLYWAY_DISCOVERY",
+  "predecessorSource372Sha256": "ae91e39c3b48b5ab10c7c5e696554397d5413e9ff989a83cee2e7d3733189cff",
+  "publishedProductPrHead": "057b8553610da55fe6674b8b84995e196f42dc76",
+  "originalDefaultVersions": "V1-V21",
+  "files": {
+    "V22__Governed_term_pc_purpose_read.sql": {
+      "sha256": "73dc0e5b49aebb3ce0dbb6d4a52a6fb8b7cdfaa382284d98566d424b5f79ccf7",
+      "bytes": 111686,
+      "originalSource372Path": "core-common-product-mgmt-models/src/main/resources/db/migration/V22__Governed_term_pc_purpose_read.sql",
+      "stagedPath": "ops/database/purpose-activation/V22__Governed_term_pc_purpose_read.sql",
+      "declaredFunctions": [
+        "firefly_product_definition_private.validate_plan",
+        "firefly_product_definition_private.plan_rows",
+        "public.begin_product_definition_command",
+        "public.product_definition_private_read_matches",
+        "public.open_product_definition_cost_read",
+        "public.open_product_definition_publication_metadata",
+        "public.product_definition_publication_read_matches",
+        "public.product_definition_private_read_admission",
+        "public.product_definition_insurance_quote_runtime_allowed",
+        "public.product_definition_insurance_quote_read_matches",
+        "public.assert_product_definition_insurance_quote_read_live",
+        "public.open_product_definition_insurance_quote_read",
+        "public.product_definition_command_admission",
+        "firefly_product_definition_private.session_allowed"
+      ],
+      "executionApproved": false,
+      "nativeInstalled": false
+    },
+    "V23__Governed_deposit_enrollment_purpose.sql": {
+      "sha256": "9d86ed9e72378bb86fb0a47abac8195a7ad0656105026fba5d067ba437f919ce",
+      "bytes": 102688,
+      "originalSource372Path": "core-common-product-mgmt-models/src/main/resources/db/migration/V23__Governed_deposit_enrollment_purpose.sql",
+      "stagedPath": "ops/database/purpose-activation/V23__Governed_deposit_enrollment_purpose.sql",
+      "declaredFunctions": [
+        "firefly_product_definition_private.validate_plan",
+        "firefly_product_definition_private.plan_rows",
+        "public.begin_product_definition_command",
+        "public.product_definition_private_read_matches",
+        "public.open_product_definition_cost_read",
+        "public.open_product_definition_publication_metadata",
+        "public.product_definition_publication_read_matches",
+        "public.product_definition_deposit_enrollment_runtime_allowed",
+        "public.product_definition_deposit_enrollment_read_matches",
+        "public.assert_product_definition_deposit_enrollment_read_live",
+        "public.open_product_definition_deposit_enrollment_read"
+      ],
+      "executionApproved": false,
+      "nativeInstalled": false
+    }
+  },
+  "automaticActivationImplemented": false,
+  "runtimeGateApproved": false
+}

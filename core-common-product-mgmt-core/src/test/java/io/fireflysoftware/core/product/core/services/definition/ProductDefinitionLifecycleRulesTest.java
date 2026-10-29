@@ -267,4 +267,14 @@ class ProductDefinitionLifecycleRulesTest {
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> ProductDefinitionLifecycleRules.requireSelection(bad, bad));
     }
+
+    @Test
+    void termPcDraftUsesExistingFixedPremiumAndActualInsuranceCostRules() {
+        var definition=DefinitionProfiles.decode(ProfileFixtures.load("insurance").toString());
+        var request=new CreateDraft(scope,product,category,definition,new CostTerms(1,"INSURANCE","TERM_PC_INSURANCE_V1","NONE",List.of()));
+        var prepared=ProductDefinitionLifecycleRules.prepare(request);
+        assertThat(prepared.canonicalDefinition()).contains("FIXED_PER_POLICY").contains("SINGLE_PREMIUM");
+        assertThat(prepared.canonicalCost()).contains("TERM_PC_INSURANCE_V1");
+        assertThat(prepared.publicDigest()).isEqualTo(DefinitionProfiles.canonical(DefinitionCanonical.tree(definition).toString()).digest());
+    }
 }

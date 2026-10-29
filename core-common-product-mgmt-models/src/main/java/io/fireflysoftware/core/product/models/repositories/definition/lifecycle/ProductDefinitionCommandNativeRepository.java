@@ -41,6 +41,14 @@ public interface ProductDefinitionCommandNativeRepository
             @Param("intentDigest") String intentDigest,
             @Param("resourcePlan") String resourcePlan);
 
+    record NativeBudgetStamp(
+            @Column("recorded_at") Instant recordedAt,
+            @Column("db_now_ms") Long dbNowMillis,
+            @Column("admission_until_ms") Long admissionUntilMillis) {}
+
+    @Query("SELECT recorded_at,db_now_ms,admission_until_ms FROM public.product_definition_command_admission(:commandId)")
+    Mono<NativeBudgetStamp> admission(@Param("commandId") UUID commandId);
+
     @Query("SELECT public.assert_product_definition_command_live(:commandId) AS live")
     Mono<Boolean> isCurrent(@Param("commandId") UUID commandId);
 

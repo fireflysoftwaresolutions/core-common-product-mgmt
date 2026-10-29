@@ -19,6 +19,10 @@ public interface ProductDefinitionReviewReadNativeRepository
             @org.springframework.data.relational.core.mapping.Column("recorded_at")
                     Instant recordedAt) {}
 
+    @Query("SELECT recorded_at,db_now_ms,admission_until_millis AS admission_until_ms FROM public.product_definition_private_read_admission(:contextId)")
+    Mono<ProductDefinitionCommandNativeRepository.NativeBudgetStamp> admission(
+            @org.springframework.data.repository.query.Param("contextId") UUID contextId);
+
     @Query(
             "SELECT context_id, recorded_at FROM"
                 + " public.open_product_definition_review_read(:tenantId,:rootId,:submissionId,:actorIssuer,:actorId,:actorUntil,:permitUntil,:policyProfile)")

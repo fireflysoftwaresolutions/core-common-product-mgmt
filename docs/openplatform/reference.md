@@ -25,22 +25,6 @@ This reference is derived from checked-in source. It separates declared HTTP map
 | `POST /api/v1/products` | `public Mono<ResponseEntity<ProductDTO>> createProduct( @Parameter(description = "Product data to create", required = true) @Valid @RequestBody ProductDTO productDTO)` | [ProductController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java) | Local declaration |
 | `PUT /api/v1/products/{productId}` | `public Mono<ResponseEntity<ProductDTO>> updateProduct( @Parameter(description = "Unique identifier of the product", required = true) @PathVariable UUID productId, @Parameter(description = "Updated product data", required = true) @Valid @RequestBody ProductDTO productDTO)` | [ProductController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java) | Local declaration |
 | `DELETE /api/v1/products/{productId}` | `public Mono<ResponseEntity<Void>> deleteProduct( @Parameter(description = "Unique identifier of the product", required = true) @PathVariable UUID productId)` | [ProductController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java) | Local declaration |
-| `GET /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-cost/current` | `public Mono<ResponseEntity<ProductDefinitionCostView>> current( @PathVariable UUID tenantId, @PathVariable UUID rootId)` | [ProductDefinitionCostController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionCostController.java) | Local declaration |
-| `POST /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/draft` | `public Mono<ResponseEntity<PublicReceipt>> create( @PathVariable UUID tenantId, @PathVariable UUID rootId, @io.swagger.v3.oas.annotations.parameters.RequestBody( required = true, content = @Content( schema = @Schema( implementation = CreateDraftBody.class))) @RequestBody String body)` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) | Local declaration |
-| `POST /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/public-revision` | `public Mono<ResponseEntity<PublicReceipt>> editPublic( @PathVariable UUID tenantId, @PathVariable UUID rootId, @io.swagger.v3.oas.annotations.parameters.RequestBody( required = true, content = @Content( schema = @Schema(implementation = EditPublicBody.class))) @RequestBody String body)` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) | Local declaration |
-| `POST /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/private-cost` | `public Mono<ResponseEntity<PrivateReceipt>> editCost( @PathVariable UUID tenantId, @PathVariable UUID rootId, @io.swagger.v3.oas.annotations.parameters.RequestBody( required = true, content = @Content(schema = @Schema(implementation = EditCostBody.class))) @RequestBody String body)` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) | Local declaration |
-| `POST /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/submission` | `public Mono<ResponseEntity<PublicReceipt>> submit( @PathVariable UUID tenantId, @PathVariable UUID rootId, @io.swagger.v3.oas.annotations.parameters.RequestBody( required = true, content = @Content( schema = @Schema( implementation = SubmitPublicBody.class))) @RequestBody String body)` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) | Local declaration |
-| `POST /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/selection/approve` | `public Mono<ResponseEntity<PrivateReceipt>> approve( @PathVariable UUID tenantId, @PathVariable UUID rootId, @io.swagger.v3.oas.annotations.parameters.RequestBody( required = true, content = @Content( schema = @Schema( implementation = ReviewSelectionBody.class))) @RequestBody String body)` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) | Local declaration |
-| `POST /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/selection/reject` | `public Mono<ResponseEntity<PrivateReceipt>> reject( @PathVariable UUID tenantId, @PathVariable UUID rootId, @io.swagger.v3.oas.annotations.parameters.RequestBody( required = true, content = @Content( schema = @Schema( implementation = ReviewSelectionBody.class))) @RequestBody String body)` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) | Local declaration |
-| `POST /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/publication` | `public Mono<ResponseEntity<PublicReceipt>> publish( @PathVariable UUID tenantId, @PathVariable UUID rootId, @io.swagger.v3.oas.annotations.parameters.RequestBody( required = true, content = @Content(schema = @Schema(implementation = PublishBody.class))) @RequestBody String body)` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) | Local declaration |
-| `POST /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/publication/withdraw` | `public Mono<ResponseEntity<PublicReceipt>> withdraw( @PathVariable UUID tenantId, @PathVariable UUID rootId, @io.swagger.v3.oas.annotations.parameters.RequestBody( required = true, content = @Content(schema = @Schema(implementation = WithdrawBody.class))) @RequestBody String body)` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) | Local declaration |
-| `GET /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-publication/readiness` | `public Mono<ResponseEntity<ProductDefinitionPublicationReadinessView>> readiness( @PathVariable UUID tenantId, @PathVariable UUID rootId)` | [ProductDefinitionPublicationReadController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionPublicationReadController.java) | Local declaration |
-| `GET /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-publication/current` | `public Mono<ResponseEntity<ProductDefinitionPublicationDiscoveryView>> current( @PathVariable UUID tenantId, @PathVariable UUID rootId)` | [ProductDefinitionPublicationReadController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionPublicationReadController.java) | Local declaration |
-| `GET /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/selection/current` | `public Mono<ResponseEntity<ProductDefinitionReviewSelectionView>> current( @PathVariable UUID tenantId, @PathVariable UUID rootId)` | [ProductDefinitionReviewController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionReviewController.java) | Local declaration |
-| `GET /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/selections/{submissionId}` | `public Mono<ResponseEntity<ProductDefinitionReviewSelectionView>> selection( @PathVariable UUID tenantId, @PathVariable UUID rootId, @PathVariable UUID submissionId)` | [ProductDefinitionReviewController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionReviewController.java) | Local declaration |
-| `GET /api/v1/tenants/{tenantId}/product-definitions/{rootId}` | `public Mono<ResponseEntity<RootView>> root( @PathVariable UUID tenantId, @PathVariable UUID rootId)` | [ProductDefinitionServingController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionServingController.java) | Local declaration |
-| `GET /api/v1/tenants/{tenantId}/product-definitions/{rootId}/revisions/{revisionId}` | `public Mono<ResponseEntity<RevisionView>> revision( @PathVariable UUID tenantId, @PathVariable UUID rootId, @PathVariable UUID revisionId)` | [ProductDefinitionServingController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionServingController.java) | Local declaration |
-| `GET /api/v1/tenants/{tenantId}/product-definitions/{rootId}/publications/{publicationId}` | `public Mono<ResponseEntity<PublicationView>> publication( @PathVariable UUID tenantId, @PathVariable UUID rootId, @PathVariable UUID publicationId)` | [ProductDefinitionServingController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionServingController.java) | Local declaration |
 | `GET /api/v1/products/{productId}/documentation/{docId}` | `public Mono<ResponseEntity<ProductDocumentationDTO>> getDocumentationById( @Parameter(description = "Unique identifier of the product", required = true) @PathVariable UUID productId, @Parameter(description = "Unique identifier of the documentation item", required = true) @PathVariable UUID docId)` | [ProductDocumentationController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java) | Local declaration |
 | `POST /api/v1/products/{productId}/documentation/filter` | `public Mono<ResponseEntity<PaginationResponse<ProductDocumentationDTO>>> filterDocumentation( @Parameter(description = "Unique identifier of the product", required = true) @PathVariable UUID productId, @Parameter(description = "Filter criteria for documentation", required = true) @Valid @RequestBody FilterRequest<ProductDocumentationDTO> filterRequest)` | [ProductDocumentationController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java) | Local declaration |
 | `POST /api/v1/products/{productId}/documentation` | `public Mono<ResponseEntity<ProductDocumentationDTO>> createDocumentation( @Parameter(description = "Unique identifier of the product", required = true) @PathVariable UUID productId, @Parameter(description = "Documentation data to create", required = true) @Valid @RequestBody ProductDocumentationDTO documentationDTO)` | [ProductDocumentationController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java) | Local declaration |
@@ -72,24 +56,6 @@ This reference is derived from checked-in source. It separates declared HTTP map
 | `DELETE /api/v1/products/{productId}/versions/{versionId}` | `public Mono<ResponseEntity<Void>> deleteProductVersion( @Parameter(description = "Unique identifier of the product", required = true) @PathVariable UUID productId, @Parameter(description = "Unique identifier of the product version", required = true) @PathVariable UUID versionId)` | [ProductVersionController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductVersionController.java) | Local declaration |
 
 ## Data contracts
-
-### ProductDefinitionCommandResources
-
-[ProductDefinitionCommandResources](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandResources.java) · DTO / record / model
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `actionId` | `UUID` | See declaration / service rules |
-| `revisionId` | `UUID` | See declaration / service rules |
-| `costRevisionId` | `UUID` | See declaration / service rules |
-| `submissionId` | `UUID` | See declaration / service rules |
-| `reviewId` | `UUID` | See declaration / service rules |
-| `publicationId` | `UUID` | See declaration / service rules |
-| `productVersionId` | `UUID` | See declaration / service rules |
-| `historyId` | `UUID` | See declaration / service rules |
-| `auditId` | `UUID` | See declaration / service rules |
-| `publicEventId` | `UUID` | See declaration / service rules |
-| `costEventId` | `UUID` | See declaration / service rules |
 
 ### BaseDTO
 
@@ -245,7 +211,7 @@ This reference is derived from checked-in source. It separates declared HTTP map
 
 ### AccountTariffTerms
 
-[AccountTariffTerms](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/AccountTariffTerms.java) · DTO / record / model
+[AccountTariffTerms](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/AccountTariffTerms.java) · DTO / record / model
 
 | Field | Java type | Validation annotations |
 | --- | --- | --- |
@@ -261,7 +227,7 @@ This reference is derived from checked-in source. It separates declared HTTP map
 
 ### CostTerms
 
-[CostTerms](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/CostTerms.java) · DTO / record / model
+[CostTerms](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/CostTerms.java) · DTO / record / model
 
 | Field | Java type | Validation annotations |
 | --- | --- | --- |
@@ -273,7 +239,7 @@ This reference is derived from checked-in source. It separates declared HTTP map
 
 ### FixedRateInstallmentLoanTerms
 
-[FixedRateInstallmentLoanTerms](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/FixedRateInstallmentLoanTerms.java) · DTO / record / model
+[FixedRateInstallmentLoanTerms](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/FixedRateInstallmentLoanTerms.java) · DTO / record / model
 
 | Field | Java type | Validation annotations |
 | --- | --- | --- |
@@ -291,81 +257,9 @@ This reference is derived from checked-in source. It separates declared HTTP map
 | `repaymentAllocation` | `ExactReference` | See declaration / service rules |
 | `calendar` | `ExactReference` | See declaration / service rules |
 
-### ProductDefinitionCommand
-
-[ProductDefinitionCommand](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionCommand.java) · DTO / record / model
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `action` | `String` | See declaration / service rules |
-| `target` | `String` | See declaration / service rules |
-| `scopes` | `Set<String>` | See declaration / service rules |
-
-### ProductDefinitionCostView
-
-[ProductDefinitionCostView](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionCostView.java) · DTO / record / model
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `rootId` | `UUID` | See declaration / service rules |
-| `publicRevisionId` | `UUID` | See declaration / service rules |
-| `publicDigest` | `String` | See declaration / service rules |
-| `publicVersion` | `Integer` | See declaration / service rules |
-| `phase` | `String` | See declaration / service rules |
-| `publicDefinition` | `DefinitionContracts.ProductDefinition` | See declaration / service rules |
-| `costRevisionId` | `UUID` | See declaration / service rules |
-| `costDigest` | `String` | See declaration / service rules |
-| `costVersion` | `Integer` | See declaration / service rules |
-| `cost` | `CostTerms` | See declaration / service rules |
-| `costCompatibility` | `String` | See declaration / service rules |
-| `validationBoundary` | `String` | See declaration / service rules |
-| `observedAt` | `Instant` | See declaration / service rules |
-
-### ProductDefinitionPublicationDiscoveryView
-
-[ProductDefinitionPublicationDiscoveryView](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionPublicationDiscoveryView.java) · DTO / record / model
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `rootId` | `UUID` | See declaration / service rules |
-| `state` | `PublicationDiscoveryState` | See declaration / service rules |
-| `publication` | `DiscoveredPublication` | See declaration / service rules |
-| `observation` | `ReadObservation` | See declaration / service rules |
-| `operationalAdmission` | `OperationalAdmission` | See declaration / service rules |
-
-### ProductDefinitionPublicationReadinessView
-
-[ProductDefinitionPublicationReadinessView](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionPublicationReadinessView.java) · DTO / record / model
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `rootId` | `UUID` | See declaration / service rules |
-| `status` | `PublicationReadinessStatus` | See declaration / service rules |
-| `selection` | `PublicationReadySelection` | See declaration / service rules |
-| `observation` | `ReadObservation` | See declaration / service rules |
-| `operationalAdmission` | `OperationalAdmission` | See declaration / service rules |
-
-### ProductDefinitionReviewSelectionView
-
-[ProductDefinitionReviewSelectionView](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionReviewSelectionView.java) · DTO / record / model
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `selection` | `Selection` | See declaration / service rules |
-| `selectionFingerprint` | `String` | See declaration / service rules |
-| `definition` | `ProductDefinition` | See declaration / service rules |
-| `cost` | `CostTerms` | See declaration / service rules |
-| `costCompatibility` | `String` | See declaration / service rules |
-| `validationBoundary` | `String` | See declaration / service rules |
-| `observedAt` | `Instant` | See declaration / service rules |
-| `activeReviewId` | `java.util.UUID` | See declaration / service rules |
-
 ### TermPcInsuranceTerms
 
-[TermPcInsuranceTerms](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/TermPcInsuranceTerms.java) · DTO / record / model
+[TermPcInsuranceTerms](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/TermPcInsuranceTerms.java) · DTO / record / model
 
 | Field | Java type | Validation annotations |
 | --- | --- | --- |
@@ -494,155 +388,6 @@ This reference is derived from checked-in source. It separates declared HTTP map
 | `versionDescription` | `String` | See declaration / service rules |
 | `effectiveDate` | `LocalDateTime` | See declaration / service rules |
 
-### ProductDefinitionPublication
-
-[ProductDefinitionPublication](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/definition/ProductDefinitionPublication.java) · Persisted entity
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `publicationId` | `UUID` | See declaration / service rules |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `rootId` | `UUID` | See declaration / service rules |
-| `reviewId` | `UUID` | See declaration / service rules |
-| `revisionId` | `UUID` | See declaration / service rules |
-| `productVersionId` | `UUID` | See declaration / service rules |
-| `canonicalDefinition` | `String` | See declaration / service rules |
-| `publicDigest` | `String` | See declaration / service rules |
-| `encodingVersion` | `String` | See declaration / service rules |
-| `operationalAdmission` | `String` | See declaration / service rules |
-| `createdAt` | `Instant` | See declaration / service rules |
-
-### ProductDefinitionPublicationControl
-
-[ProductDefinitionPublicationControl](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/definition/ProductDefinitionPublicationControl.java) · Persisted entity
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `publicationId` | `UUID` | See declaration / service rules |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `rootId` | `UUID` | See declaration / service rules |
-| `state` | `String` | See declaration / service rules |
-| `stateVersion` | `Integer` | See declaration / service rules |
-
-### ProductDefinitionRevision
-
-[ProductDefinitionRevision](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/definition/ProductDefinitionRevision.java) · Persisted entity
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `revisionId` | `UUID` | See declaration / service rules |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `rootId` | `UUID` | See declaration / service rules |
-| `canonicalDefinition` | `String` | See declaration / service rules |
-| `publicDigest` | `String` | See declaration / service rules |
-| `encodingVersion` | `String` | See declaration / service rules |
-| `sourcePublicationId` | `UUID` | See declaration / service rules |
-| `sourcePublicationDigest` | `String` | See declaration / service rules |
-| `createdAt` | `Instant` | See declaration / service rules |
-
-### ProductDefinitionRoot
-
-[ProductDefinitionRoot](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/definition/ProductDefinitionRoot.java) · Persisted entity
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `rootId` | `UUID` | See declaration / service rules |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `productId` | `UUID` | See declaration / service rules |
-| `productCode` | `String` | See declaration / service rules |
-| `businessArea` | `String` | See declaration / service rules |
-| `profileCode` | `String` | See declaration / service rules |
-| `profileVersion` | `Integer` | See declaration / service rules |
-| `phase` | `String` | See declaration / service rules |
-| `publicStateVersion` | `Integer` | See declaration / service rules |
-| `publicHead` | `UUID` | See declaration / service rules |
-| `createdAt` | `Instant` | See declaration / service rules |
-
-### ProductDefinitionVersionIdentity
-
-[ProductDefinitionVersionIdentity](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/definition/ProductDefinitionVersionIdentity.java) · Persisted entity
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `productVersionId` | `UUID` | See declaration / service rules |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `rootId` | `UUID` | See declaration / service rules |
-| `productId` | `UUID` | See declaration / service rules |
-| `publicationId` | `UUID` | See declaration / service rules |
-
-### ProductDefinitionCostControl
-
-[ProductDefinitionCostControl](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/definition/lifecycle/ProductDefinitionCostControl.java) · Persisted entity
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `rootId` | `UUID` | See declaration / service rules |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `costHead` | `UUID` | See declaration / service rules |
-| `costStateVersion` | `Integer` | See declaration / service rules |
-
-### ProductDefinitionCostRevision
-
-[ProductDefinitionCostRevision](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/definition/lifecycle/ProductDefinitionCostRevision.java) · Persisted entity
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `costRevisionId` | `UUID` | See declaration / service rules |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `rootId` | `UUID` | See declaration / service rules |
-| `canonicalCost` | `String` | See declaration / service rules |
-| `costDigest` | `String` | See declaration / service rules |
-| `encodingVersion` | `String` | See declaration / service rules |
-| `actorIssuer` | `String` | See declaration / service rules |
-| `actorId` | `String` | See declaration / service rules |
-| `createdAt` | `Instant` | See declaration / service rules |
-
-### ProductDefinitionDraftRevision
-
-[ProductDefinitionDraftRevision](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/definition/lifecycle/ProductDefinitionDraftRevision.java) · Persisted entity
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `revisionId` | `UUID` | See declaration / service rules |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `rootId` | `UUID` | See declaration / service rules |
-| `canonicalDefinition` | `String` | See declaration / service rules |
-| `publicDigest` | `String` | See declaration / service rules |
-| `encodingVersion` | `String` | See declaration / service rules |
-| `sourcePublicationId` | `UUID` | See declaration / service rules |
-| `sourcePublicationDigest` | `String` | See declaration / service rules |
-| `actorIssuer` | `String` | See declaration / service rules |
-| `actorId` | `String` | See declaration / service rules |
-| `createdAt` | `Instant` | See declaration / service rules |
-
-### ProductDefinitionDraftRoot
-
-[ProductDefinitionDraftRoot](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/definition/lifecycle/ProductDefinitionDraftRoot.java) · Persisted entity
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `rootId` | `UUID` | See declaration / service rules |
-| `tenantId` | `UUID` | See declaration / service rules |
-| `productId` | `UUID` | See declaration / service rules |
-| `productCode` | `String` | See declaration / service rules |
-| `businessArea` | `String` | See declaration / service rules |
-| `profileCode` | `String` | See declaration / service rules |
-| `profileVersion` | `Integer` | See declaration / service rules |
-| `phase` | `String` | See declaration / service rules |
-| `publicStateVersion` | `Integer` | See declaration / service rules |
-| `publicHead` | `UUID` | See declaration / service rules |
-| `activeReviewId` | `UUID` | See declaration / service rules |
-| `createdAt` | `Instant` | See declaration / service rules |
-
-### ProductDefinitionServingProperties
-
-[ProductDefinitionServingProperties](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionServingProperties.java) · DTO / record / model
-
-| Field | Java type | Validation annotations |
-| --- | --- | --- |
-| `policyBaseUrl` | `String` | See declaration / service rules |
-| `policyPath` | `String` | See declaration / service rules |
-
 ## Ports and service contracts
 
 ### ProductCategoryService
@@ -757,113 +502,6 @@ Mono<ProductVersionDTO> updateProductVersion(UUID productId, UUID versionId, Pro
 Mono<Void> deleteProductVersion(UUID productId, UUID versionId);
 ```
 
-### ProductDefinitionCommandAuthorization
-
-[ProductDefinitionCommandAuthorization](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionCommandAuthorization.java)
-
-```java
-record Scope( UUID tenantId, UUID rootId, UUID operationId, ProductDefinitionCommand command, UUID targetId);
-record Admission( SecurityPrincipal principal, Scope scope, long actorExpiresAtEpochMillis, long validUntilEpochMillis);
-Mono<Admission> authorize(Scope scope);
-Mono<Void> reauthorize(Admission admission);
-```
-
-### ProductDefinitionCostReadAuthorization
-
-[ProductDefinitionCostReadAuthorization](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionCostReadAuthorization.java)
-
-```java
-record Scope(UUID tenantId, UUID rootId);
-record Admission( SecurityPrincipal principal, Scope scope, long actorExpiresAtEpochMillis, long validUntilEpochMillis);
-Mono<Admission> authorize(Scope scope);
-Mono<Void> reauthorize(Admission admission);
-```
-
-### ProductDefinitionCostReadService
-
-[ProductDefinitionCostReadService](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionCostReadService.java)
-
-```java
-Mono<ProductDefinitionCostView> readCurrent(UUID tenantId, UUID rootId);
-```
-
-### ProductDefinitionLifecycleService
-
-[ProductDefinitionLifecycleService](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionLifecycleService.java)
-
-```java
-Mono<Receipt> execute( UUID tenantId, UUID rootId, ProductDefinitionCommand command, String body);
-```
-
-### ProductDefinitionPublicationReadAuthorization
-
-[ProductDefinitionPublicationReadAuthorization](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionPublicationReadAuthorization.java)
-
-```java
-READINESS( "product:definitions:publish", "product.definition.publication.readiness", "readiness"), DISCOVERY( "product:definitions:withdraw", "product.definition.publication.discovery", "current");
-Target(String scope, String action, String resourceSuffix);
-String requiredScope();
-String action();
-String resourceSuffix();
-record Scope(UUID tenantId, UUID rootId, Target target);
-record Admission( SecurityPrincipal principal, Scope scope, long actorExpiresAtEpochMillis, long validUntilEpochMillis);
-Mono<Admission> authorize(Scope scope);
-Mono<Void> reauthorize(Admission admission);
-```
-
-### ProductDefinitionPublicationReadService
-
-[ProductDefinitionPublicationReadService](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionPublicationReadService.java)
-
-```java
-Mono<ProductDefinitionPublicationReadinessView> readiness(UUID tenantId, UUID rootId);
-Mono<ProductDefinitionPublicationDiscoveryView> discover(UUID tenantId, UUID rootId);
-```
-
-### ProductDefinitionReadAuthorization
-
-[ProductDefinitionReadAuthorization](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionReadAuthorization.java)
-
-```java
-record Scope(UUID tenantId, UUID rootId, Operation operation, UUID resourceId);
-record Admission( SecurityPrincipal principal, Scope scope, long actorExpiresAtEpochMillis, long validUntilEpochMillis);
-Mono<Admission> authorize(Scope scope);
-Mono<Void> reauthorize(Admission admission);
-```
-
-### ProductDefinitionReviewAuthorization
-
-[ProductDefinitionReviewAuthorization](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionReviewAuthorization.java)
-
-```java
-record Scope(UUID tenantId, UUID rootId, UUID submissionId, Target target);
-public Scope(UUID tenantId, UUID rootId, UUID submissionId);
-this(tenantId, rootId, submissionId, Target.EXACT);
-static Scope current(UUID tenantId, UUID rootId);
-record Admission( SecurityPrincipal principal, Scope scope, long actorExpiresAtEpochMillis, long validUntilEpochMillis);
-Mono<Admission> authorize(Scope scope);
-Mono<Void> reauthorize(Admission admission);
-```
-
-### ProductDefinitionReviewReadService
-
-[ProductDefinitionReviewReadService](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionReviewReadService.java)
-
-```java
-Mono<ProductDefinitionReviewSelectionView> readCurrentSelection(UUID tenantId, UUID rootId);
-Mono<ProductDefinitionReviewSelectionView> readSelection( UUID tenantId, UUID rootId, UUID submissionId);
-```
-
-### ProductDefinitionServingService
-
-[ProductDefinitionServingService](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionServingService.java)
-
-```java
-Mono<RootView> readRoot(UUID tenantId, UUID rootId);
-Mono<RevisionView> readRevision(UUID tenantId, UUID rootId, UUID revisionId);
-Mono<PublicationView> readPublication(UUID tenantId, UUID rootId, UUID publicationId);
-```
-
 ## Configuration
 
 Values below come from source placeholders. Plain YAML values and configuration-property classes must also be reviewed at the linked configuration sources. Secret fallback values are deliberately redacted.
@@ -889,11 +527,6 @@ Values below come from source placeholders. Plain YAML values and configuration-
 | `DB_PASSWORD` | No fallback | [application](../../core-common-product-mgmt-web/src/main/resources/application.yaml) |
 | `SERVER_ADDRESS` | `localhost` | [application](../../core-common-product-mgmt-web/src/main/resources/application.yaml) |
 | `SERVER_PORT` | `8080` | [application](../../core-common-product-mgmt-web/src/main/resources/application.yaml) |
-| `PRODUCT_DEFINITION_ISSUER` | Empty | [application](../../core-common-product-mgmt-web/src/main/resources/application.yaml) |
-| `PRODUCT_DEFINITION_AUDIENCE` | Empty | [application](../../core-common-product-mgmt-web/src/main/resources/application.yaml) |
-| `PRODUCT_DEFINITION_JWKS_URI` | Empty | [application](../../core-common-product-mgmt-web/src/main/resources/application.yaml) |
-| `PRODUCT_DEFINITION_POLICY_URL` | Empty | [application](../../core-common-product-mgmt-web/src/main/resources/application.yaml) |
-| `PRODUCT_DEFINITION_POLICY_PATH` | Empty | [application](../../core-common-product-mgmt-web/src/main/resources/application.yaml) |
 
 ## Security and failure evidence
 
@@ -901,84 +534,14 @@ Values below come from source placeholders. Plain YAML values and configuration-
 | --- | --- |
 | `new RuntimeException("Error parsing product marketing_features JSON", e);` | [ProductMapper](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductMapper.java) |
 | `new RuntimeException("Error serialising product marketing_features", e);` | [ProductMapper](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductMapper.java) |
-| `new IllegalArgumentException("EXACT_CARD_ENROLLMENT_CAPABILITY_REQUEST_REQUIRED");` | [CardEnrollmentCapabilityCodec](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/cardeligibility/CardEnrollmentCapabilityCodec.java) |
-| `new IllegalArgumentException("EXACT_CARD_ENROLLMENT_CAPABILITY_REQUIRED"); }` | [CardEnrollmentCapabilityRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/cardeligibility/CardEnrollmentCapabilityRules.java) |
-| `new IllegalArgumentException("COST_DEFINITION_INVALID");` | [CostRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/CostRules.java) |
-| `new IllegalStateException("SHA-256 unavailable", e);` | [DefinitionCanonical](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/DefinitionCanonical.java) |
-| `new IllegalArgumentException("DEFINITION_SHAPE");` | [DefinitionCanonical](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/DefinitionCanonical.java) |
-| `new IllegalArgumentException("CHECKER_IDENTITY_REQUIRED");` | [DefinitionReviewRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/DefinitionReviewRules.java) |
-| `new IllegalArgumentException("HUMAN_CHECKER_REQUIRED");` | [DefinitionReviewRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/DefinitionReviewRules.java) |
-| `new IllegalArgumentException("REVIEW_CONTRIBUTORS_REQUIRED");` | [DefinitionReviewRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/DefinitionReviewRules.java) |
-| `new IllegalArgumentException("INDEPENDENT_CHECKER_REQUIRED");` | [DefinitionReviewRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/DefinitionReviewRules.java) |
-| `new IllegalArgumentException("DEFINITION_RULE at " + path);` | [DefinitionRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/DefinitionRules.java) |
-| `new IllegalArgumentException("PRODUCT_DEFINITION_COMMAND_INVALID");` | [ProductDefinitionInstructionCodec](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionInstructionCodec.java) |
-| `new IllegalArgumentException(message);` | [ProductDefinitionLifecycleRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionLifecycleRules.java) |
-| `new ResponseStatusException(HttpStatus.NOT_FOUND, "Product definition not found");` | [AccountTariffServingMapper](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/AccountTariffServingMapper.java) |
-| `new ResponseStatusException(` | [AccountTariffServingMapper](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/AccountTariffServingMapper.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [AccountTariffServingMapper](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/AccountTariffServingMapper.java) |
-| `new ResponseStatusException(` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `HttpStatus.BAD_REQUEST` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `HttpStatus.BAD_REQUEST` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `HttpStatus.BAD_REQUEST` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `HttpStatus.BAD_REQUEST` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `HttpStatus.UNAUTHORIZED` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `HttpStatus.FORBIDDEN` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionCommandAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationImpl.java) |
-| `HttpStatus.CONFLICT` | [ProductDefinitionCommandErrors](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandErrors.java) |
-| `HttpStatus.CONFLICT` | [ProductDefinitionCommandErrors](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandErrors.java) |
-| `HttpStatus.FORBIDDEN` | [ProductDefinitionCommandErrors](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandErrors.java) |
-| `HttpStatus.NOT_FOUND` | [ProductDefinitionCommandErrors](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandErrors.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionCommandErrors](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandErrors.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionCommandErrors](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandErrors.java) |
-| `new ResponseStatusException(status, message);` | [ProductDefinitionCommandErrors](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandErrors.java) |
-| `new IllegalArgumentException("PRODUCT_DEFINITION_NATIVE_PLAN_INVALID");` | [ProductDefinitionCommandPlan](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandPlan.java) |
-| `new IllegalArgumentException("PRODUCT_DEFINITION_RECEIPT_INVALID");` | [ProductDefinitionCommandReceiptCodec](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandReceiptCodec.java) |
-| `new ResponseStatusException(` | [ProductDefinitionCommandTransactionBoundary](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandTransactionBoundary.java) |
-| `new ResponseStatusException(` | [ProductDefinitionCostReadServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCostReadServiceImpl.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionCostReadServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCostReadServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `HttpStatus.BAD_REQUEST` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `HttpStatus.NOT_FOUND` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `HttpStatus.NOT_FOUND` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `HttpStatus.CONFLICT` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionLifecycleServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionPrivateReadSnapshots](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPrivateReadSnapshots.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionPrivateReadSnapshots](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPrivateReadSnapshots.java) |
-| `new ResponseStatusException(HttpStatus.NOT_FOUND, "Product definition not found");` | [ProductDefinitionPrivateReadSnapshots](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPrivateReadSnapshots.java) |
-| `new ResponseStatusException(HttpStatus.FORBIDDEN, "Current permission required");` | [ProductDefinitionPublicationReadServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationReadServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionPublicationReadServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationReadServiceImpl.java) |
-| `HttpStatus.NOT_FOUND` | [ProductDefinitionPublicationReadServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationReadServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionPublicationSnapshots](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationSnapshots.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionPublicationSnapshots](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationSnapshots.java) |
-| `new ResponseStatusException(` | [ProductDefinitionReadAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadAuthorizationImpl.java) |
-| `HttpStatus.BAD_REQUEST` | [ProductDefinitionReadAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadAuthorizationImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionReadAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadAuthorizationImpl.java) |
-| `HttpStatus.UNAUTHORIZED` | [ProductDefinitionReadAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadAuthorizationImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionReadAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadAuthorizationImpl.java) |
-| `HttpStatus.FORBIDDEN` | [ProductDefinitionReadAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadAuthorizationImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionReadAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadAuthorizationImpl.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionReadAuthorizationImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadAuthorizationImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionReviewReadServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReviewReadServiceImpl.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionReviewReadServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReviewReadServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionReviewReadServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReviewReadServiceImpl.java) |
-| `HttpStatus.NOT_FOUND` | [ProductDefinitionReviewReadServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReviewReadServiceImpl.java) |
-| `new ResponseStatusException(HttpStatus.CONFLICT, "Product review selection changed");` | [ProductDefinitionReviewReadServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReviewReadServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionServingServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionServingServiceImpl.java) |
-| `HttpStatus.FORBIDDEN` | [ProductDefinitionServingServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionServingServiceImpl.java) |
-| `new ResponseStatusException(` | [ProductDefinitionServingServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionServingServiceImpl.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionServingServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionServingServiceImpl.java) |
-| `new ResponseStatusException(HttpStatus.NOT_FOUND, "Product definition not found");` | [ProductDefinitionServingServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionServingServiceImpl.java) |
+| `new IllegalArgumentException("COST_DEFINITION_INVALID");` | [CostRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRules.java) |
+| `new IllegalStateException("SHA-256 unavailable", e);` | [DefinitionCanonical](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonical.java) |
+| `new IllegalArgumentException("DEFINITION_SHAPE");` | [DefinitionCanonical](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonical.java) |
+| `new IllegalArgumentException("CHECKER_IDENTITY_REQUIRED");` | [DefinitionReviewRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRules.java) |
+| `new IllegalArgumentException("HUMAN_CHECKER_REQUIRED");` | [DefinitionReviewRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRules.java) |
+| `new IllegalArgumentException("REVIEW_CONTRIBUTORS_REQUIRED");` | [DefinitionReviewRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRules.java) |
+| `new IllegalArgumentException("INDEPENDENT_CHECKER_REQUIRED");` | [DefinitionReviewRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRules.java) |
+| `new IllegalArgumentException("DEFINITION_RULE at " + path);` | [DefinitionRules](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRules.java) |
 | `new RuntimeException("Parent category not found with ID: " + parentCategoryId)))` | [ProductCategoryServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java) |
 | `new RuntimeException("Category not found with ID: " + categoryId)))` | [ProductCategoryServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java) |
 | `new RuntimeException("Category not found with ID: " + categoryId)))` | [ProductCategoryServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java) |
@@ -1036,52 +599,9 @@ Values below come from source placeholders. Plain YAML values and configuration-
 | `new RuntimeException("Product version with ID " + versionId + " does not belong to product " + productId));` | [ProductVersionServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductVersionServiceImpl.java) |
 | `new RuntimeException("Product version not found with ID: " + versionId)))` | [ProductVersionServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductVersionServiceImpl.java) |
 | `new RuntimeException("Product version with ID " + versionId + " does not belong to product " + productId));` | [ProductVersionServiceImpl](../../core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductVersionServiceImpl.java) |
-| `new IllegalArgumentException("PRODUCT_DEFINITION_COMMAND_SCOPE_REQUIRED");` | [ProductDefinitionLifecycleMessages](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionLifecycleMessages.java) |
-| `new IllegalArgumentException("PRODUCT_DEFINITION_COMMAND_BODY_REQUIRED");` | [ProductDefinitionLifecycleMessages](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionLifecycleMessages.java) |
-| `new IllegalArgumentException("PRODUCT_PUBLICATION_CONTROL_REQUIRED");` | [ProductDefinitionPublicationDiscoveryView](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionPublicationDiscoveryView.java) |
-| `new IllegalArgumentException("PRODUCT_PUBLICATION_DISCOVERY_REQUIRED");` | [ProductDefinitionPublicationDiscoveryView](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionPublicationDiscoveryView.java) |
-| `new IllegalArgumentException("PRODUCT_PUBLICATION_SELECTION_REQUIRED");` | [ProductDefinitionPublicationReadinessView](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionPublicationReadinessView.java) |
-| `new IllegalArgumentException("PRODUCT_PUBLICATION_READINESS_REQUIRED");` | [ProductDefinitionPublicationReadinessView](../../core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/ProductDefinitionPublicationReadinessView.java) |
-| `new IllegalStateException("PRODUCT_DEFINITION_READ_FACTORY_BINDING_REQUIRED");` | [ProductDefinitionReadConnectionSource](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/config/ProductDefinitionReadConnectionSource.java) |
-| `new IllegalArgumentException("PRODUCT_DEFINITION_ASSIGNED_ID_REQUIRED"));` | [ProductDefinitionDraftWritesImpl](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionDraftWritesImpl.java) |
-| `new IllegalArgumentException("PRODUCT_DEFINITION_VERSION_EXHAUSTED");` | [ProductDefinitionDraftWritesImpl](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionDraftWritesImpl.java) |
-| `new DataIntegrityViolationException(` | [ProductDefinitionDraftWritesImpl](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionDraftWritesImpl.java) |
-| `new OptimisticLockingFailureException(` | [ProductDefinitionDraftWritesImpl](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionDraftWritesImpl.java) |
-| `new DataIntegrityViolationException(` | [ProductDefinitionDraftWritesImpl](../../core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionDraftWritesImpl.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionCommandSecurityConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionCommandSecurityConfiguration.java) |
-| `new IllegalStateException(` | [ProductDefinitionServingConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionServingConfiguration.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionServingSecurityConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionServingSecurityConfiguration.java) |
-| `new JwtException("Current product signing configuration unavailable"));` | [ProductDefinitionServingSecurityConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionServingSecurityConfiguration.java) |
-| `new IllegalStateException("PRODUCT_DEFINITION_COMMAND_CREDENTIALS_REQUIRED");` | [ProductDefinitionCommandConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionCommandConfiguration.java) |
-| `new IllegalStateException("PRODUCT_DEFINITION_READ_OPTIONS_UNAVAILABLE");` | [ProductDefinitionCommandConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionCommandConfiguration.java) |
-| `new IllegalStateException(` | [ProductDefinitionCommandConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionCommandConfiguration.java) |
-| `new IllegalStateException("PRODUCT_DEFINITION_POSTGRESQL_REQUIRED");` | [ProductDefinitionCommandConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionCommandConfiguration.java) |
-| `new IllegalStateException("PRODUCT_DEFINITION_COMMAND_FACTORY_UNAVAILABLE");` | [ProductDefinitionCommandConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionCommandConfiguration.java) |
-| `new IllegalStateException("PRODUCT_DEFINITION_COMMAND_PERSISTENCE_UNAVAILABLE");` | [ProductDefinitionCommandConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionCommandConfiguration.java) |
-| `new IllegalStateException(` | [ProductDefinitionPublicationReadConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionPublicationReadConfiguration.java) |
-| `new IllegalStateException("PRODUCT_DEFINITION_READ_OPTIONS_UNAVAILABLE");` | [ProductDefinitionPublicationReadConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionPublicationReadConfiguration.java) |
-| `new IllegalStateException(` | [ProductDefinitionPublicationReadConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionPublicationReadConfiguration.java) |
-| `new IllegalStateException("PRODUCT_DEFINITION_POSTGRESQL_REQUIRED");` | [ProductDefinitionPublicationReadConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionPublicationReadConfiguration.java) |
-| `new IllegalStateException(` | [ProductDefinitionPublicationReadConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionPublicationReadConfiguration.java) |
-| `new IllegalStateException(` | [ProductDefinitionPublicationReadConfiguration](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionPublicationReadConfiguration.java) |
 | `HttpStatus.CREATED` | [ProductCategoryController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductCategoryController.java) |
 | `HttpStatus.CREATED` | [ProductConfigurationController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductConfigurationController.java) |
 | `HttpStatus.CREATED` | [ProductController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java) |
-| `@SecurityRequirement(name = "productDefinitionBearer")` | [ProductDefinitionCostController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionCostController.java) |
-| `new ResponseStatusException(` | [ProductDefinitionCostController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionCostController.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionCostController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionCostController.java) |
-| `@SecurityRequirement(name = "productDefinitionBearer")` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) |
-| `new ResponseStatusException(` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionLifecycleController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleController.java) |
-| `@SecurityRequirement(name = "productDefinitionBearer")` | [ProductDefinitionPublicationReadController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionPublicationReadController.java) |
-| `new ResponseStatusException(` | [ProductDefinitionPublicationReadController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionPublicationReadController.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionPublicationReadController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionPublicationReadController.java) |
-| `@SecurityRequirement(name = "productDefinitionBearer")` | [ProductDefinitionReviewController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionReviewController.java) |
-| `new ResponseStatusException(` | [ProductDefinitionReviewController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionReviewController.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionReviewController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionReviewController.java) |
-| `new ResponseStatusException(` | [ProductDefinitionReviewController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionReviewController.java) |
-| `HttpStatus.SERVICE_UNAVAILABLE` | [ProductDefinitionReviewController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionReviewController.java) |
-| `@SecurityRequirement(name = "productDefinitionBearer")` | [ProductDefinitionServingController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionServingController.java) |
 | `HttpStatus.CREATED` | [ProductDocumentationController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java) |
 | `HttpStatus.CREATED` | [ProductDocumentationRequirementController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationRequirementController.java) |
 | `HttpStatus.CREATED` | [ProductLocalizationController](../../core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductLocalizationController.java) |
@@ -1099,7 +619,6 @@ Coordinates: `io.fireflysoftware:core-common-product-mgmt-core:26.10.6`. Parent:
 - `io.fireflysoftware:core-common-product-mgmt-interfaces:`
 - `io.fireflysoftware:core-common-product-mgmt-models:`
 - `io.projectreactor:reactor-test:`
-- `org.fireflyframework:fireflyframework-security-spi:`
 - `org.fireflyframework:fireflyframework-starter-core:`
 - `org.fireflyframework:fireflyframework-web:`
 - `org.flywaydb:flyway-database-postgresql:`
@@ -1151,7 +670,6 @@ Coordinates: `io.fireflysoftware:core-common-product-mgmt-sdk:26.10.6`. Parent: 
 - `io.swagger.core.v3:swagger-annotations:`
 - `jakarta.annotation:jakarta.annotation-api:`
 - `javax.annotation:javax.annotation-api:1.3.2`
-- `org.junit.jupiter:junit-jupiter:`
 - `org.openapitools:jackson-databind-nullable:0.2.8`
 - `org.projectlombok:lombok:`
 - `org.springframework:spring-webflux:`
@@ -1166,8 +684,6 @@ Coordinates: `io.fireflysoftware:core-common-product-mgmt-web:26.10.6`. Parent: 
 - `io.fireflysoftware:core-common-product-mgmt-interfaces:`
 - `io.micrometer:micrometer-registry-prometheus:`
 - `io.projectreactor:reactor-test:`
-- `org.fireflyframework:fireflyframework-security-adapter-opa:`
-- `org.fireflyframework:fireflyframework-security-resource-server:`
 - `org.fireflyframework:fireflyframework-web:`
 - `org.projectlombok:lombok:`
 - `org.springdoc:springdoc-openapi-starter-webflux-ui:`
@@ -1189,82 +705,27 @@ Coordinates: `io.fireflysoftware:core-common-product-mgmt:26.10.6`. Parent: `io.
 
 ## Test sources
 
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/architecture/ProductDefinitionServingArchitectureTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/architecture/ProductDefinitionServingArchitectureTest.java)
 - [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/README.md](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/README.md)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/cardeligibility/CardEnrollmentCapabilityCodecTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/cardeligibility/CardEnrollmentCapabilityCodecTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/cardeligibility/CardEnrollmentCapabilityRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/cardeligibility/CardEnrollmentCapabilityRulesTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/ProductCategoryServiceImplTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/ProductCategoryServiceImplTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/ProductConfigurationServiceImplTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/ProductConfigurationServiceImplTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/AccountTariffRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/AccountTariffRulesTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/CostRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/CostRulesTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/DefinitionCanonicalTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/DefinitionCanonicalTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/DefinitionEnvelopeRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/DefinitionEnvelopeRulesTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/DefinitionReviewRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/DefinitionReviewRulesTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/DefinitionRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/DefinitionRulesTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/FixedRateInstallmentLoanRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/FixedRateInstallmentLoanRulesTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionCommandDatabaseFixture.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionCommandDatabaseFixture.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionCommandDatabaseFixtureTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionCommandDatabaseFixtureTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionDatabaseTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionDatabaseTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionFixtureGate.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionFixtureGate.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionFixtureGateTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionFixtureGateTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionInstructionCodecTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionInstructionCodecTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionLifecycleRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionLifecycleRulesTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionServingNativeIT.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProductDefinitionServingNativeIT.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProfileFixtures.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/ProfileFixtures.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/TermPcInsuranceRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/TermPcInsuranceRulesTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/AccountTariffServingMapperTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/AccountTariffServingMapperTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandAuthorizationTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandErrorsTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandErrorsTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandPlanTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandPlanTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandReceiptCodecTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCommandReceiptCodecTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCostReadAuthorizationTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCostReadAuthorizationTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCostReadServiceTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCostReadServiceTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCurrentSelectionAuthorizationTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCurrentSelectionAuthorizationTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCurrentSelectionTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionCurrentSelectionTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionLifecycleServiceTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationDiscoverySnapshotsTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationDiscoverySnapshotsTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationReadAuthorizationTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationReadAuthorizationTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationReadDeadlineTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationReadDeadlineTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationReadServiceTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationReadServiceTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationSnapshotsTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationSnapshotsTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationViewsTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionPublicationViewsTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadAuthorizationTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadAuthorizationTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadMappingTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReadMappingTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReviewAuthorizationTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReviewAuthorizationTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReviewReadServiceTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionReviewReadServiceTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionServingServiceTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/impl/ProductDefinitionServingServiceTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/AccountTariffRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/AccountTariffRulesTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRulesTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonicalTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonicalTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionEnvelopeRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionEnvelopeRulesTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRulesTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/FixedRateInstallmentLoanRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/FixedRateInstallmentLoanRulesTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProfileFixtures.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProfileFixtures.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/TermPcInsuranceRulesTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/TermPcInsuranceRulesTest.java)
 - [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImplTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImplTest.java)
 - [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImplTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImplTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/ProductPricingAggregatorServiceImplTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/ProductPricingAggregatorServiceImplTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionDraftCountTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionDraftCountTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionDraftMappingTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionDraftMappingTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionLifecyclePersistenceContractTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionLifecyclePersistenceContractTest.java)
-- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionPublicationReadRepositoryTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/models/repositories/definition/lifecycle/impl/ProductDefinitionPublicationReadRepositoryTest.java)
+- [core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java](../../core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java)
 - [core-common-product-mgmt-core/src/test/resources/definition/v1/account.json](../../core-common-product-mgmt-core/src/test/resources/definition/v1/account.json)
 - [core-common-product-mgmt-core/src/test/resources/definition/v1/insurance.json](../../core-common-product-mgmt-core/src/test/resources/definition/v1/insurance.json)
 - [core-common-product-mgmt-core/src/test/resources/definition/v1/loan.json](../../core-common-product-mgmt-core/src/test/resources/definition/v1/loan.json)
-- [core-common-product-mgmt-sdk/src/test/java/io/fireflysoftware/core/product/sdk/InstantScalarGeneratedContractTest.java](../../core-common-product-mgmt-sdk/src/test/java/io/fireflysoftware/core/product/sdk/InstantScalarGeneratedContractTest.java)
-- [core-common-product-mgmt-sdk/src/test/java/io/fireflysoftware/core/product/sdk/PackagedOpenApiCompatibilityTest.java](../../core-common-product-mgmt-sdk/src/test/java/io/fireflysoftware/core/product/sdk/PackagedOpenApiCompatibilityTest.java)
-- [core-common-product-mgmt-sdk/src/test/java/io/fireflysoftware/core/product/sdk/ProfileTermsGeneratedContractTest.java](../../core-common-product-mgmt-sdk/src/test/java/io/fireflysoftware/core/product/sdk/ProfileTermsGeneratedContractTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionCommandSecurityTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionCommandSecurityTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionPublicationSecurityTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionPublicationSecurityTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionServingConfigurationTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionServingConfigurationTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionServingSecurityTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/ProductDefinitionServingSecurityTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionCommandConfigurationTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionCommandConfigurationTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionFlywayDefaultsTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionFlywayDefaultsTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionJdbcSslModeTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionJdbcSslModeTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionLifecycleConfigurationTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionLifecycleConfigurationTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionLifecycleNativeIT.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionLifecycleNativeIT.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionOwnerCommandConfigurationTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionOwnerCommandConfigurationTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionPublicationPersistenceConfigurationTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/config/definition/lifecycle/ProductDefinitionPublicationPersistenceConfigurationTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionCostControllerTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionCostControllerTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleControllerTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionLifecycleControllerTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionPublicationReadControllerTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionPublicationReadControllerTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionReviewControllerTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionReviewControllerTest.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionServingControllerTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductDefinitionServingControllerTest.java)
 - [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductPricingAggregatorControllerTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductPricingAggregatorControllerTest.java)
 - [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/openapi/OpenApiGenApplication.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/openapi/OpenApiGenApplication.java)
-- [core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/openapi/ProductDefinitionInstantSchemaTest.java](../../core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/openapi/ProductDefinitionInstantSchemaTest.java)
 
 ## CI definitions
 

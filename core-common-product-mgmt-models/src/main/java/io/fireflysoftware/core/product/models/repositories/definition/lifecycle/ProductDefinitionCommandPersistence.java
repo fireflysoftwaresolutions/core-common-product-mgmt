@@ -18,6 +18,11 @@ package io.fireflysoftware.core.product.models.repositories.definition.lifecycle
 
 import io.fireflysoftware.core.product.models.repositories.definition.lifecycle.impl.ProductDefinitionDraftWritesImpl;
 import io.r2dbc.pool.ConnectionPool;
+import io.r2dbc.spi.ConnectionFactory;
+import org.fireflyframework.core.transaction.*;
+import org.fireflyframework.core.transaction.impl.DefaultBoundedRootTransaction;
+import reactor.core.publisher.Mono;
+import java.util.function.Function;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.r2dbc.convert.R2dbcConverter;
@@ -54,15 +59,23 @@ public final class ProductDefinitionCommandPersistence implements AutoCloseable 
     private final R2dbcEntityTemplate operations;
     private final R2dbcTransactionManager manager;
     private final TransactionalOperator transactions;
+    private final BoundedRootTransaction bounded;
+    private final DefaultTransactionDefinition boundedCommand, boundedRead;
     private final ProductDefinitionDraftRepository drafts;
     private final ProductDefinitionCostControlRepository costs;
 
     public ProductDefinitionCommandPersistence(
             ConnectionPool pool, R2dbcConverter converter, ApplicationContext context) {
+        this(pool, converter, context, false);
+    }
+
+    public ProductDefinitionCommandPersistence(
+            ConnectionPool pool, R2dbcConverter converter, ApplicationContext context, boolean boundedMode) {
         this.pool = Objects.requireNonNull(pool);
+        ConnectionFactory transactionFactory = boundedMode ? new OwnedLeaseConnectionFactory(pool) : pool;
         operations =
                 new R2dbcEntityTemplate(
-                        DatabaseClient.create(pool),
+                        DatabaseClient.create(transactionFactory),
                         PostgresDialect.INSTANCE,
                         Objects.requireNonNull(converter));
         operations.setBeanFactory(context);
@@ -95,7 +108,7 @@ public final class ProductDefinitionCommandPersistence implements AutoCloseable 
                 factory.getRepository(ProductDefinitionCommandNativeRepository.class);
 
         reviewReadNative = factory.getRepository(ProductDefinitionReviewReadNativeRepository.class);
-        manager = new R2dbcTransactionManager(pool);
+        manager = new R2dbcTransactionManager(transactionFactory);
         manager.setEnforceReadOnly(true);
         var readDefinition = new DefaultTransactionDefinition();
         readDefinition.setName("product-definition-review-selection");
@@ -109,6 +122,32 @@ public final class ProductDefinitionCommandPersistence implements AutoCloseable 
         definition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         definition.setTimeout((int) Duration.ofSeconds(10).toSeconds());
         transactions = TransactionalOperator.create(manager, definition);
+        bounded = boundedMode ? new DefaultBoundedRootTransaction(
+                BoundedR2dbcResources.verify((OwnedLeaseConnectionFactory)transactionFactory,
+                        operations.getDatabaseClient(), operations, manager),
+                new CleanupPolicy(Duration.ofSeconds(2), Duration.ofSeconds(2))) : null;
+        boundedCommand = new DefaultTransactionDefinition();
+        boundedCommand.setName("product-definition-term-pc-command");
+        boundedCommand.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        boundedCommand.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+        boundedCommand.setTimeout(30);
+        boundedRead = new DefaultTransactionDefinition(boundedCommand);
+        boundedRead.setName("product-definition-term-pc-private-read");
+        boundedRead.setReadOnly(true);
+        boundedRead.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+    }
+
+    public boolean boundedTransactions() {
+        return bounded != null;
+    }
+
+    public <T> Mono<T> executeBounded(R2dbcOperationBudget budget, boolean readOnly,
+            Function<RootTransactionScope, Mono<T>> work) {
+        return Mono.defer(() -> {
+            if (bounded == null) return Mono.error(new IllegalStateException("PRODUCT_BOUNDED_PERSISTENCE_REQUIRED"));
+            return bounded.execute(budget, readOnly ? boundedRead : boundedCommand, work)
+                    .map(RootCompletion::value);
+        });
     }
 
     public ProductDefinitionReviewReadNativeRepository reviewReadNative() {

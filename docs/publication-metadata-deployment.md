@@ -2,7 +2,7 @@
 
 This guide covers the staged database setup for governed product publication metadata. It does not grant operational product admission, approve a customer quote, or provide an available CARD eligibility producer. CARD enrollment capability remains `NOT_OFFERED` or `UNKNOWN`.
 
-Qualify the selected source, dependency versions, database identities, and deployed authorization together before enabling traffic. Build/SDK and restricted native-database checks have distinct scopes; neither substitutes for real issuer, policy-service, HTTP, or downstream journey acceptance.
+This reconciled source candidate requires joint qualification before deployment. Existing build, API, and database evidence covers separate configurations.
 
 ## Identities and ownership
 

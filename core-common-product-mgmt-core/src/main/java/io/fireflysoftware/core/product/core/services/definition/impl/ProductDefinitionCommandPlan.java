@@ -27,7 +27,13 @@ final class ProductDefinitionCommandPlan {
             Snapshot privateSnapshot) {}
 
     static String encode(Parsed parsed, ProductDefinitionCommandResources resources) {
+        return encode(parsed, resources, GovernedDefinitionProfile.ACCOUNT_TARIFF);
+    }
+
+    static String encode(Parsed parsed, ProductDefinitionCommandResources resources,
+            GovernedDefinitionProfile backend) {
         try {
+            if (backend == null) throw invalid();
             if (parsed == null
                     || parsed.instruction() == null
                     || parsed.canonicalIntent() == null
@@ -40,7 +46,7 @@ final class ProductDefinitionCommandPlan {
                             scope.tenantId(),
                             scope.rootId(),
                             instruction.command(),
-                            DefinitionCanonical.encode(original.get("request")));
+                            DefinitionCanonical.encode(original.get("request")), backend);
             if (!reparsed.equals(parsed)) throw invalid();
             resources(instruction.command(), resources);
             Snapshot publicSnapshot = null, privateSnapshot = null;

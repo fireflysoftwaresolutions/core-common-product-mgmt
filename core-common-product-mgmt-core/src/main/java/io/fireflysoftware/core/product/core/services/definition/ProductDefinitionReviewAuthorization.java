@@ -28,6 +28,8 @@ public interface ProductDefinitionReviewAuthorization {
             long actorExpiresAtEpochMillis,
             long validUntilEpochMillis) {}
 
+    default GovernedDefinitionProfile definitionProfile() { return GovernedDefinitionProfile.ACCOUNT_TARIFF; }
+
     Mono<Admission> authorize(Scope scope);
 
     Mono<Void> reauthorize(Admission admission);

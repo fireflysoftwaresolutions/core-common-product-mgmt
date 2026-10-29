@@ -18,11 +18,18 @@ import reactor.core.publisher.Mono;
 
 import java.time.*;
 import java.util.*;
+import java.util.function.*;
+import org.fireflyframework.core.transaction.R2dbcOperationBudget;
+import org.fireflyframework.core.transaction.RootTransactionException;
 
 public final class ProductDefinitionLifecycleServiceImpl
         implements ProductDefinitionLifecycleService {
     private final ProductDefinitionCommandAuthorization authorization;
     private final ProductDefinitionCommandPersistence persistence;
+    private final GovernedDefinitionProfile backend;
+    private final Clock clock;
+    private final LongSupplier nanos;
+    private final boolean boundedMode;
 
     private record Frame(
             Parsed parsed,
@@ -35,11 +42,68 @@ public final class ProductDefinitionLifecycleServiceImpl
     public ProductDefinitionLifecycleServiceImpl(
             ProductDefinitionCommandAuthorization authorization,
             ProductDefinitionCommandPersistence persistence) {
-        this.authorization = Objects.requireNonNull(authorization);
-        this.persistence = Objects.requireNonNull(persistence);
+        this(authorization, persistence, GovernedDefinitionProfile.ACCOUNT_TARIFF,
+                Clock.systemUTC(), System::nanoTime, false);
     }
 
-    public Mono<Receipt> execute(
+    public ProductDefinitionLifecycleServiceImpl(
+            ProductDefinitionCommandAuthorization authorization,
+            ProductDefinitionCommandPersistence persistence, GovernedDefinitionProfile backend,
+            Clock clock, LongSupplier nanos) {
+        this(authorization, persistence, backend, clock, nanos, true);
+    }
+
+    private ProductDefinitionLifecycleServiceImpl(
+            ProductDefinitionCommandAuthorization authorization,
+            ProductDefinitionCommandPersistence persistence, GovernedDefinitionProfile backend,
+            Clock clock, LongSupplier nanos, boolean boundedMode) {
+        this.authorization=Objects.requireNonNull(authorization);
+        this.persistence=Objects.requireNonNull(persistence);this.backend=Objects.requireNonNull(backend);
+        this.clock=Objects.requireNonNull(clock);this.nanos=Objects.requireNonNull(nanos);this.boundedMode=boundedMode;
+        if(boundedMode && (authorization.definitionProfile()!=backend || !persistence.boundedTransactions()))
+            throw new IllegalArgumentException("Matching bounded product backend required");
+    }
+
+    public Mono<Receipt> execute(UUID tenantId,UUID rootId,ProductDefinitionCommand command,String body) {
+        return boundedMode ? executeBounded(tenantId,rootId,command,body) : executeLegacy(tenantId,rootId,command,body);
+    }
+
+    private Mono<Receipt> executeBounded(UUID tenantId,UUID rootId,ProductDefinitionCommand command,String body) {
+        return ProductDefinitionCommandTransactionBoundary.outsideSql(()->Mono.defer(()->{
+            Instant observedAt=clock.instant();long before=nanos.getAsLong();
+            var requestBudget=R2dbcOperationBudget.observed(observedAt,observedAt.plusSeconds(30),before,Duration.ofSeconds(30),clock,nanos);
+            return Mono.fromSupplier(()->parse(tenantId,rootId,command,body)).flatMap(parsed->{
+                var value=parsed.instruction().scope();
+                var requested=new ProductDefinitionCommandAuthorization.Scope(value.tenantId(),value.rootId(),value.operationId(),command,parsed.instruction().targetId());
+                return authorization.authorize(requested).switchIfEmpty(Mono.error(unavailable())).flatMap(admission->{
+                    require(requested.equals(admission.scope()));
+                    // The exact approved snapshot is currently loaded inside SQL. Remote current
+                    // observations require an outside-SQL pre-read and native revalidation first.
+                    if(backend==GovernedDefinitionProfile.DEPOSIT_ACCOUNT && command==ProductDefinitionCommand.PUBLISH)
+                        return Mono.error(unavailable());
+                    var window=ProductDefinitionLifecycleWindow.start(observedAt,before,admission.actorExpiresAtEpochMillis(),admission.validUntilEpochMillis(),clock,nanos);
+                    var resources=ProductDefinitionCommandResources.fresh(command);
+                    var failures=new ProductDefinitionBoundedErrors();
+                    return persistence.executeBounded(window.budget(),false,scope->{
+                        long beforeNative=nanos.getAsLong();
+                        return failures.capture(command(parsed,admission,resources,nativeAdmission->persistence.productDefinitionCommandNativeRepository()
+                            .admission(nativeAdmission.commandId()).switchIfEmpty(Mono.error(unavailable())).flatMap(stamp->{
+                                require(stamp.recordedAt()!=null && stamp.dbNowMillis()!=null && stamp.admissionUntilMillis()!=null
+                                        && stamp.recordedAt().equals(nativeAdmission.commandRecordedAt()));
+                                scope.narrow(window.observe(stamp.recordedAt(),stamp.dbNowMillis(),stamp.admissionUntilMillis(),beforeNative));
+                                return Mono.empty();
+                            })));
+                    }).onErrorMap(RootTransactionException.class,error->failures.resolve(error,window::budget)).flatMap(receipt->{
+                        window.budget().remaining();
+                        return authorization.reauthorize(admission).timeout(window.budget().remaining())
+                            .then(Mono.defer(()->{window.budget().remaining();return Mono.just(receipt);}));
+                    });
+                });
+            }).timeout(requestBudget.remaining());
+        })).onErrorMap(ProductDefinitionLifecycleServiceImpl::safe);
+    }
+
+    private Mono<Receipt> executeLegacy(
             UUID tenantId, UUID rootId, ProductDefinitionCommand command, String body) {
         return ProductDefinitionCommandTransactionBoundary.outsideSql(
                         () ->
@@ -94,10 +158,10 @@ public final class ProductDefinitionLifecycleServiceImpl
                 .onErrorMap(ProductDefinitionLifecycleServiceImpl::safe);
     }
 
-    private static Parsed parse(
+    private Parsed parse(
             UUID tenant, UUID root, ProductDefinitionCommand command, String body) {
         try {
-            return ProductDefinitionInstructionCodec.parse(tenant, root, command, body);
+            return ProductDefinitionInstructionCodec.parse(tenant, root, command, body, backend);
         } catch (IllegalArgumentException invalid) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Exact product command required");
@@ -105,68 +169,26 @@ public final class ProductDefinitionLifecycleServiceImpl
     }
 
     private Mono<Receipt> transaction(Parsed parsed, Admission admission) {
-        var resources = ProductDefinitionCommandResources.fresh(parsed.instruction().command());
-        var scope = parsed.instruction().scope();
-        return persistence
-                .transactions()
-                .execute(
-                        status ->
-                                persistence
-                                        .productDefinitionCommandNativeRepository()
-                                        .begin(
-                                                scope.tenantId(),
-                                                scope.rootId(),
-                                                scope.operationId(),
-                                                parsed.instruction().command().name(),
-                                                admission.principal().issuer(),
-                                                admission.principal().subject(),
-                                                admission.actorExpiresAtEpochMillis(),
-                                                admission.validUntilEpochMillis(),
-                                                ProductDefinitionCommandAuthorization
-                                                        .POLICY_PROFILE,
-                                                parsed.canonicalIntent(),
-                                                parsed.intentDigest(),
-                                                ProductDefinitionCommandPlan.encode(
-                                                        parsed, resources))
-                                        .switchIfEmpty(Mono.error(unavailable()))
-                                        .flatMap(
-                                                nativeAdmission -> {
-                                                    validateNative(nativeAdmission, resources);
-                                                    var frame =
-                                                            new Frame(
-                                                                    parsed,
-                                                                    admission,
-                                                                    nativeAdmission,
-                                                                    resources);
-                                                    return truth(
-                                                                    persistence
-                                                                            .productDefinitionCommandNativeRepository()
-                                                                            .isCurrent(
-                                                                                    nativeAdmission
-                                                                                            .commandId()))
-                                                            .then(
-                                                                    Mono.defer(
-                                                                            () ->
-                                                                                    Boolean.TRUE
-                                                                                                    .equals(
-                                                                                                            nativeAdmission
-                                                                                                                    .replay())
-                                                                                            ? replay(
-                                                                                                    frame)
-                                                                                            : fresh(
-                                                                                                    frame)))
-                                                            .flatMap(
-                                                                    receipt ->
-                                                                            truth(
-                                                                                            persistence
-                                                                                                    .productDefinitionCommandNativeRepository()
-                                                                                                    .finish(
-                                                                                                            nativeAdmission
-                                                                                                                    .commandId()))
-                                                                                    .thenReturn(
-                                                                                            receipt));
-                                                }))
-                .single();
+        var resources=ProductDefinitionCommandResources.fresh(parsed.instruction().command());
+        return persistence.transactions().execute(status->command(parsed,admission,resources,ignored->Mono.empty())).single();
+    }
+
+    private Mono<Receipt> command(Parsed parsed,Admission admission,ProductDefinitionCommandResources resources,
+            Function<NativeAdmission,Mono<Void>> narrow) {
+        var scope=parsed.instruction().scope();
+        return persistence.productDefinitionCommandNativeRepository().begin(
+                scope.tenantId(),scope.rootId(),scope.operationId(),parsed.instruction().command().name(),
+                admission.principal().issuer(),admission.principal().subject(),admission.actorExpiresAtEpochMillis(),admission.validUntilEpochMillis(),
+                backend.policyProfile(),parsed.canonicalIntent(),parsed.intentDigest(),ProductDefinitionCommandPlan.encode(parsed,resources,backend))
+            .switchIfEmpty(Mono.error(unavailable())).flatMap(nativeAdmission->{
+                validateNative(nativeAdmission,resources);
+                return narrow.apply(nativeAdmission).then(Mono.defer(()->{
+                    var frame=new Frame(parsed,admission,nativeAdmission,resources);
+                    return truth(persistence.productDefinitionCommandNativeRepository().isCurrent(nativeAdmission.commandId()))
+                        .then(Mono.defer(()->Boolean.TRUE.equals(nativeAdmission.replay())?replay(frame):fresh(frame)))
+                        .flatMap(receipt->truth(persistence.productDefinitionCommandNativeRepository().finish(nativeAdmission.commandId())).thenReturn(receipt));
+                }));
+            });
     }
 
     private static void validateNative(
@@ -320,8 +342,8 @@ public final class ProductDefinitionLifecycleServiceImpl
                         scope.tenantId(),
                         request.productId(),
                         common.code(),
-                        "BANKING",
-                        "ACCOUNT_TARIFF_V1",
+                        backend.businessArea(),
+                        backend.profileCode(),
                         1,
                         "DRAFT",
                         0,
@@ -411,9 +433,7 @@ public final class ProductDefinitionLifecycleServiceImpl
                                     row.tenantId().equals(scope.tenantId())
                                             && row.rootId().equals(scope.rootId())
                                             && row.productId() != null
-                                            && "BANKING".equals(row.businessArea())
-                                            && "ACCOUNT_TARIFF_V1".equals(row.profileCode())
-                                            && Integer.valueOf(1).equals(row.profileVersion())
+                                            && backend.matches(row.businessArea(),row.profileCode(),row.profileVersion())
                                             && row.publicHead() != null
                                             && row.publicStateVersion() != null
                                             && row.publicStateVersion() >= 0
@@ -447,13 +467,13 @@ public final class ProductDefinitionLifecycleServiceImpl
                                                                             canonical.json())
                                                                     .common()
                                                                     .code())
-                                            && "BANKING"
+                                            && backend.businessArea()
                                                     .equals(
                                                             DefinitionProfiles.decode(
                                                                             canonical.json())
                                                                     .common()
                                                                     .businessArea())
-                                            && "ACCOUNT_TARIFF_V1"
+                                            && backend.profileCode()
                                                     .equals(
                                                             DefinitionProfiles.decode(
                                                                             canonical.json())

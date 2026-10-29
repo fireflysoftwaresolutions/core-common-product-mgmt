@@ -46,8 +46,17 @@ final class DefinitionProfileSupport {
         owner(ref.owner(), path + "/owner");
         require(kind.equals(ref.kind()), path + "/kind");
         DefinitionRules.uuid(ref.id(), path + "/id");
-        require(ref.version() != null && ref.version() > 0, path + "/version");
+        require(ref.version() != null && ref.version() > 0 && ref.versionFormat()==null && ref.versionText()==null, path + "/version");
         digest(ref.digest(), path + "/digest");
+    }
+
+    static void documentReference(ExactReference ref,String kind,String path,boolean opaqueAllowed) {
+        if(opaqueAllowed && ref!=null && ref.version()==null && "OPAQUE".equals(ref.versionFormat())) {
+            owner(ref.owner(),path+"/owner");require(kind.equals(ref.kind()),path+"/kind");
+            DefinitionRules.uuid(ref.id(),path+"/id");digest(ref.digest(),path+"/digest");
+            try {require(ref.ownerVersion() instanceof OpaqueOwnerVersion,path+"/versionText");}
+            catch(IllegalArgumentException invalid){throw DefinitionRules.invalid(path+"/versionText");}
+        } else reference(ref,kind,path);
     }
 
     static void currency(CurrencyPolicyReference ref, String path) {

@@ -40,6 +40,12 @@ public class OpenApiGenApplication {
                         "true",
                         "product.definitions.publication-read.enabled",
                         "true",
+                        "product.definitions.term-pc.enabled",
+                        "true",
+                        "product.definitions.deposit.enabled",
+                        "true",
+                        "product.definitions.insurance-quote-read.enabled",
+                        "true",
                         "firefly.openapi.instant-scalar.enabled",
                         "true"));
         application.run(args);

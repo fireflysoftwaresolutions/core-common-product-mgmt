@@ -1,6 +1,7 @@
 package io.fireflysoftware.core.product.core.services.definition.impl;
 
 import io.fireflysoftware.core.product.core.services.definition.DefinitionCanonical;
+import io.fireflysoftware.core.product.core.services.definition.GovernedDefinitionProfile;
 import io.fireflysoftware.core.product.core.services.definition.ProductDefinitionCommandAuthorization;
 import io.fireflysoftware.core.product.core.services.definition.ProductDefinitionCostReadAuthorization;
 import io.fireflysoftware.core.product.core.services.definition.ProductDefinitionPublicationReadAuthorization;
@@ -28,6 +29,7 @@ public final class ProductDefinitionCommandAuthorizationImpl
     private final Clock clock;
     private final Set<String> issuers;
     private final String profile;
+    private final GovernedDefinitionProfile backend;
 
     public ProductDefinitionCommandAuthorizationImpl(
             SecurityContextPort principals,
@@ -35,12 +37,21 @@ public final class ProductDefinitionCommandAuthorizationImpl
             Clock clock,
             Set<String> issuers,
             String profile) {
+        this(principals, policies, clock, issuers, profile, GovernedDefinitionProfile.ACCOUNT_TARIFF);
+    }
+
+    public ProductDefinitionCommandAuthorizationImpl(
+            SecurityContextPort principals, PolicyDecisionPort policies, Clock clock,
+            Set<String> issuers, String profile, GovernedDefinitionProfile backend) {
+        this.backend = Objects.requireNonNull(backend);
         this.principals = Objects.requireNonNull(principals);
         this.policies = Objects.requireNonNull(policies);
         this.clock = Objects.requireNonNull(clock);
         this.issuers = Set.copyOf(issuers);
         this.profile = profile;
     }
+
+    @Override public GovernedDefinitionProfile definitionProfile() { return backend; }
 
     public Mono<ProductDefinitionCommandAuthorization.Admission> authorize(
             ProductDefinitionCommandAuthorization.Scope scope) {
@@ -112,10 +123,10 @@ public final class ProductDefinitionCommandAuthorizationImpl
                     context.put("rootId", scope.rootId().toString());
                     context.put("operationId", scope.operationId().toString());
                     context.put("command", command.name());
-                    context.put("authorityProfile", POLICY_PROFILE);
-                    context.put("profileCode", "ACCOUNT_TARIFF_V1");
+                    context.put("authorityProfile", backend.policyProfile());
+                    context.put("profileCode", backend.profileCode());
                     context.put("profileVersion", 1);
-                    context.put("businessArea", "BANKING");
+                    context.put("businessArea", backend.businessArea());
                     if (scope.targetId() != null)
                         context.put("targetId", scope.targetId().toString());
                     return policies.authorize(
@@ -246,10 +257,10 @@ public final class ProductDefinitionCommandAuthorizationImpl
                     context.put("tenantId", scope.tenantId().toString());
                     context.put("rootId", scope.rootId().toString());
                     context.put("selectionTarget", scope.target().name());
-                    context.put("authorityProfile", POLICY_PROFILE);
-                    context.put("profileCode", "ACCOUNT_TARIFF_V1");
+                    context.put("authorityProfile", backend.policyProfile());
+                    context.put("profileCode", backend.profileCode());
                     context.put("profileVersion", 1);
-                    context.put("businessArea", "BANKING");
+                    context.put("businessArea", backend.businessArea());
                     if (scope.target() == ProductDefinitionReviewAuthorization.Target.EXACT)
                         context.put("submissionId", scope.submissionId().toString());
                     return policies.authorize(
@@ -378,13 +389,13 @@ public final class ProductDefinitionCommandAuthorizationImpl
                                     "rootId",
                                     scope.rootId().toString(),
                                     "authorityProfile",
-                                    POLICY_PROFILE,
+                                    backend.policyProfile(),
                                     "profileCode",
-                                    "ACCOUNT_TARIFF_V1",
+                                    backend.profileCode(),
                                     "profileVersion",
                                     1,
                                     "businessArea",
-                                    "BANKING");
+                                    backend.businessArea());
                     return policies.authorize(
                                     principal,
                                     "product.definition.cost.read",
@@ -499,13 +510,13 @@ public final class ProductDefinitionCommandAuthorizationImpl
                                     "rootId",
                                     scope.rootId().toString(),
                                     "authorityProfile",
-                                    POLICY_PROFILE,
+                                    backend.policyProfile(),
                                     "profileCode",
-                                    "ACCOUNT_TARIFF_V1",
+                                    backend.profileCode(),
                                     "profileVersion",
                                     1,
                                     "businessArea",
-                                    "BANKING");
+                                    backend.businessArea());
                     return policies.authorize(
                                     principal,
                                     scope.target().action(),
@@ -547,7 +558,7 @@ public final class ProductDefinitionCommandAuthorizationImpl
     }
 
     private void configured() {
-        if (!POLICY_PROFILE.equals(profile)) throw unavailable();
+        if (!backend.policyProfile().equals(profile)) throw unavailable();
     }
 
     private void current(ProductDefinitionCommandAuthorization.Admission admission) {

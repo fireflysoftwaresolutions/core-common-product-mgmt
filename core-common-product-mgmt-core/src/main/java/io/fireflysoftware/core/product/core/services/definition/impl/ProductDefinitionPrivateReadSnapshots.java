@@ -28,6 +28,12 @@ final class ProductDefinitionPrivateReadSnapshots {
 
     static Mono<Head> head(
             ProductDefinitionCommandPersistence persistence, UUID tenant, UUID root) {
+        return head(persistence,tenant,root,GovernedDefinitionProfile.ACCOUNT_TARIFF);
+    }
+
+    static Mono<Head> head(ProductDefinitionCommandPersistence persistence,UUID tenant,UUID root,
+            GovernedDefinitionProfile backend) {
+        Objects.requireNonNull(backend);
         return persistence
                 .drafts()
                 .findByTenantIdAndRootId(tenant, root)
@@ -37,9 +43,7 @@ final class ProductDefinitionPrivateReadSnapshots {
                             require(
                                     header.tenantId().equals(tenant)
                                             && header.rootId().equals(root)
-                                            && "BANKING".equals(header.businessArea())
-                                            && "ACCOUNT_TARIFF_V1".equals(header.profileCode())
-                                            && Integer.valueOf(1).equals(header.profileVersion())
+                                            && backend.matches(header.businessArea(),header.profileCode(),header.profileVersion())
                                             && header.publicHead() != null
                                             && header.publicStateVersion() != null
                                             && header.publicStateVersion() >= 0
@@ -83,12 +87,12 @@ final class ProductDefinitionPrivateReadSnapshots {
                                                                         .equals(
                                                                                 header
                                                                                         .productCode())
-                                                                && "BANKING"
+                                                                && backend.businessArea()
                                                                         .equals(
                                                                                 definition
                                                                                         .common()
                                                                                         .businessArea())
-                                                                && "ACCOUNT_TARIFF_V1"
+                                                                && backend.profileCode()
                                                                         .equals(
                                                                                 definition
                                                                                         .common()

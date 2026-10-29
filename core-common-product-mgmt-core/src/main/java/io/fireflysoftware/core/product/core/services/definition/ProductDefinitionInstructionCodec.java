@@ -15,14 +15,20 @@ public final class ProductDefinitionInstructionCodec {
 
     public static Parsed parse(
             UUID tenantId, UUID rootId, ProductDefinitionCommand command, String body) {
+        return parse(tenantId, rootId, command, body, GovernedDefinitionProfile.ACCOUNT_TARIFF);
+    }
+
+    public static Parsed parse(
+            UUID tenantId, UUID rootId, ProductDefinitionCommand command, String body,
+            GovernedDefinitionProfile backend) {
         try {
-            if (command == null || body == null || body.length() > 131072) throw invalid();
+            if (backend == null || command == null || body == null || body.length() > 131072) throw invalid();
             var raw = DefinitionCanonical.parse(body);
             Body request =
                     switch (command) {
                         case CREATE_DRAFT -> {
                             var value = DefinitionCanonical.read(raw, RawCreate.class);
-                            var definition = profile(value.definition());
+                            var definition = profile(value.definition(), backend);
                             DefinitionRules.text(
                                     definition.common().name(), 255, "/definition/common/name");
                             yield new CreateDraftBody(
@@ -40,7 +46,7 @@ public final class ProductDefinitionInstructionCodec {
                                     uuid(value.operationId()),
                                     version(value.expectedPublicVersion()),
                                     uuid(value.expectedPublicHead()),
-                                    profile(value.definition()),
+                                    profile(value.definition(), backend),
                                     value.sourcePublicationId() == null
                                             ? null
                                             : uuid(value.sourcePublicationId()),
@@ -50,7 +56,7 @@ public final class ProductDefinitionInstructionCodec {
                         }
                         case EDIT_COST -> {
                             var value = DefinitionCanonical.read(raw, RawEditCost.class);
-                            var definition = profile(value.publicDefinition());
+                            var definition = profile(value.publicDefinition(), backend);
                             String actual =
                                     DefinitionProfiles.canonical(
                                                     DefinitionCanonical.tree(definition).toString())
@@ -134,11 +140,10 @@ public final class ProductDefinitionInstructionCodec {
         }
     }
 
-    private static ProductDefinition profile(JsonNode value) {
+    private static ProductDefinition profile(JsonNode value, GovernedDefinitionProfile backend) {
         if (value == null) throw invalid();
         var definition = DefinitionProfiles.decode(value.toString());
-        if (!"ACCOUNT_TARIFF_V1".equals(definition.common().profileCode())
-                || !"BANKING".equals(definition.common().businessArea())) throw invalid();
+        backend.require(definition.common());
         return definition;
     }
 
