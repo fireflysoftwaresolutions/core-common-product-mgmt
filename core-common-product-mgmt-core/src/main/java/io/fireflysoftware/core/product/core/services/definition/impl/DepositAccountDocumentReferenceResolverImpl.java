@@ -41,7 +41,9 @@ public final class DepositAccountDocumentReferenceResolverImpl implements Deposi
                             Instant effective=earliest(earliest(until,layout.effectiveUntil()),clock.instant().plus(left));
                             effective=effective.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
                             Instant observed=issued.observedAt().isAfter(layout.observedAt())?issued.observedAt():layout.observedAt();
-                            var result=new Observation(target,observed,earliest(issued.nativeUntil(),layout.nativeUntil()),effective);
+                            var result=issued.windowEvidence()==WindowEvidence.EFFECTIVE_ONLY || layout.windowEvidence()==WindowEvidence.EFFECTIVE_ONLY
+                                ?Observation.effectiveOnly(target,observed,effective)
+                                :new Observation(target,observed,earliest(issued.nativeUntil(),layout.nativeUntil()),effective);
                             remaining(originalBudget,effective,spans);return result;
                         });
                 });
@@ -61,12 +63,15 @@ public final class DepositAccountDocumentReferenceResolverImpl implements Deposi
     }
 
     private void validate(Target target,Observation value) {
-        if(value==null || !target.equals(value.target()) || value.observedAt()==null || value.nativeUntil()==null
+        if(value==null || !target.equals(value.target()) || value.observedAt()==null || value.windowEvidence()==null
                 || value.effectiveUntil()==null || value.observedAt().isAfter(clock.instant())
-                || value.observedAt().getNano()%1_000_000!=0 || value.nativeUntil().getNano()%1_000_000!=0
+                || value.observedAt().getNano()%1_000_000!=0
                 || value.effectiveUntil().getNano()%1_000_000!=0
-                || !value.nativeUntil().isAfter(value.observedAt()) || !value.effectiveUntil().isAfter(value.observedAt())
-                || value.effectiveUntil().isAfter(value.nativeUntil())
+                || !value.effectiveUntil().isAfter(value.observedAt()))throw unavailable();
+        if(value.windowEvidence()==WindowEvidence.EFFECTIVE_ONLY) {
+            if(value.nativeUntil()!=null || Duration.between(value.observedAt(),value.effectiveUntil()).compareTo(Duration.ofSeconds(5))>0)throw unavailable();
+        } else if(value.nativeUntil()==null || value.nativeUntil().getNano()%1_000_000!=0
+                || !value.nativeUntil().isAfter(value.observedAt()) || value.effectiveUntil().isAfter(value.nativeUntil())
                 || Duration.between(value.observedAt(),value.nativeUntil()).compareTo(Duration.ofSeconds(5))>0)throw unavailable();
     }
 

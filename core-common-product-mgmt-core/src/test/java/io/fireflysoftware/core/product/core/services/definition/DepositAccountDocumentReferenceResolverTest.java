@@ -17,6 +17,17 @@ import reactor.test.StepVerifier;
 
 /** Controlled owner ports qualify local binding/timing only, never owner or native acceptance. */
 class DepositAccountDocumentReferenceResolverTest {
+    @Test void legacyFourArgumentObservationRetainsNativeAndEffectiveEvidence(){
+        var value=observation(target());assertEquals(WindowEvidence.NATIVE_AND_EFFECTIVE,value.windowEvidence());assertNotNull(value.nativeUntil());
+    }
+    @Test void effectiveOnlyEvidenceCannotSmuggleAnIndependentNativeDeadline(){
+        var service=service((t,b,u)->Mono.just(observation(t)),(t,b,u)->Mono.just(new Observation(t,NOW,NOW.plusSeconds(4),NOW.plusSeconds(3),WindowEvidence.EFFECTIVE_ONLY)));
+        assertThrows(IllegalStateException.class,()->service.verify(target(),budget(),NOW.plusSeconds(5)).block());
+    }
+    @Test void effectiveOnlyOwnerWindowCannotExceedFiveSeconds(){
+        var service=service((t,b,u)->Mono.just(observation(t)),(t,b,u)->Mono.just(Observation.effectiveOnly(t,NOW,NOW.plusSeconds(6))));
+        assertThrows(IllegalStateException.class,()->service.verify(target(),budget(),NOW.plusSeconds(5)).block());
+    }
     static final Instant NOW=Instant.parse("2026-10-28T12:00:00Z");
     final AtomicReference<Instant> wall=new AtomicReference<>(NOW);final AtomicLong ticks=new AtomicLong();
     final Clock clock=new Clock(){public ZoneId getZone(){return ZoneOffset.UTC;}public Clock withZone(ZoneId z){return this;}public Instant instant(){return wall.get();}};
