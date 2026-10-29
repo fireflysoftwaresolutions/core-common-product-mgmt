@@ -6,8 +6,8 @@ servers:
 - url: http://localhost:18080
   description: Generated server url
 tags:
-- name: Product Category
-  description: APIs for managing product categories in the product management platform
+- name: Private product costs
+  description: Current-authorized private cost editing context
 - name: Product Documentation Requirements
   description: APIs for managing documentation requirements for products during the
     contracting/opening phase
@@ -16,18 +16,33 @@ tags:
     \ with a specific product"
 - name: Product Relationship
   description: APIs for managing relationships between products
+- name: Product Configuration
+  description: APIs for managing key-value configuration data for products
+- name: Account tariff definitions
+  description: Current-authorized retained public metadata; operational admission
+    remains NOT_ADMITTED
+- name: Product
+  description: APIs for managing core product entities in the product management platform
+- name: Governed deposit account project catalog
+  description: Current-authorized staff commands; publication metadata remains NOT_ADMITTED
+- name: Product Version
+  description: APIs for managing different versions of a product
+- name: Governed TERM_PC insurance catalog
+  description: Current-authorized staff commands; publication metadata remains NOT_ADMITTED
+- name: Product Category
+  description: APIs for managing product categories in the product management platform
+- name: Private product review
+  description: Current-authorized checker selection and private cost inspection
+- name: Governed product lifecycle
+  description: Current-authorized staff commands; publication metadata remains NOT_ADMITTED
 - name: Product Localization
   description: "APIs for managing localized data (translations, region-specific info)\
     \ for a product"
-- name: Product Configuration
-  description: APIs for managing key-value configuration data for products
 - name: Product Pricing
   description: Read-only aggregator that composes product configurations into pricing
     parameters for calculators
-- name: Product
-  description: APIs for managing core product entities in the product management platform
-- name: Product Version
-  description: APIs for managing different versions of a product
+- name: Product publication workflow
+  description: Current-authorized advisory publication metadata
 paths:
   /api/v1/products/{productId}:
     get:
@@ -46,8 +61,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -76,8 +93,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -114,8 +133,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -148,8 +169,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -185,8 +208,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -230,8 +255,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -264,8 +291,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -301,8 +330,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -346,8 +377,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -380,8 +413,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -417,8 +452,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -462,8 +499,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -496,8 +535,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -533,8 +574,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -578,8 +621,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -612,8 +657,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -649,8 +696,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -695,8 +744,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -729,8 +780,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -767,8 +820,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -812,8 +867,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -839,8 +896,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -870,8 +929,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -908,8 +969,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -918,6 +981,918 @@ paths:
           description: Product category successfully deleted
         "404":
           description: Product category not found
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/submission:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Retain an immutable public submission for review
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: submit
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitPublicBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/selection/reject:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Retain a private checker rejection of an exact selection
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: reject
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewSelectionBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/selection/approve:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Approve an exact public and private selection as an independent checker
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: approve
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewSelectionBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/publication/withdraw:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Withdraw current publication control without changing retained terms
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: withdraw
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WithdrawBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/publication:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Publish approved retained metadata without operational admission
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: publish
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/public-revision:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Append public terms and return the root to draft
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: editPublic
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditPublicBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/private-cost:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Append private cost terms without changing public state
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: editCost
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditCostBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/draft:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Create a complete fixed-premium TERM_PC metadata draft
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: create
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDraftBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/submission:
+    post:
+      tags:
+      - Governed product lifecycle
+      summary: Retain an immutable public submission for review
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: submit_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitPublicBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/selection/reject:
+    post:
+      tags:
+      - Governed product lifecycle
+      summary: Retain a private checker rejection of an exact selection
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: reject_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewSelectionBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/selection/approve:
+    post:
+      tags:
+      - Governed product lifecycle
+      summary: Approve an exact public and private selection as an independent checker
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: approve_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewSelectionBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/publication/withdraw:
+    post:
+      tags:
+      - Governed product lifecycle
+      summary: Withdraw current publication control without changing retained terms
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: withdraw_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WithdrawBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/publication:
+    post:
+      tags:
+      - Governed product lifecycle
+      summary: Publish approved retained metadata without operational admission
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: publish_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/public-revision:
+    post:
+      tags:
+      - Governed product lifecycle
+      summary: Append public terms and return the root to draft
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: editPublic_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditPublicBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/private-cost:
+    post:
+      tags:
+      - Governed product lifecycle
+      summary: Append private cost terms without changing public state
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: editCost_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditCostBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/draft:
+    post:
+      tags:
+      - Governed product lifecycle
+      summary: Create a complete validated account tariff draft
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: create_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDraftBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/submission:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Retain an immutable public submission for review
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: submit_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitPublicBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/selection/reject:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Retain a private checker rejection of an exact selection
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: reject_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewSelectionBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/selection/approve:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Approve an exact public and private selection as an independent checker
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: approve_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewSelectionBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/publication/withdraw:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Withdraw current publication control without changing retained terms
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: withdraw_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WithdrawBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/publication:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Publish approved retained metadata without operational admission
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: publish_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/public-revision:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Append public terms and return the root to draft
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: editPublic_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditPublicBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/private-cost:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Append private cost terms without changing public state
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: editCost_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditCostBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/draft:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Create a complete checking deposit DEPOSIT_ACCOUNT_V1 metadata draft
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: create_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDraftBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
   /api/v1/products:
     post:
       tags:
@@ -928,8 +1903,10 @@ paths:
       parameters:
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -965,8 +1942,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1005,8 +1984,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1044,8 +2025,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1084,8 +2067,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1123,8 +2108,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1163,8 +2150,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1202,8 +2191,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1242,8 +2233,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1281,8 +2274,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1321,8 +2316,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1360,8 +2357,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1400,8 +2399,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1432,8 +2433,10 @@ paths:
       parameters:
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1462,8 +2465,10 @@ paths:
       parameters:
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1493,8 +2498,10 @@ paths:
       parameters:
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1513,6 +2520,624 @@ paths:
                 $ref: "#/components/schemas/PaginationResponse"
         "400":
           description: Invalid filter request
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}:
+    get:
+      tags:
+      - Account tariff definitions
+      summary: Read the current public account tariff head
+      description: Returns the retained public-head revision under current finite
+        read permission. This read does not admit or activate an account product.
+      operationId: root
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/RootView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/term-pc/selections/{submissionId}:
+    get:
+      tags:
+      - term-pc-insurance-read-controller
+      summary: Observe an exact current TERM_PC checker selection
+      operationId: selection
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: submissionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionReviewSelectionView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/term-pc/selection/current:
+    get:
+      tags:
+      - term-pc-insurance-read-controller
+      summary: Observe the current submitted TERM_PC checker selection
+      operationId: current
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionReviewSelectionView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/selections/{submissionId}:
+    get:
+      tags:
+      - Private product review
+      summary: Inspect the exact current submitted public and private selection
+      description: "Requires current review and private-cost read scope plus staff\
+        \ selection.read policy. Retain the returned IDs, digests, versions and selectionFingerprint\
+        \ when approving or rejecting. A later head change causes a conflict; validation\
+        \ is a trusted service boundary."
+      operationId: selection_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: submissionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionReviewSelectionView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/selection/current:
+    get:
+      tags:
+      - Private product review
+      summary: Discover the actual current submitted selection
+      description: Resolves the real immutable submission for the current IN_REVIEW
+        head/version; no maker-held submission ID is required. Current review and
+        private-cost read permission is checked before and after the read. The observed
+        active review pointer supports resuming an authorized publish command; publication
+        still validates the retained decision and exact selection.
+      operationId: current_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionReviewSelectionView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/deposit/selections/{submissionId}:
+    get:
+      tags:
+      - deposit-account-read-controller
+      summary: Observe an exact current DEPOSIT_ACCOUNT_V1 checker selection
+      operationId: selection_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: submissionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionReviewSelectionView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/deposit/selection/current:
+    get:
+      tags:
+      - deposit-account-read-controller
+      summary: Observe the current submitted DEPOSIT_ACCOUNT_V1 checker selection
+      operationId: current_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionReviewSelectionView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-publication/readiness:
+    get:
+      tags:
+      - Product publication workflow
+      summary: Discover exact current approved publication coordinates
+      description: Requires current publish scope and publication.readiness policy.
+        READY returns only the exact review/public/cost versions for PUBLISH; NOT_READY
+        has no selection coordinates. This advisory snapshot is not a command permit.
+        PUBLISH reauthorizes and checks the selection again; metadata remains NOT_ADMITTED.
+      operationId: publicationReadiness
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionPublicationReadinessView"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-publication/current:
+    get:
+      tags:
+      - Product publication workflow
+      summary: Discover the active or latest retained publication
+      description: "Requires current withdraw scope and publication.discovery policy.\
+        \ ACTIVE, RETAINED_WITHDRAWN and NONE are observed metadata states, not withdrawability.\
+        \ Latest ordering uses native public-state history, not timestamps. Incomplete\
+        \ or ambiguous retained ordering is unavailable; known-ID public publication\
+        \ reads remain separate. WITHDRAW independently reauthorizes and checks the\
+        \ returned control version."
+      operationId: publicationDiscovery
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionPublicationDiscoveryView"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-cost/term-pc/current:
+    get:
+      tags:
+      - term-pc-insurance-read-controller
+      summary: Observe current private TERM_PC costs without product admission
+      operationId: cost
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionCostView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-cost/deposit/current:
+    get:
+      tags:
+      - deposit-account-read-controller
+      summary: Observe current private DEPOSIT_ACCOUNT_V1 costs without product admission
+      operationId: cost_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionCostView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-cost/current:
+    get:
+      tags:
+      - Private product costs
+      summary: Reopen exact current costs and their public definition context
+      description: "Requires current cost:read scope and staff cost.read policy, without\
+        \ checker review permission. Retain the returned cost revision/version and\
+        \ public revision/digest when editing; a changed selection conflicts. This\
+        \ private read does not admit or activate a product."
+      operationId: current_3
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionCostView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/revisions/{revisionId}:
+    get:
+      tags:
+      - Account tariff definitions
+      summary: Read an exact retained account tariff revision
+      operationId: revision
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: revisionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/RevisionView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/publications/{publicationId}:
+    get:
+      tags:
+      - Account tariff definitions
+      summary: Read an exact retained publication and observed current control
+      description: The control state is observed in a read snapshot under finite permission.
+        Publication metadata remains NOT_ADMITTED and does not represent instantaneous
+        revocation or consumer financial activation.
+      operationId: publication
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: publicationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicationView"
+      security:
+      - productDefinitionBearer: []
+  ? /api/v1/tenants/{tenantId}/product-definitions/{rootId}/insurance-quote-configurations/{productId}/revisions/{revisionId}/publications/{publicationId}
+  : get:
+      tags:
+      - insurance-quote-purpose-controller
+      summary: Observe exact current fixed-premium TERM_PC configuration
+      description: "Requires current owner-purpose permission, native read context\
+        \ and genuine current reference records. This metadata observation establishes\
+        \ neither applicant eligibility nor insurance cover or financial admission."
+      operationId: observe
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: revisionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: publicationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Observation"
+      security:
+      - productDefinitionBearer: []
   /api/v1/products/{productId}/pricing:
     get:
       tags:
@@ -1532,8 +3157,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1567,8 +3194,10 @@ paths:
           format: uuid
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1619,8 +3248,10 @@ paths:
           - OTHER
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1662,8 +3293,10 @@ paths:
           - CUSTOM
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1701,8 +3334,10 @@ paths:
           type: string
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -1733,8 +3368,10 @@ paths:
           type: string
       - name: X-Idempotency-Key
         in: header
-        description: "Unique key for idempotent requests. If provided, ensures that\
-          \ identical requests with the same key will only be processed once."
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
         required: false
         schema:
           type: string
@@ -2013,6 +3650,605 @@ components:
           type: integer
           format: int32
           readOnly: true
+    SubmitPublicBody:
+      type: object
+      properties:
+        operationId:
+          type: string
+          format: uuid
+        expectedPublicVersion:
+          type: integer
+          format: int32
+        expectedPublicHead:
+          type: string
+          format: uuid
+    PublicReceipt:
+      type: object
+      properties:
+        scope:
+          $ref: "#/components/schemas/Scope"
+        command:
+          type: string
+          enum:
+          - CREATE_DRAFT
+          - EDIT_PUBLIC
+          - EDIT_COST
+          - SUBMIT_PUBLIC
+          - APPROVE_SELECTION
+          - REJECT_SELECTION
+          - PUBLISH
+          - WITHDRAW_PUBLICATION
+        actionId:
+          type: string
+          format: uuid
+        recordedAt:
+          type: string
+        phase:
+          type: string
+        publicVersion:
+          type: integer
+          format: int32
+        revisionId:
+          type: string
+          format: uuid
+        publicationId:
+          type: string
+          format: uuid
+        productVersionId:
+          type: string
+          format: uuid
+        versionNumber:
+          type: integer
+          format: int64
+        publicationState:
+          type: string
+        publicationStateVersion:
+          type: integer
+          format: int32
+        operationalAdmission:
+          type: string
+    Scope:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          format: uuid
+        rootId:
+          type: string
+          format: uuid
+        operationId:
+          type: string
+          format: uuid
+    ReviewSelectionBody:
+      type: object
+      properties:
+        operationId:
+          type: string
+          format: uuid
+        submissionId:
+          type: string
+          format: uuid
+        revisionId:
+          type: string
+          format: uuid
+        publicDigest:
+          type: string
+        publicVersion:
+          type: integer
+          format: int32
+        costRevisionId:
+          type: string
+          format: uuid
+        costDigest:
+          type: string
+        costVersion:
+          type: integer
+          format: int32
+        selectionFingerprint:
+          type: string
+        reason:
+          type: string
+    PrivateReceipt:
+      type: object
+      properties:
+        scope:
+          $ref: "#/components/schemas/Scope"
+        command:
+          type: string
+          enum:
+          - CREATE_DRAFT
+          - EDIT_PUBLIC
+          - EDIT_COST
+          - SUBMIT_PUBLIC
+          - APPROVE_SELECTION
+          - REJECT_SELECTION
+          - PUBLISH
+          - WITHDRAW_PUBLICATION
+        actionId:
+          type: string
+          format: uuid
+        recordedAt:
+          type: string
+        costRevisionId:
+          type: string
+          format: uuid
+        costVersion:
+          type: integer
+          format: int32
+        reviewId:
+          type: string
+          format: uuid
+        decision:
+          type: string
+    WithdrawBody:
+      type: object
+      properties:
+        operationId:
+          type: string
+          format: uuid
+        publicationId:
+          type: string
+          format: uuid
+        expectedStateVersion:
+          type: integer
+          format: int32
+    PublishBody:
+      type: object
+      properties:
+        operationId:
+          type: string
+          format: uuid
+        reviewId:
+          type: string
+          format: uuid
+        expectedPublicVersion:
+          type: integer
+          format: int32
+        expectedCostVersion:
+          type: integer
+          format: int32
+        versionNumber:
+          type: integer
+          format: int64
+    AccountTariffTerms:
+      type: object
+      properties:
+        accountKind:
+          type: string
+        ownershipKinds:
+          type: array
+          items:
+            type: string
+        openingMinimum:
+          $ref: "#/components/schemas/Money"
+        retainedMinimum:
+          $ref: "#/components/schemas/Money"
+        perTransferLimit:
+          $ref: "#/components/schemas/Money"
+        dailyTransferLimit:
+          $ref: "#/components/schemas/Money"
+        interest:
+          type: string
+        overdraft:
+          type: string
+        tariffs:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeeRule"
+    Common:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          format: int32
+        businessArea:
+          type: string
+        profileCode:
+          type: string
+        profileVersion:
+          type: integer
+          format: int32
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        portfolioCode:
+          type: string
+        legalEntityId:
+          type: string
+        market:
+          $ref: "#/components/schemas/MarketScope"
+        effectiveFrom:
+          type: string
+        effectiveTo:
+          type: string
+        requirements:
+          $ref: "#/components/schemas/Requirements"
+    Coverage:
+      type: object
+      properties:
+        code:
+          type: string
+        wording:
+          $ref: "#/components/schemas/ExactReference"
+        perOccurrenceLimit:
+          $ref: "#/components/schemas/Money"
+        aggregateLimit:
+          $ref: "#/components/schemas/Money"
+        deductible:
+          $ref: "#/components/schemas/Money"
+        groupCode:
+          type: string
+    CurrencyPolicyReference:
+      type: object
+      properties:
+        policyId:
+          type: string
+        currencyId:
+          type: string
+        isoCode:
+          type: string
+        version:
+          type: integer
+          format: int64
+        digest:
+          type: string
+        encodingVersion:
+          type: string
+    DeductibleGroup:
+      type: object
+      properties:
+        code:
+          type: string
+        mode:
+          type: string
+    DependencyRequirement:
+      type: object
+      properties:
+        code:
+          type: string
+        capability:
+          type: string
+        owner:
+          type: string
+        requiredForLaunch:
+          type: boolean
+    DepositAccountTerms:
+      type: object
+      properties:
+        accountKind:
+          type: string
+        ownershipKinds:
+          type: array
+          items:
+            type: string
+        openingMinimum:
+          $ref: "#/components/schemas/Money"
+        retainedMinimum:
+          $ref: "#/components/schemas/Money"
+        perTransferLimit:
+          $ref: "#/components/schemas/Money"
+        dailyTransferLimit:
+          $ref: "#/components/schemas/Money"
+        interest:
+          type: string
+        overdraft:
+          type: string
+        transferFee:
+          type: string
+        enrollmentPurpose:
+          type: string
+    DocumentRequirement:
+      type: object
+      properties:
+        code:
+          type: string
+        documentType:
+          type: string
+        mandatory:
+          type: boolean
+        template:
+          $ref: "#/components/schemas/ExactReference"
+        issuer:
+          $ref: "#/components/schemas/ExactReference"
+        layout:
+          $ref: "#/components/schemas/ExactReference"
+        locale:
+          type: string
+    EditPublicBody:
+      type: object
+      properties:
+        operationId:
+          type: string
+          format: uuid
+        expectedPublicVersion:
+          type: integer
+          format: int32
+        expectedPublicHead:
+          type: string
+          format: uuid
+        definition:
+          $ref: "#/components/schemas/ProductDefinition"
+        sourcePublicationId:
+          type: string
+          format: uuid
+        sourcePublicationDigest:
+          type: string
+    ExactReference:
+      type: object
+      properties:
+        owner:
+          type: string
+        kind:
+          type: string
+        id:
+          type: string
+        version:
+          type: integer
+          format: int64
+        digest:
+          type: string
+        versionFormat:
+          type: string
+          nullable: true
+          enum:
+          - OPAQUE
+        versionText:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: Exact case-sensitive opaque owner version; no normalization
+            or numeric conversion; at most 255 UTF-8 bytes. Owner-specific constraints
+            also apply.
+          nullable: true
+    FactRequirement:
+      type: object
+      properties:
+        code:
+          type: string
+        sourceOwner:
+          type: string
+        factContract:
+          type: string
+        version:
+          type: integer
+          format: int64
+        contractDigest:
+          type: string
+        kind:
+          type: string
+        operator:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+        maxAgeSeconds:
+          type: integer
+          format: int32
+        evidenceRequired:
+          type: boolean
+    FeeRule:
+      type: object
+      properties:
+        code:
+          type: string
+        event:
+          type: string
+        kind:
+          type: string
+        amount:
+          $ref: "#/components/schemas/Money"
+        payer:
+          type: string
+        occurrence:
+          type: string
+        refundPolicy:
+          type: string
+        taxTreatment:
+          type: string
+        taxPolicy:
+          $ref: "#/components/schemas/ExactReference"
+    FixedRateInstallmentLoanTerms:
+      type: object
+      properties:
+        principalMinimum:
+          $ref: "#/components/schemas/Money"
+        principalMaximum:
+          $ref: "#/components/schemas/Money"
+        minimumMonths:
+          type: integer
+          format: int32
+        maximumMonths:
+          type: integer
+          format: int32
+        annualNominalRate:
+          type: string
+        interestConvention:
+          type: string
+        repaymentConvention:
+          type: string
+        installmentRounding:
+          type: string
+        finalInstallmentAdjustment:
+          type: string
+        originationFee:
+          $ref: "#/components/schemas/FeeRule"
+        earlyRepaymentPolicy:
+          type: string
+        repaymentAllocation:
+          $ref: "#/components/schemas/ExactReference"
+        calendar:
+          $ref: "#/components/schemas/ExactReference"
+    MarketScope:
+      type: object
+      properties:
+        jurisdiction:
+          type: string
+        channel:
+          type: string
+        customerSegment:
+          type: string
+        currencyPolicy:
+          $ref: "#/components/schemas/CurrencyPolicyReference"
+    Money:
+      type: object
+      properties:
+        minorUnits:
+          type: string
+        currencyPolicy:
+          $ref: "#/components/schemas/CurrencyPolicyReference"
+    ProductDefinition:
+      type: object
+      properties:
+        common:
+          $ref: "#/components/schemas/Common"
+        terms:
+          $ref: "#/components/schemas/ProfileTerms"
+    ProfileTerms:
+      type: object
+      oneOf:
+      - $ref: "#/components/schemas/AccountTariffTerms"
+      - $ref: "#/components/schemas/DepositAccountTerms"
+      - $ref: "#/components/schemas/FixedRateInstallmentLoanTerms"
+      - $ref: "#/components/schemas/TermPcInsuranceTerms"
+    Requirements:
+      type: object
+      properties:
+        facts:
+          type: array
+          items:
+            $ref: "#/components/schemas/FactRequirement"
+        documents:
+          type: array
+          items:
+            $ref: "#/components/schemas/DocumentRequirement"
+        dependencies:
+          type: array
+          items:
+            $ref: "#/components/schemas/DependencyRequirement"
+    TaxComponent:
+      type: object
+      properties:
+        code:
+          type: string
+        amount:
+          $ref: "#/components/schemas/Money"
+        policy:
+          $ref: "#/components/schemas/ExactReference"
+    TermPcInsuranceTerms:
+      type: object
+      properties:
+        riskKind:
+          type: string
+        minimumCoverageDays:
+          type: integer
+          format: int32
+        maximumCoverageDays:
+          type: integer
+          format: int32
+        premiumBasis:
+          type: string
+        paymentSchedule:
+          type: string
+        basePremium:
+          $ref: "#/components/schemas/Money"
+        taxComponents:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaxComponent"
+        totalPremium:
+          $ref: "#/components/schemas/Money"
+        coverages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Coverage"
+        deductibleGroups:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeductibleGroup"
+        exclusions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExactReference"
+        territory:
+          type: string
+        cancellationRefundPolicy:
+          type: string
+    CostLine:
+      type: object
+      properties:
+        code:
+          type: string
+        kind:
+          type: string
+        amount:
+          $ref: "#/components/schemas/Money"
+        ratio:
+          type: string
+        basis:
+          type: string
+        occurrence:
+          type: string
+        payee:
+          $ref: "#/components/schemas/ExactReference"
+        allocation:
+          $ref: "#/components/schemas/ExactReference"
+    CostTerms:
+      type: object
+      properties:
+        schemaVersion:
+          type: integer
+          format: int32
+        businessArea:
+          type: string
+        profileCode:
+          type: string
+        mode:
+          type: string
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/CostLine"
+    EditCostBody:
+      type: object
+      properties:
+        operationId:
+          type: string
+          format: uuid
+        expectedCostVersion:
+          type: integer
+          format: int32
+        expectedCostHead:
+          type: string
+          format: uuid
+        publicRevisionId:
+          type: string
+          format: uuid
+        publicDigest:
+          type: string
+        publicDefinition:
+          $ref: "#/components/schemas/ProductDefinition"
+        cost:
+          $ref: "#/components/schemas/CostTerms"
+    CreateDraftBody:
+      type: object
+      properties:
+        operationId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        categoryId:
+          type: string
+          format: uuid
+        definition:
+          $ref: "#/components/schemas/ProductDefinition"
+        cost:
+          $ref: "#/components/schemas/CostTerms"
     FilterOptions:
       type: object
       properties:
@@ -2201,6 +4437,342 @@ components:
         options:
           $ref: "#/components/schemas/FilterOptions"
       description: Filter criteria for categories
+    PublicDefinition:
+      type: object
+      properties:
+        common:
+          $ref: "#/components/schemas/Common"
+        terms:
+          $ref: "#/components/schemas/AccountTariffTerms"
+    ReadObservation:
+      type: object
+      properties:
+        databaseRecordedAt:
+          $ref: "#/components/schemas/FireflyInstant"
+        admissionValidUntil:
+          $ref: "#/components/schemas/FireflyInstant"
+    RetainedDefinition:
+      type: object
+      properties:
+        encodingVersion:
+          type: string
+        publicDigest:
+          type: string
+        definition:
+          $ref: "#/components/schemas/PublicDefinition"
+    RetainedRevision:
+      type: object
+      properties:
+        revisionId:
+          type: string
+          format: uuid
+        definition:
+          $ref: "#/components/schemas/RetainedDefinition"
+        sourcePublication:
+          $ref: "#/components/schemas/SourcePublication"
+        createdAt:
+          $ref: "#/components/schemas/FireflyInstant"
+    RootState:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          format: uuid
+        rootId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        productCode:
+          type: string
+        businessArea:
+          type: string
+        profileCode:
+          type: string
+        profileVersion:
+          type: integer
+          format: int32
+        phase:
+          type: string
+        publicStateVersion:
+          type: integer
+          format: int32
+        publicHead:
+          type: string
+          format: uuid
+        createdAt:
+          $ref: "#/components/schemas/FireflyInstant"
+    RootView:
+      type: object
+      properties:
+        root:
+          $ref: "#/components/schemas/RootState"
+        publicHead:
+          $ref: "#/components/schemas/RetainedRevision"
+        observation:
+          $ref: "#/components/schemas/ReadObservation"
+        operationalAdmission:
+          type: string
+          enum:
+          - NOT_ADMITTED
+    SourcePublication:
+      type: object
+      properties:
+        publicationId:
+          type: string
+          format: uuid
+        publicDigest:
+          type: string
+    ProductDefinitionReviewSelectionView:
+      type: object
+      properties:
+        selection:
+          $ref: "#/components/schemas/Selection"
+        selectionFingerprint:
+          type: string
+        definition:
+          $ref: "#/components/schemas/ProductDefinition"
+        cost:
+          $ref: "#/components/schemas/CostTerms"
+        costCompatibility:
+          type: string
+        validationBoundary:
+          type: string
+        observedAt:
+          $ref: "#/components/schemas/FireflyInstant"
+        activeReviewId:
+          type: string
+          format: uuid
+    Selection:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          format: uuid
+        rootId:
+          type: string
+          format: uuid
+        submissionId:
+          type: string
+          format: uuid
+        revisionId:
+          type: string
+          format: uuid
+        publicDigest:
+          type: string
+        publicVersion:
+          type: integer
+          format: int32
+        costRevisionId:
+          type: string
+          format: uuid
+        costDigest:
+          type: string
+        costVersion:
+          type: integer
+          format: int32
+    ProductDefinitionPublicationReadinessView:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          format: uuid
+        rootId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - READY
+          - NOT_READY
+        selection:
+          $ref: "#/components/schemas/PublicationReadySelection"
+        observation:
+          $ref: "#/components/schemas/ReadObservation"
+        operationalAdmission:
+          type: string
+          enum:
+          - NOT_ADMITTED
+    PublicationReadySelection:
+      type: object
+      properties:
+        reviewId:
+          type: string
+          format: uuid
+        publicVersion:
+          type: integer
+          format: int32
+        costVersion:
+          type: integer
+          format: int32
+    DiscoveredPublication:
+      type: object
+      properties:
+        publicationId:
+          type: string
+          format: uuid
+        stateVersion:
+          type: integer
+          format: int32
+    ProductDefinitionPublicationDiscoveryView:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          format: uuid
+        rootId:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum:
+          - NONE
+          - ACTIVE
+          - RETAINED_WITHDRAWN
+        publication:
+          $ref: "#/components/schemas/DiscoveredPublication"
+        observation:
+          $ref: "#/components/schemas/ReadObservation"
+        operationalAdmission:
+          type: string
+          enum:
+          - NOT_ADMITTED
+    ProductDefinitionCostView:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          format: uuid
+        rootId:
+          type: string
+          format: uuid
+        publicRevisionId:
+          type: string
+          format: uuid
+        publicDigest:
+          type: string
+        publicVersion:
+          type: integer
+          format: int32
+        phase:
+          type: string
+        publicDefinition:
+          $ref: "#/components/schemas/ProductDefinition"
+        costRevisionId:
+          type: string
+          format: uuid
+        costDigest:
+          type: string
+        costVersion:
+          type: integer
+          format: int32
+        cost:
+          $ref: "#/components/schemas/CostTerms"
+        costCompatibility:
+          type: string
+        validationBoundary:
+          type: string
+        observedAt:
+          $ref: "#/components/schemas/FireflyInstant"
+    RevisionView:
+      type: object
+      properties:
+        root:
+          $ref: "#/components/schemas/RootState"
+        revision:
+          $ref: "#/components/schemas/RetainedRevision"
+        observation:
+          $ref: "#/components/schemas/ReadObservation"
+        operationalAdmission:
+          type: string
+          enum:
+          - NOT_ADMITTED
+    PublicationControl:
+      type: object
+      properties:
+        state:
+          type: string
+        stateVersion:
+          type: integer
+          format: int32
+    PublicationView:
+      type: object
+      properties:
+        root:
+          $ref: "#/components/schemas/RootState"
+        publication:
+          $ref: "#/components/schemas/RetainedPublication"
+        control:
+          $ref: "#/components/schemas/PublicationControl"
+        observation:
+          $ref: "#/components/schemas/ReadObservation"
+        operationalAdmission:
+          type: string
+          enum:
+          - NOT_ADMITTED
+    RetainedPublication:
+      type: object
+      properties:
+        publicationId:
+          type: string
+          format: uuid
+        reviewId:
+          type: string
+          format: uuid
+        revisionId:
+          type: string
+          format: uuid
+        productVersionId:
+          type: string
+          format: uuid
+        definition:
+          $ref: "#/components/schemas/RetainedDefinition"
+        createdAt:
+          $ref: "#/components/schemas/FireflyInstant"
+    Configuration:
+      type: object
+      properties:
+        scope:
+          $ref: "#/components/schemas/InsuranceQuotePurposeScope"
+        publicDigest:
+          type: string
+        definition:
+          $ref: "#/components/schemas/TermPcDefinition"
+    InsuranceQuotePurposeScope:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          format: uuid
+        rootId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        revisionId:
+          type: string
+          format: uuid
+        publicationId:
+          type: string
+          format: uuid
+    Observation:
+      type: object
+      properties:
+        configuration:
+          $ref: "#/components/schemas/Configuration"
+        observedAt:
+          $ref: "#/components/schemas/FireflyInstant"
+        effectiveUntil:
+          $ref: "#/components/schemas/FireflyInstant"
+    TermPcDefinition:
+      type: object
+      properties:
+        common:
+          $ref: "#/components/schemas/Common"
+        terms:
+          $ref: "#/components/schemas/TermPcInsuranceTerms"
     FeeDefinitionDTO:
       type: object
       properties:
@@ -2309,3 +4881,11 @@ components:
             $ref: "#/components/schemas/FeeDefinitionDTO"
       description: "Read-only aggregated pricing parameters for a product, used by\
         \ calculators and quote services"
+    FireflyInstant:
+      type: string
+      format: date-time
+  securitySchemes:
+    productDefinitionBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

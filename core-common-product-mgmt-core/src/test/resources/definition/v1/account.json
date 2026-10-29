@@ -1,0 +1,202 @@
+{
+  "common": {
+    "schemaVersion": 1,
+    "businessArea": "BANKING",
+    "profileCode": "ACCOUNT_TARIFF_V1",
+    "profileVersion": 1,
+    "code": "ACCOUNT_TARIFF_V1_DEMO",
+    "name": "Synthetic definition",
+    "description": "Synthetic exact definition fixture",
+    "portfolioCode": "RETAIL",
+    "legalEntityId": "44444444-4444-4444-4444-444444444444",
+    "market": {
+      "jurisdiction": "US",
+      "channel": "BRANCH",
+      "customerSegment": "RETAIL",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "effectiveFrom": "2026-11-01T00:00:00.000Z",
+    "effectiveTo": "2027-11-01T00:00:00.000Z",
+    "requirements": {
+      "facts": [
+        {
+          "code": "KYC",
+          "sourceOwner": "core-common-customer-mgmt",
+          "factContract": "KYC_V1",
+          "version": 1,
+          "contractDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "kind": "STRING",
+          "operator": "PRESENT",
+          "values": [],
+          "maxAgeSeconds": 3600,
+          "evidenceRequired": true
+        },
+        {
+          "code": "OWNERSHIP_MANDATE",
+          "sourceOwner": "core-common-customer-mgmt",
+          "factContract": "OWNERSHIP_MANDATE_V1",
+          "version": 1,
+          "contractDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "kind": "STRING",
+          "operator": "PRESENT",
+          "values": [],
+          "maxAgeSeconds": 3600,
+          "evidenceRequired": true
+        }
+      ],
+      "documents": [
+        {
+          "code": "CONTRACT",
+          "documentType": "CONTRACT",
+          "mandatory": true,
+          "template": {
+            "owner": "core-common-reference-master-data",
+            "kind": "DOCUMENT_TEMPLATE",
+            "id": "33333333-3333-3333-3333-333333333333",
+            "version": 1,
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "issuer": {
+            "owner": "core-common-reference-master-data",
+            "kind": "DOCUMENT_ISSUER",
+            "id": "33333333-3333-3333-3333-333333333333",
+            "version": 1,
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "layout": {
+            "owner": "core-common-reference-master-data",
+            "kind": "DOCUMENT_LAYOUT",
+            "id": "33333333-3333-3333-3333-333333333333",
+            "version": 1,
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "locale": "en-US"
+        }
+      ],
+      "dependencies": [
+        {
+          "code": "EXECUTION",
+          "capability": "ACCOUNT_TARIFF_V1",
+          "owner": "domain-product-catalog",
+          "requiredForLaunch": true
+        }
+      ]
+    }
+  },
+  "terms": {
+    "accountKind": "CURRENT",
+    "ownershipKinds": [
+      "SINGLE",
+      "JOINT"
+    ],
+    "openingMinimum": {
+      "minorUnits": "0",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "retainedMinimum": {
+      "minorUnits": "0",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "perTransferLimit": {
+      "minorUnits": "10000",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "dailyTransferLimit": {
+      "minorUnits": "100000",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "interest": "NONE",
+    "overdraft": "NOT_OFFERED",
+    "tariffs": [
+      {
+        "code": "MAINTENANCE",
+        "event": "MAINTENANCE",
+        "kind": "FIXED",
+        "amount": {
+          "minorUnits": "500",
+          "currencyPolicy": {
+            "policyId": "11111111-1111-1111-1111-111111111111",
+            "currencyId": "22222222-2222-2222-2222-222222222222",
+            "isoCode": "USD",
+            "version": 1,
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+          }
+        },
+        "payer": "CUSTOMER",
+        "occurrence": "MONTHLY",
+        "refundPolicy": "NOT_REFUNDABLE",
+        "taxTreatment": "EXEMPT",
+        "taxPolicy": null
+      },
+      {
+        "code": "TRANSFER",
+        "event": "INTERNAL_TRANSFER",
+        "kind": "FREE",
+        "amount": null,
+        "payer": "CUSTOMER",
+        "occurrence": "PER_EVENT",
+        "refundPolicy": "NOT_REFUNDABLE",
+        "taxTreatment": "EXEMPT",
+        "taxPolicy": null
+      },
+      {
+        "code": "STATEMENT",
+        "event": "STATEMENT",
+        "kind": "FREE",
+        "amount": null,
+        "payer": "CUSTOMER",
+        "occurrence": "PER_EVENT",
+        "refundPolicy": "NOT_REFUNDABLE",
+        "taxTreatment": "EXEMPT",
+        "taxPolicy": null
+      },
+      {
+        "code": "CLOSURE",
+        "event": "CLOSURE",
+        "kind": "FREE",
+        "amount": null,
+        "payer": "CUSTOMER",
+        "occurrence": "PER_EVENT",
+        "refundPolicy": "NOT_REFUNDABLE",
+        "taxTreatment": "EXEMPT",
+        "taxPolicy": null
+      }
+    ]
+  }
+}

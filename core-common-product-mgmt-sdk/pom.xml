@@ -15,6 +15,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <generated-sources-dir>${project.build.directory}/generated-sources</generated-sources-dir>
+        <openapi.use.oneof.interfaces>true</openapi.use.oneof.interfaces>
+        <openapi.use.oneof.deduction>true</openapi.use.oneof.deduction>
     </properties>
 
     <dependencies>
@@ -81,10 +83,43 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webflux</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>mirror-producer-openapi-compatibility-resource</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/api-spec</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/src/main/resources</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>openapi.yml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <!-- OpenAPI Generator Maven Plugin — version from fireflyframework-parent (7.26.0) -->
             <plugin>
@@ -105,6 +140,9 @@
                             <apiPackage>io.fireflysoftware.core.product.sdk.api</apiPackage>
                             <modelPackage>io.fireflysoftware.core.product.sdk.model</modelPackage>
                             <invokerPackage>io.fireflysoftware.core.product.sdk.invoker</invokerPackage>
+                            <schemaMappings>
+                                <schemaMapping>FireflyInstant=java.time.Instant</schemaMapping>
+                            </schemaMappings>
                             <configOptions>
                                 <java20>true</java20>
                                 <useTags>true</useTags>
@@ -114,6 +152,8 @@
                                 <reactive>true</reactive>
                                 <returnResponse>true</returnResponse>
                                 <useJakartaEe>true</useJakartaEe>
+                                <useOneOfInterfaces>${openapi.use.oneof.interfaces}</useOneOfInterfaces>
+                                <useDeductionForOneOfInterfaces>${openapi.use.oneof.deduction}</useDeductionForOneOfInterfaces>
                             </configOptions>
                         </configuration>
                     </execution>

@@ -14,12 +14,22 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <document-issuer-sdk.version>26.10.6</document-issuer-sdk.version>
+        <document-reference-sdk.version>26.10.6</document-reference-sdk.version>
         <!-- Enable OpenAPI generation (profile inherited from firefly-parent) -->
         <openapi.gen.skip>false</openapi.gen.skip>
         <openapi.gen.mainClass>io.fireflysoftware.core.product.web.openapi.OpenApiGenApplication</openapi.gen.mainClass>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.fireflyframework</groupId>
+            <artifactId>fireflyframework-security-resource-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.fireflyframework</groupId>
+            <artifactId>fireflyframework-security-adapter-opa</artifactId>
+        </dependency>
         <!-- Internal modules -->
         <dependency>
             <groupId>io.fireflysoftware</groupId>
@@ -30,7 +40,19 @@
             <artifactId>core-common-product-mgmt-interfaces</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.fireflysoftware</groupId>
+            <artifactId>core-common-config-mgmt-sdk</artifactId>
+            <version>${document-issuer-sdk.version}</version>
+        </dependency>
+
         <!-- Common Libraries -->
+        <dependency>
+            <groupId>io.fireflysoftware</groupId>
+            <artifactId>core-common-reference-master-data-sdk</artifactId>
+            <version>${document-reference-sdk.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.fireflyframework</groupId>
             <artifactId>fireflyframework-web</artifactId>

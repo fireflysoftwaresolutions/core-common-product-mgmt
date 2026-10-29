@@ -1,0 +1,172 @@
+{
+  "common": {
+    "schemaVersion": 1,
+    "businessArea": "LENDING",
+    "profileCode": "FIXED_RATE_INSTALLMENT_LOAN_V1",
+    "profileVersion": 1,
+    "code": "FIXED_RATE_INSTALLMENT_LOAN_V1_DEMO",
+    "name": "Synthetic definition",
+    "description": "Synthetic exact definition fixture",
+    "portfolioCode": "RETAIL",
+    "legalEntityId": "44444444-4444-4444-4444-444444444444",
+    "market": {
+      "jurisdiction": "US",
+      "channel": "BRANCH",
+      "customerSegment": "RETAIL",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "effectiveFrom": "2026-11-01T00:00:00.000Z",
+    "effectiveTo": "2027-11-01T00:00:00.000Z",
+    "requirements": {
+      "facts": [
+        {
+          "code": "KYC",
+          "sourceOwner": "core-common-customer-mgmt",
+          "factContract": "KYC_V1",
+          "version": 1,
+          "contractDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "kind": "STRING",
+          "operator": "PRESENT",
+          "values": [],
+          "maxAgeSeconds": 3600,
+          "evidenceRequired": true
+        },
+        {
+          "code": "CREDIT_APPROVAL",
+          "sourceOwner": "core-common-customer-mgmt",
+          "factContract": "CREDIT_APPROVAL_V1",
+          "version": 1,
+          "contractDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "kind": "STRING",
+          "operator": "PRESENT",
+          "values": [],
+          "maxAgeSeconds": 3600,
+          "evidenceRequired": true
+        },
+        {
+          "code": "AFFORDABILITY",
+          "sourceOwner": "core-common-customer-mgmt",
+          "factContract": "AFFORDABILITY_V1",
+          "version": 1,
+          "contractDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "kind": "STRING",
+          "operator": "PRESENT",
+          "values": [],
+          "maxAgeSeconds": 3600,
+          "evidenceRequired": true
+        }
+      ],
+      "documents": [
+        {
+          "code": "CONTRACT",
+          "documentType": "CONTRACT",
+          "mandatory": true,
+          "template": {
+            "owner": "core-common-reference-master-data",
+            "kind": "DOCUMENT_TEMPLATE",
+            "id": "33333333-3333-3333-3333-333333333333",
+            "version": 1,
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "issuer": {
+            "owner": "core-common-reference-master-data",
+            "kind": "DOCUMENT_ISSUER",
+            "id": "33333333-3333-3333-3333-333333333333",
+            "version": 1,
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "layout": {
+            "owner": "core-common-reference-master-data",
+            "kind": "DOCUMENT_LAYOUT",
+            "id": "33333333-3333-3333-3333-333333333333",
+            "version": 1,
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "locale": "en-US"
+        }
+      ],
+      "dependencies": [
+        {
+          "code": "EXECUTION",
+          "capability": "FIXED_RATE_INSTALLMENT_LOAN_V1",
+          "owner": "domain-product-catalog",
+          "requiredForLaunch": true
+        }
+      ]
+    }
+  },
+  "terms": {
+    "principalMinimum": {
+      "minorUnits": "100000",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "principalMaximum": {
+      "minorUnits": "10000000",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "minimumMonths": 1,
+    "maximumMonths": 600,
+    "annualNominalRate": "0.05",
+    "interestConvention": "NOMINAL_ANNUAL_DIVIDED_BY_12",
+    "repaymentConvention": "MONTHLY_EQUAL_INSTALLMENT_NO_GRACE_NO_BALLOON",
+    "installmentRounding": "HALF_EVEN",
+    "finalInstallmentAdjustment": "RECONCILE_EXACT_REMAINING_PRINCIPAL",
+    "originationFee": {
+      "code": "ORIGINATION",
+      "event": "ORIGINATION",
+      "kind": "FIXED",
+      "amount": {
+        "minorUnits": "10000",
+        "currencyPolicy": {
+          "policyId": "11111111-1111-1111-1111-111111111111",
+          "currencyId": "22222222-2222-2222-2222-222222222222",
+          "isoCode": "USD",
+          "version": 1,
+          "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+        }
+      },
+      "payer": "CUSTOMER",
+      "occurrence": "PER_EVENT",
+      "refundPolicy": "NOT_REFUNDABLE",
+      "taxTreatment": "EXEMPT",
+      "taxPolicy": null
+    },
+    "earlyRepaymentPolicy": "ALLOWED_NO_FEE",
+    "repaymentAllocation": {
+      "owner": "core-common-reference-master-data",
+      "kind": "REPAYMENT_ALLOCATION",
+      "id": "33333333-3333-3333-3333-333333333333",
+      "version": 1,
+      "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "calendar": {
+      "owner": "core-common-reference-master-data",
+      "kind": "CALENDAR",
+      "id": "33333333-3333-3333-3333-333333333333",
+      "version": 1,
+      "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  }
+}
