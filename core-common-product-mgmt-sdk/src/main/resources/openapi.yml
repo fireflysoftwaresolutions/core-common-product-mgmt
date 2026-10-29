@@ -23,8 +23,12 @@ tags:
     remains NOT_ADMITTED
 - name: Product
   description: APIs for managing core product entities in the product management platform
+- name: Governed deposit account project catalog
+  description: Current-authorized staff commands; publication metadata remains NOT_ADMITTED
 - name: Product Version
   description: APIs for managing different versions of a product
+- name: Governed TERM_PC insurance catalog
+  description: Current-authorized staff commands; publication metadata remains NOT_ADMITTED
 - name: Product Category
   description: APIs for managing product categories in the product management platform
 - name: Private product review
@@ -977,6 +981,310 @@ paths:
           description: Product category successfully deleted
         "404":
           description: Product category not found
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/submission:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Retain an immutable public submission for review
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: submit
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitPublicBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/selection/reject:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Retain a private checker rejection of an exact selection
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: reject
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewSelectionBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/selection/approve:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Approve an exact public and private selection as an independent checker
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: approve
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewSelectionBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/publication/withdraw:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Withdraw current publication control without changing retained terms
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: withdraw
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WithdrawBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/publication:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Publish approved retained metadata without operational admission
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: publish
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/public-revision:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Append public terms and return the root to draft
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: editPublic
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditPublicBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/private-cost:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Append private cost terms without changing public state
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: editCost
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditCostBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/term-pc/draft:
+    post:
+      tags:
+      - Governed TERM_PC insurance catalog
+      summary: Create a complete fixed-premium TERM_PC metadata draft
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: create
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDraftBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
   /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/submission:
     post:
       tags:
@@ -985,7 +1293,7 @@ paths:
       description: The operation ID binds the full original intent. Every retry rechecks
         current staff permission; durable outcome and current receipt visibility are
         separate.
-      operationId: submit
+      operationId: submit_1
       parameters:
       - name: tenantId
         in: path
@@ -1023,7 +1331,7 @@ paths:
       description: The operation ID binds the full original intent. Every retry rechecks
         current staff permission; durable outcome and current receipt visibility are
         separate.
-      operationId: reject
+      operationId: reject_1
       parameters:
       - name: tenantId
         in: path
@@ -1061,7 +1369,7 @@ paths:
       description: The operation ID binds the full original intent. Every retry rechecks
         current staff permission; durable outcome and current receipt visibility are
         separate.
-      operationId: approve
+      operationId: approve_1
       parameters:
       - name: tenantId
         in: path
@@ -1099,7 +1407,7 @@ paths:
       description: The operation ID binds the full original intent. Every retry rechecks
         current staff permission; durable outcome and current receipt visibility are
         separate.
-      operationId: withdraw
+      operationId: withdraw_1
       parameters:
       - name: tenantId
         in: path
@@ -1137,7 +1445,7 @@ paths:
       description: The operation ID binds the full original intent. Every retry rechecks
         current staff permission; durable outcome and current receipt visibility are
         separate.
-      operationId: publish
+      operationId: publish_1
       parameters:
       - name: tenantId
         in: path
@@ -1175,7 +1483,7 @@ paths:
       description: The operation ID binds the full original intent. Every retry rechecks
         current staff permission; durable outcome and current receipt visibility are
         separate.
-      operationId: editPublic
+      operationId: editPublic_1
       parameters:
       - name: tenantId
         in: path
@@ -1213,7 +1521,7 @@ paths:
       description: The operation ID binds the full original intent. Every retry rechecks
         current staff permission; durable outcome and current receipt visibility are
         separate.
-      operationId: editCost
+      operationId: editCost_1
       parameters:
       - name: tenantId
         in: path
@@ -1251,7 +1559,311 @@ paths:
       description: The operation ID binds the full original intent. Every retry rechecks
         current staff permission; durable outcome and current receipt visibility are
         separate.
-      operationId: create
+      operationId: create_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDraftBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/submission:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Retain an immutable public submission for review
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: submit_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitPublicBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/selection/reject:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Retain a private checker rejection of an exact selection
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: reject_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewSelectionBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/selection/approve:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Approve an exact public and private selection as an independent checker
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: approve_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewSelectionBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/publication/withdraw:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Withdraw current publication control without changing retained terms
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: withdraw_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WithdrawBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/publication:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Publish approved retained metadata without operational admission
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: publish_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PublishBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/public-revision:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Append public terms and return the root to draft
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: editPublic_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditPublicBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PublicReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/private-cost:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Append private cost terms without changing public state
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: editCost_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditCostBody"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PrivateReceipt"
+      security:
+      - productDefinitionBearer: []
+      x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/commands/deposit/draft:
+    post:
+      tags:
+      - Governed deposit account project catalog
+      summary: Create a complete checking deposit DEPOSIT_ACCOUNT_V1 metadata draft
+      description: The operation ID binds the full original intent. Every retry rechecks
+        current staff permission; durable outcome and current receipt visibility are
+        separate.
+      operationId: create_2
       parameters:
       - name: tenantId
         in: path
@@ -1947,6 +2559,86 @@ paths:
                 $ref: "#/components/schemas/RootView"
       security:
       - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/term-pc/selections/{submissionId}:
+    get:
+      tags:
+      - term-pc-insurance-read-controller
+      summary: Observe an exact current TERM_PC checker selection
+      operationId: selection
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: submissionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionReviewSelectionView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/term-pc/selection/current:
+    get:
+      tags:
+      - term-pc-insurance-read-controller
+      summary: Observe the current submitted TERM_PC checker selection
+      operationId: current
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionReviewSelectionView"
+      security:
+      - productDefinitionBearer: []
   /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/selections/{submissionId}:
     get:
       tags:
@@ -1956,7 +2648,7 @@ paths:
         \ selection.read policy. Retain the returned IDs, digests, versions and selectionFingerprint\
         \ when approving or rejecting. A later head change causes a conflict; validation\
         \ is a trusted service boundary."
-      operationId: selection
+      operationId: selection_1
       parameters:
       - name: tenantId
         in: path
@@ -2004,7 +2696,87 @@ paths:
         private-cost read permission is checked before and after the read. The observed
         active review pointer supports resuming an authorized publish command; publication
         still validates the retained decision and exact selection.
-      operationId: current
+      operationId: current_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionReviewSelectionView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/deposit/selections/{submissionId}:
+    get:
+      tags:
+      - deposit-account-read-controller
+      summary: Observe an exact current DEPOSIT_ACCOUNT_V1 checker selection
+      operationId: selection_2
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: submissionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionReviewSelectionView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-review/deposit/selection/current:
+    get:
+      tags:
+      - deposit-account-read-controller
+      summary: Observe the current submitted DEPOSIT_ACCOUNT_V1 checker selection
+      operationId: current_2
       parameters:
       - name: tenantId
         in: path
@@ -2104,6 +2876,80 @@ paths:
       security:
       - productDefinitionBearer: []
       x-disable-idempotency: true
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-cost/term-pc/current:
+    get:
+      tags:
+      - term-pc-insurance-read-controller
+      summary: Observe current private TERM_PC costs without product admission
+      operationId: cost
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionCostView"
+      security:
+      - productDefinitionBearer: []
+  /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-cost/deposit/current:
+    get:
+      tags:
+      - deposit-account-read-controller
+      summary: Observe current private DEPOSIT_ACCOUNT_V1 costs without product admission
+      operationId: cost_1
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductDefinitionCostView"
+      security:
+      - productDefinitionBearer: []
   /api/v1/tenants/{tenantId}/product-definitions/{rootId}/staff-cost/current:
     get:
       tags:
@@ -2113,7 +2959,7 @@ paths:
         \ checker review permission. Retain the returned cost revision/version and\
         \ public revision/digest when editing; a changed selection conflicts. This\
         \ private read does not admit or activate a product."
-      operationId: current_1
+      operationId: current_3
       parameters:
       - name: tenantId
         in: path
@@ -2232,6 +3078,64 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/PublicationView"
+      security:
+      - productDefinitionBearer: []
+  ? /api/v1/tenants/{tenantId}/product-definitions/{rootId}/insurance-quote-configurations/{productId}/revisions/{revisionId}/publications/{publicationId}
+  : get:
+      tags:
+      - insurance-quote-purpose-controller
+      summary: Observe exact current fixed-premium TERM_PC configuration
+      description: "Requires current owner-purpose permission, native read context\
+        \ and genuine current reference records. This metadata observation establishes\
+        \ neither applicant eligibility nor insurance cover or financial admission."
+      operationId: observe
+      parameters:
+      - name: tenantId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: rootId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: revisionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: publicationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: X-Idempotency-Key
+        in: header
+        description: "Optional retry key for scoped POST, PUT, PATCH, and DELETE response\
+          \ reuse. Safe methods ignore it. Reuse requires configured trusted identity\
+          \ and namespace; changed input returns 409. Business effects require durable\
+          \ application idempotency."
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Observation"
       security:
       - productDefinitionBearer: []
   /api/v1/products/{productId}/pricing:
@@ -3011,6 +3915,31 @@ components:
           type: string
         requiredForLaunch:
           type: boolean
+    DepositAccountTerms:
+      type: object
+      properties:
+        accountKind:
+          type: string
+        ownershipKinds:
+          type: array
+          items:
+            type: string
+        openingMinimum:
+          $ref: "#/components/schemas/Money"
+        retainedMinimum:
+          $ref: "#/components/schemas/Money"
+        perTransferLimit:
+          $ref: "#/components/schemas/Money"
+        dailyTransferLimit:
+          $ref: "#/components/schemas/Money"
+        interest:
+          type: string
+        overdraft:
+          type: string
+        transferFee:
+          type: string
+        enrollmentPurpose:
+          type: string
     DocumentRequirement:
       type: object
       properties:
@@ -3061,6 +3990,19 @@ components:
           format: int64
         digest:
           type: string
+        versionFormat:
+          type: string
+          nullable: true
+          enum:
+          - OPAQUE
+        versionText:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: Exact case-sensitive opaque owner version; no normalization
+            or numeric conversion; at most 255 UTF-8 bytes. Owner-specific constraints
+            also apply.
+          nullable: true
     FactRequirement:
       type: object
       properties:
@@ -3169,6 +4111,7 @@ components:
       type: object
       oneOf:
       - $ref: "#/components/schemas/AccountTariffTerms"
+      - $ref: "#/components/schemas/DepositAccountTerms"
       - $ref: "#/components/schemas/FixedRateInstallmentLoanTerms"
       - $ref: "#/components/schemas/TermPcInsuranceTerms"
     Requirements:
@@ -3787,6 +4730,49 @@ components:
           $ref: "#/components/schemas/RetainedDefinition"
         createdAt:
           $ref: "#/components/schemas/FireflyInstant"
+    Configuration:
+      type: object
+      properties:
+        scope:
+          $ref: "#/components/schemas/InsuranceQuotePurposeScope"
+        publicDigest:
+          type: string
+        definition:
+          $ref: "#/components/schemas/TermPcDefinition"
+    InsuranceQuotePurposeScope:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          format: uuid
+        rootId:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        revisionId:
+          type: string
+          format: uuid
+        publicationId:
+          type: string
+          format: uuid
+    Observation:
+      type: object
+      properties:
+        configuration:
+          $ref: "#/components/schemas/Configuration"
+        observedAt:
+          $ref: "#/components/schemas/FireflyInstant"
+        effectiveUntil:
+          $ref: "#/components/schemas/FireflyInstant"
+    TermPcDefinition:
+      type: object
+      properties:
+        common:
+          $ref: "#/components/schemas/Common"
+        terms:
+          $ref: "#/components/schemas/TermPcInsuranceTerms"
     FeeDefinitionDTO:
       type: object
       properties:
