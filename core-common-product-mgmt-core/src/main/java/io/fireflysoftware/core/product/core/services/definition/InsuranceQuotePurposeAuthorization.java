@@ -35,9 +35,16 @@ public final class InsuranceQuotePurposeAuthorization {
     private final String issuer,audience,tenantClaim,clientClaim,clientId;
     private final Clock clock;
     private final LongSupplier nanos;
+    private final InsuranceQuoteTenantBindingResolver bindings;
 
     public InsuranceQuotePurposeAuthorization(SecurityContextPort security,PolicyDecisionPort policies,
             String issuer,String audience,String tenantClaim,String clientClaim,String clientId,Clock clock,LongSupplier nanos) {
+        this(security,policies,issuer,audience,tenantClaim,clientClaim,clientId,clock,nanos,null);
+    }
+    public InsuranceQuotePurposeAuthorization(SecurityContextPort security,PolicyDecisionPort policies,
+            String issuer,String audience,String tenantClaim,String clientClaim,String clientId,Clock clock,LongSupplier nanos,
+            InsuranceQuoteTenantBindingResolver bindings) {
+        this.bindings=bindings;
         this.security=Objects.requireNonNull(security);this.policies=Objects.requireNonNull(policies);
         text(issuer,512);text(audience,255);text(clientId,255);
         for(String key:new String[]{tenantClaim,clientClaim})if(key==null || !key.matches("[A-Za-z][A-Za-z0-9_:.]{0,63}")
@@ -52,9 +59,14 @@ public final class InsuranceQuotePurposeAuthorization {
         private final Scope scope;
         private final Instant actorUntil,until,observedAt;
         private final long beforeNanos,budgetNanos;
+        private final InsuranceQuoteTenantBindingResolver.Observation binding;
         private Permit(SecurityPrincipal principal,Scope scope,Instant actorUntil,Instant observedAt,long beforeNanos) {
-            this.principal=principal;this.scope=scope;this.actorUntil=actorUntil;this.observedAt=observedAt;this.beforeNanos=beforeNanos;
-            until=actorUntil.isBefore(observedAt.plusSeconds(5))?actorUntil:observedAt.plusSeconds(5);
+            this(principal,scope,actorUntil,observedAt,beforeNanos,null);
+        }
+        private Permit(SecurityPrincipal principal,Scope scope,Instant actorUntil,Instant observedAt,long beforeNanos,InsuranceQuoteTenantBindingResolver.Observation binding) {
+            this.principal=principal;this.scope=scope;this.actorUntil=actorUntil;this.observedAt=observedAt;this.beforeNanos=beforeNanos;this.binding=binding;
+            var cap=actorUntil.isBefore(observedAt.plusSeconds(5))?actorUntil:observedAt.plusSeconds(5);
+            until=binding==null||cap.isBefore(binding.validUntil())?cap:binding.validUntil();
             budgetNanos=Duration.between(observedAt,until).toNanos();remaining();
         }
         public Scope scope(){return scope;}
@@ -77,8 +89,10 @@ public final class InsuranceQuotePurposeAuthorization {
             Objects.requireNonNull(scope);Instant observed=clock.instant();long start=nanos.getAsLong();
             return security.currentPrincipal().switchIfEmpty(Mono.error(unavailable())).flatMap(principal->{
                 Instant expiry=validate(principal,scope,observed);
-                return decide(principal,scope,"READ").then(Mono.defer(security::currentPrincipal).switchIfEmpty(Mono.error(unavailable())))
-                    .map(current->{if(!principal.equals(current) || !expiry.equals(validate(current,scope,clock.instant())))throw unavailable();return new Permit(principal,scope,expiry,observed,start);});
+                var initial=new Permit(principal,scope,expiry,observed,start);
+                Mono<Permit> selected=bindings==null?Mono.just(initial):observeBinding(initial).map(binding->new Permit(principal,scope,expiry,observed,start,binding));
+                return selected.flatMap(permit->requirePrincipal(permit).then(decide(principal,scope,"READ")).then(Mono.defer(security::currentPrincipal).switchIfEmpty(Mono.error(unavailable())))
+                    .map(current->{if(!principal.equals(current)||!expiry.equals(validate(current,scope,clock.instant())))throw unavailable();permit.remaining();return permit;}).timeout(permit.remaining()));
             });
         }).timeout(Duration.ofSeconds(2)).onErrorMap(error->unavailable());
     }
@@ -87,20 +101,37 @@ public final class InsuranceQuotePurposeAuthorization {
             if(permit==null || permit.owner!=this)throw unavailable();permit.remaining();
             return security.currentPrincipal().switchIfEmpty(Mono.error(unavailable())).flatMap(principal->{
                 if(!permit.principal.equals(principal))throw unavailable();validate(principal,permit.scope,clock.instant());
-                return decide(principal,permit.scope,"RESPONSE").then(Mono.defer(security::currentPrincipal).switchIfEmpty(Mono.error(unavailable())))
-                    .flatMap(current->{if(!permit.principal.equals(current))throw unavailable();validate(current,permit.scope,clock.instant());permit.remaining();return Mono.<Void>empty();});
+                Mono<InsuranceQuoteTenantBindingResolver.Observation> currentBinding=bindings==null?Mono.empty():observeBinding(permit).doOnNext(current->{if(!permit.binding.sameAuthority(current))throw unavailable();});
+                return currentBinding.map(Optional::of).defaultIfEmpty(Optional.empty()).flatMap(observation->requirePrincipal(permit).then(decide(principal,permit.scope,"RESPONSE")).then(Mono.defer(security::currentPrincipal).switchIfEmpty(Mono.error(unavailable())))
+                    .flatMap(current->{if(!permit.principal.equals(current))throw unavailable();validate(current,permit.scope,clock.instant());permit.remaining();observation.ifPresent(value->{if(!clock.instant().isBefore(value.validUntil()))throw unavailable();});return Mono.<Void>empty();}));
             }).timeout(permit.remaining());
         }).onErrorMap(error->unavailable());
     }
     private Instant validate(SecurityPrincipal principal,Scope scope,Instant now) {
         text(principal.issuer(),512);text(principal.subject(),255);
         var tenant=principal.claim(tenantClaim,String.class);
-        if(!issuer.equals(principal.issuer()) || !scope.tenantId().toString().equals(principal.tenantId())
-                || !scope.tenantId().toString().equals(tenant) || !principal.hasScope(REQUIRED_SCOPE))throw unavailable();
+        text(tenant,1024);text(principal.tenantId(),1024);
+        if(!issuer.equals(principal.issuer()) || !principal.tenantId().equals(tenant)
+                || bindings==null&&!scope.tenantId().toString().equals(tenant) || !principal.hasScope(REQUIRED_SCOPE))throw unavailable();
         var exp=principal.claim("exp",Instant.class);var nbf=principal.claim("nbf",Instant.class);var aud=principal.claim("aud",List.class);
         if(exp==null || nbf==null || !now.isBefore(exp) || now.isBefore(nbf) || !nbf.isBefore(exp)
                 || aud==null || aud.size()!=1 || !audience.equals(aud.getFirst()) || !clientId.equals(principal.claim(clientClaim,String.class)))throw unavailable();
         return exp;
+    }
+    private Mono<Void> requirePrincipal(Permit permit) {
+        return Mono.defer(security::currentPrincipal).switchIfEmpty(Mono.error(unavailable())).flatMap(current->{
+            if(!permit.principal.equals(current))throw unavailable();validate(current,permit.scope,clock.instant());permit.remaining();return Mono.<Void>empty();
+        });
+    }
+    private Mono<InsuranceQuoteTenantBindingResolver.Observation> observeBinding(Permit permit) {
+        return Mono.defer(()->{permit.remaining();return bindings.resolve(permit.principal,permit.scope.tenantId(),permit.until(),permit::remaining);})
+            .switchIfEmpty(Mono.error(unavailable())).map(binding->{
+                permit.remaining();var now=clock.instant();
+                if(!permit.principal.issuer().equals(binding.issuer())||!permit.principal.tenantId().equals(binding.platformTenant())
+                        ||!permit.scope.tenantId().equals(binding.resourceTenant())||binding.observedAt().isBefore(permit.observedAt())
+                        ||binding.observedAt().isAfter(now)||!now.isBefore(binding.validUntil())||!now.isBefore(binding.businessUntil()))throw unavailable();
+                return binding;
+            }).timeout(permit.remaining());
     }
     private Mono<Void> decide(SecurityPrincipal principal,Scope scope,String phase) {
         String resource="tenant/"+scope.tenantId()+"/product/"+scope.productId()+"/definition/"+scope.rootId()+"/revision/"+scope.revisionId()+"/publication/"+scope.publicationId()+"/purpose/TERM_PC_INSURANCE_QUOTE";

@@ -42,7 +42,7 @@ class ProductDocumentIssuerReferenceProviderTest {
     ProductDocumentIssuerReferenceProvider adapter(Function<ClientRequest,Mono<ClientResponse>> exchange){
         var format=ApiClient.createDefaultDateFormat();var mapper=ApiClient.createDefaultMapper(format);
         var web=ApiClient.buildWebClientBuilder(mapper).exchangeFunction(request->{calls.incrementAndGet();return exchange.apply(request);}).build();
-        var api=new ApiClient(web,mapper,format);api.setBasePath("https://unit.invalid");api.setBearerToken("unit-test-only");
+        var api=new ApiClient(web,mapper,format);api.setBasePath("https://unit.invalid");((io.fireflysoftware.common.config.sdk.invoker.auth.HttpBearerAuth)api.getAuthentication("documentIssuerBearer")).setBearerToken("unit-test-only");
         try{return (ProductDocumentIssuerReferenceProvider)Class.forName("io.fireflysoftware.core.product.web.adapters.document.impl.ProductDocumentIssuerReferenceProviderImpl")
             .getConstructor(DocumentIssuerApi.class,Clock.class,LongSupplier.class).newInstance(new DocumentIssuerApi(api),clock,nanos);}
         catch(InvocationTargetException e){throw new AssertionError(e.getCause());}catch(ReflectiveOperationException e){throw new AssertionError("Genuine issuer SDK adapter missing",e);}

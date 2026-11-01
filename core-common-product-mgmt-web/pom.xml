@@ -23,12 +23,21 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.fireflyframework</groupId>
             <artifactId>fireflyframework-security-resource-server</artifactId>
         </dependency>
         <dependency>
             <groupId>org.fireflyframework</groupId>
             <artifactId>fireflyframework-security-adapter-opa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
         </dependency>
         <!-- Internal modules -->
         <dependency>
@@ -46,6 +55,11 @@
             <version>${document-issuer-sdk.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.fireflysoftware</groupId>
+            <artifactId>core-common-reference-master-data-interfaces</artifactId>
+            <version>${document-reference-sdk.version}</version>
+        </dependency>
         <!-- Common Libraries -->
         <dependency>
             <groupId>io.fireflysoftware</groupId>
@@ -91,6 +105,9 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Owner codecs are test fixtures only; production owner calls use generated SDKs. -->
+        <dependency><groupId>io.fireflysoftware</groupId><artifactId>core-common-config-mgmt-core</artifactId><version>${document-issuer-sdk.version}</version><scope>test</scope></dependency>
+        <dependency><groupId>io.fireflysoftware</groupId><artifactId>core-common-reference-master-data-core</artifactId><version>${document-reference-sdk.version}</version><scope>test</scope></dependency>
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

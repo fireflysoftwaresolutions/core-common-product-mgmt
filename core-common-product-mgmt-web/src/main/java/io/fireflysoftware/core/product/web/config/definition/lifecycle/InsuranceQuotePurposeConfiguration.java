@@ -18,8 +18,22 @@ import java.util.function.LongSupplier;
 
 @Configuration(proxyBeanMethods=false)
 @ConditionalOnProperty(prefix="product.definitions.insurance-quote-read",name="enabled",havingValue="true")
-@EnableConfigurationProperties({InsuranceQuotePurposeReadProperties.class,ProductDefinitionCommandProperties.class,ProductDefinitionPublicationReadProperties.class,ResourceServerProperties.class})
+@EnableConfigurationProperties({InsuranceQuotePurposeReadProperties.class,InsuranceQuoteReferenceProperties.class,ProductDefinitionCommandProperties.class,ProductDefinitionPublicationReadProperties.class,ResourceServerProperties.class})
 public class InsuranceQuotePurposeConfiguration {
+    @Bean
+    @ConditionalOnProperty(prefix="product.definitions.insurance-quote-read",name="current-tenant-binding-enabled",havingValue="true")
+    public InsuranceQuoteTenantBindingResolver insuranceQuoteTenantBindingResolver(InsuranceQuotePurposeReadProperties properties,
+            SecurityContextPort principals,org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager clients){
+        return new io.fireflysoftware.core.product.web.adapters.identity.impl.GeneratedConfigInsuranceQuoteTenantBindingResolverImpl(principals,clients,
+            properties.getCurrentTenantBindingEndpoint(),properties.getCurrentTenantBindingRegistrationId(),properties.getCurrentTenantBindingIssuer(),
+            properties.getCurrentTenantBindingPlatformTenant(),properties.getTenantClaim(),Clock.systemUTC());
+    }
+    @Bean
+    @ConditionalOnProperty(prefix="product.definitions.insurance-quote-read.references",name="enabled",havingValue="true")
+    public InsuranceQuotePurposeReferenceResolver insuranceQuotePurposeReferenceResolver(InsuranceQuoteReferenceProperties properties,
+            SecurityContextPort principals,org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager clients){
+        return new io.fireflysoftware.core.product.web.adapters.insurance.impl.GeneratedInsuranceQuotePurposeReferenceResolverImpl(principals,clients,properties,Clock.systemUTC(),System::nanoTime);
+    }
     @Bean(destroyMethod="close")
     public InsuranceQuotePurposeRuntime insuranceQuotePurposeRuntime(InsuranceQuotePurposeReferenceResolver references,
             InsuranceQuotePurposeReadProperties properties,ProductDefinitionCommandProperties commands,ProductDefinitionPublicationReadProperties publication,
@@ -34,7 +48,7 @@ public class InsuranceQuotePurposeConfiguration {
                 || !trust.isTenantRequired() || !trust.getTenantClaimPaths().contains(properties.getTenantClaim()))
             throw new IllegalStateException("PRODUCT_INSURANCE_CALLER_TRUST_REQUIRED");
         Clock clock=Clock.systemUTC();LongSupplier nanos=System::nanoTime;
-        var authority=new InsuranceQuotePurposeAuthorization(principals,policies,trust.getIssuer(),properties.getAudience(),properties.getTenantClaim(),properties.getClientClaim(),properties.getClientId(),clock,nanos);
+        var authority=new InsuranceQuotePurposeAuthorization(principals,policies,trust.getIssuer(),properties.getAudience(),properties.getTenantClaim(),properties.getClientClaim(),properties.getClientId(),clock,nanos,properties.isCurrentTenantBindingEnabled()?context.getBean(InsuranceQuoteTenantBindingResolver.class):null);
         Objects.requireNonNull(references);
         var pool=ProductDefinitionBoundedPools.create("product-insurance-quote-read",readFactory,ownerSource,properties.getUsername(),properties.getPassword(),commands.getUsername(),publication.getUsername());
         try{

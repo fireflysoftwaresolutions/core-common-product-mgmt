@@ -55,6 +55,18 @@ class InsuranceQuotePurposeServiceTest {
     }
     @Test void actualAuthorityTwoCompletedReadsAndMandatoryReferencesProduceOnlyConfiguration(){var reads=new AtomicInteger();var resolves=new AtomicInteger();var original=new AtomicReference<Admission>();var s=service(auth(),a->{reads.incrementAndGet();if(original.get()==null)original.set(a);else {var first=original.get();assertEquals(first.scope(),a.scope());assertEquals(first.issuer(),a.issuer());assertEquals(first.actor(),a.actor());assertEquals(first.actorUntil(),a.actorUntil());assertEquals(first.permitUntil(),a.permitUntil());assertEquals(first.observedAt(),a.observedAt());assertEquals(first.beforeNanos(),a.beforeNanos());assertNotNull(a.priorWindow());assertEquals(NOW.plusSeconds(4),a.priorWindow().until());}return Mono.just(read());},c->{resolves.incrementAndGet();return Mono.just(verified(c));});var o=s.observe(scope).block();assertNotNull(o);assertEquals(scope,o.configuration().scope());assertEquals(NOW.plusNanos(123000),o.observedAt());assertEquals(NOW.plusSeconds(4),o.effectiveUntil());assertEquals(2,reads.get());assertEquals(1,resolves.get());}
     @Test void emptyReferenceResolutionDoesNotBecomeSuccess(){var reads=new AtomicInteger();var s=service(auth(),a->{reads.incrementAndGet();return Mono.just(read());},c->Mono.empty());assertThrows(IllegalStateException.class,()->s.observe(scope).block());assertEquals(1,reads.get());}
+    @Test void currentResponseCarriesTheExactOwnerConfigurationWithoutConsumerReconstruction(){
+        var s=service(auth(),a->Mono.just(read()),c->Mono.just(verified(c)));
+        var observed=s.observe(scope).block();
+        assertNotNull(observed);
+        assertEquals(InsuranceQuotePurposeCodec.encode(observed.configuration()),observed.canonicalConfiguration());
+        assertEquals(observed.configuration(),InsuranceQuotePurposeCodec.decode(observed.canonicalConfiguration()));
+    }
+    @Test void legacyObservationConstructionDoesNotInventCanonicalOwnerData(){
+        var legacy=new Observation(configuration(),NOW,NOW.plusSeconds(1));
+        assertNull(legacy.canonicalConfiguration());
+        assertThrows(IllegalArgumentException.class,()->new Observation(configuration(),NOW,NOW.plusSeconds(1),"x".repeat(131073)));
+    }
     @Test void omittedConfiguredReferenceRefuses(){var s=service(auth(),a->Mono.just(read()),c->Mono.just(new VerifiedReferences(scope,InsuranceQuotePurposeCodec.digest(c),c.definition().common().market().currencyPolicy(),Set.of(),NOW,NOW.plusSeconds(4))));assertThrows(IllegalStateException.class,()->s.observe(scope).block());}
     @Test void wrongResolvedCurrencyRefuses(){var s=service(auth(),a->Mono.just(read()),c->{var old=c.definition().common().market().currencyPolicy();var wrong=new CurrencyPolicyReference(old.policyId(),old.currencyId(),"EUR",old.version(),old.digest(),old.encodingVersion());return Mono.just(new VerifiedReferences(scope,InsuranceQuotePurposeCodec.digest(c),wrong,references(c),NOW,NOW.plusSeconds(4)));});assertThrows(IllegalStateException.class,()->s.observe(scope).block());}
     @Test void wrongResolvedConfigurationDigestRefuses(){var s=service(auth(),a->Mono.just(read()),c->Mono.just(new VerifiedReferences(scope,"0".repeat(64),c.definition().common().market().currencyPolicy(),references(c),NOW,NOW.plusSeconds(4))));assertThrows(IllegalStateException.class,()->s.observe(scope).block());}

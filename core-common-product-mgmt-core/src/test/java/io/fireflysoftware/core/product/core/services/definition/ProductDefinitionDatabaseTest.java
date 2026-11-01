@@ -18,7 +18,6 @@ package io.fireflysoftware.core.product.core.services.definition;
 
 import static org.assertj.core.api.Assertions.*;
 
-import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -115,11 +114,7 @@ class ProductDefinitionDatabaseTest {
                             + " definition_runtime,definition_reader,definition_commands; REVOKE"
                             + " CREATE ON SCHEMA public FROM PUBLIC");
         }
-        Flyway.configure()
-                .dataSource(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword())
-                .locations("classpath:db/migration")
-                .load()
-                .migrate();
+        ProductPublicationMigrationFixture.migrate(postgres);
         try (var c = owner();
                 var s = c.createStatement()) {
             s.execute(

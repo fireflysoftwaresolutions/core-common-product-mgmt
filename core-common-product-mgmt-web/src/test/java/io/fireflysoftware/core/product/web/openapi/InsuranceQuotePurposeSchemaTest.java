@@ -69,7 +69,7 @@ class InsuranceQuotePurposeSchemaTest {
 
     @Test void allPublishedPurposeNestedRecordsKeepTheirActualPropertySets() {
         var schemas = new ModelConverters().readAll(InsuranceQuotePurposeContracts.Observation.class);
-        assertThat(schemas.get("Observation").getProperties().keySet()).containsExactlyInAnyOrder("configuration", "observedAt", "effectiveUntil");
+        assertThat(schemas.get("Observation").getProperties().keySet()).containsExactlyInAnyOrder("configuration", "observedAt", "effectiveUntil", "canonicalConfiguration");
         assertThat(schemas.get("Configuration").getProperties().keySet()).containsExactlyInAnyOrder("scope", "publicDigest", "definition");
         assertThat(schemas.get("TermPcDefinition").getProperties().keySet()).containsExactlyInAnyOrder("common", "terms");
         assertThat(schemas.get("TermPcInsuranceTerms").getProperties()).hasSize(13);
@@ -77,6 +77,13 @@ class InsuranceQuotePurposeSchemaTest {
                 .containsExactlyInAnyOrder("owner", "kind", "id", "version", "digest", "versionFormat", "versionText");
         assertThat(schemas.get("CurrencyPolicyReference").getProperties().keySet())
                 .containsExactlyInAnyOrder("policyId", "currencyId", "isoCode", "version", "digest", "encodingVersion");
+    }
+
+    @Test void canonicalOwnerRepresentationRemainsOptionalAndBounded() {
+        var schema = new ModelConverters().readAll(InsuranceQuotePurposeContracts.Observation.class).get("Observation");
+        assertThat(property(schema, "canonicalConfiguration").getType()).isEqualTo("string");
+        assertThat(property(schema, "canonicalConfiguration").getMaxLength()).isEqualTo(131072);
+        assertThat(schema.getRequired() == null || !schema.getRequired().contains("canonicalConfiguration")).isTrue();
     }
 
     private static Schema<?> property(Schema<?> value, String name) {

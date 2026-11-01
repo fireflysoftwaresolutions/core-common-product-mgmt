@@ -38,11 +38,16 @@ class ProductDocumentReferenceMigrationDiscoveryTest {
         Map.entry("V23__Governed_deposit_enrollment_purpose.sql","9d86ed9e72378bb86fb0a47abac8195a7ad0656105026fba5d067ba437f919ce"));
     private static String digest(byte[] value)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(value));}
     @Test void defaultOwnerClasspathDiscoversTheExactPublishedV1ThroughV21Bytes()throws Exception {
-        var source=new YamlPropertySourceLoader().load("actual-owner",new ClassPathResource("application.yaml")).getFirst();
-        assertEquals("classpath:db/migration",source.getProperty("spring.flyway.locations"));
-        var resources=new PathMatchingResourcePatternResolver().getResources("classpath*:db/migration/V*__*.sql");
-        var actual=new TreeMap<String,String>();for(var resource:resources){var previous=actual.put(resource.getFilename(),digest(resource.getContentAsByteArray()));assertNull(previous,"Duplicate default migration identity");}
-        assertEquals(PUBLISHED,actual,"Unpublished purpose extensions must not become default application migrations");
+        // Codec-only test dependencies contain other owners' migrations; inspect the actual Product modules only.
+        var models=io.fireflysoftware.core.product.models.entities.ProductCategory.class.getProtectionDomain().getCodeSource().getLocation();
+        var web=io.fireflysoftware.core.product.web.config.definition.lifecycle.InsuranceQuotePurposeConfiguration.class.getProtectionDomain().getCodeSource().getLocation();
+        try(var owner=new java.net.URLClassLoader(new java.net.URL[]{models,web},null)){
+            var source=new YamlPropertySourceLoader().load("actual-owner",new ClassPathResource("application.yaml",owner)).getFirst();
+            assertEquals("classpath:db/migration",source.getProperty("spring.flyway.locations"));
+            var resources=new PathMatchingResourcePatternResolver(owner).getResources("classpath*:db/migration/V*__*.sql");
+            var actual=new TreeMap<String,String>();for(var resource:resources){var previous=actual.put(resource.getFilename(),digest(resource.getContentAsByteArray()));assertNull(previous,"Duplicate default migration identity");}
+            assertEquals(PUBLISHED,actual,"Unpublished purpose extensions must not become default application migrations");
+        }
     }
     @Test void unpublishedPurposeSqlIsBytePreservedOutsideRuntimeMigrationDiscovery()throws Exception {
         var root=Path.of(System.getProperty("product.reference.source-root",

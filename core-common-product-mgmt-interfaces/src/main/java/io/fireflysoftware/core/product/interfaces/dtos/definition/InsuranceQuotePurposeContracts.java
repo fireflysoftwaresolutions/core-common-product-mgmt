@@ -55,12 +55,20 @@ public final class InsuranceQuotePurposeContracts {
     /** Supplied response data. Authentic current owner/PDP/native evidence is established by the service. */
     public record Observation(Configuration configuration,
             @Schema(ref="#/components/schemas/FireflyInstant") Instant observedAt,
-            @Schema(ref="#/components/schemas/FireflyInstant") Instant effectiveUntil) {
+            @Schema(ref="#/components/schemas/FireflyInstant") Instant effectiveUntil,
+            @Schema(description="Exact canonical configuration emitted by the current owner; supplied bytes alone do not establish owner authenticity or financial admission.",nullable=true,maxLength=131072)
+            String canonicalConfiguration) {
+        public Observation(Configuration configuration,Instant observedAt,Instant effectiveUntil) {
+            this(configuration,observedAt,effectiveUntil,null);
+        }
         public Observation {
             Objects.requireNonNull(configuration);Objects.requireNonNull(observedAt);Objects.requireNonNull(effectiveUntil);
             if(observedAt.getNano()%1_000!=0 || effectiveUntil.getNano()%1_000!=0
                     || !effectiveUntil.isAfter(observedAt)
                     || Duration.between(observedAt,effectiveUntil).compareTo(Duration.ofSeconds(30))>0)throw invalid();
+            if(canonicalConfiguration!=null && (canonicalConfiguration.isBlank() || canonicalConfiguration.length()>131072
+                    || !java.nio.charset.StandardCharsets.UTF_8.newEncoder().canEncode(canonicalConfiguration)
+                    || canonicalConfiguration.getBytes(java.nio.charset.StandardCharsets.UTF_8).length>131072))throw invalid();
         }
         @Override public String toString(){return "InsuranceQuotePurposeObservation";}
     }

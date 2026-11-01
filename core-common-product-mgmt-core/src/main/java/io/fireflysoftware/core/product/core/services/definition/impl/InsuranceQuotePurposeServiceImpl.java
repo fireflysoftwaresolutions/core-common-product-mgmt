@@ -58,7 +58,8 @@ public final class InsuranceQuotePurposeServiceImpl implements InsuranceQuotePur
                             return authority.reauthorize(permit).timeout(finalWindow.remaining(clock.instant(),nanos.getAsLong()))
                                 .then(Mono.defer(()->{
                                     permit.remaining();finalWindow.remaining(clock.instant(),nanos.getAsLong());effective(current.configuration(),clock.instant());
-                                    var response=new Observation(current.configuration(),current.window().recordedAt(),finalWindow.until());
+                                    var response=new Observation(current.configuration(),current.window().recordedAt(),finalWindow.until(),
+                                            InsuranceQuotePurposeCodec.encode(current.configuration()));
                                     permit.remaining();finalWindow.remaining(clock.instant(),nanos.getAsLong());return Mono.just(response);
                                 }));
                         });

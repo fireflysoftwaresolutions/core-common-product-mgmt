@@ -3,7 +3,7 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:18080
+- url: ""
   description: Generated server url
 tags:
 - name: Private product costs
@@ -4766,6 +4766,13 @@ components:
           $ref: "#/components/schemas/FireflyInstant"
         effectiveUntil:
           $ref: "#/components/schemas/FireflyInstant"
+        canonicalConfiguration:
+          maxLength: 131072
+          type: string
+          description: Exact canonical configuration emitted by the current owner;
+            supplied bytes alone do not establish owner authenticity or financial
+            admission.
+          nullable: true
     TermPcDefinition:
       type: object
       properties:
