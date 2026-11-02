@@ -82,11 +82,21 @@ final class ProductDefinitionCommandDatabaseFixture implements AutoCloseable {
     private final ProductDefinitionCommandPersistence persistence;
     private final ProductDefinitionLifecycleService commands;
     private final ProductDefinitionCostReadService costReads;
+    private final ProductDefinitionReviewReadService selectionReads;
     private final Probe probe;
     private final Map<UUID, UUID> productRoots = new ConcurrentHashMap<>();
     private final Map<UUID, Control> controls = new ConcurrentHashMap<>();
 
     ProductDefinitionCommandDatabaseFixture(Settings settings) {
+        this(settings, GovernedDefinitionProfile.ACCOUNT_TARIFF, false);
+    }
+
+    ProductDefinitionCommandDatabaseFixture(Settings settings, GovernedDefinitionProfile backend) {
+        this(settings, backend, true);
+    }
+
+    private ProductDefinitionCommandDatabaseFixture(
+            Settings settings, GovernedDefinitionProfile backend, boolean bounded) {
         context = new AnnotationConfigApplicationContext();
         context.getEnvironment()
                 .getPropertySources()
@@ -140,7 +150,7 @@ final class ProductDefinitionCommandDatabaseFixture implements AutoCloseable {
                                     .build());
             persistence =
                     new ProductDefinitionCommandPersistence(
-                            pool, context.getBean(R2dbcConverter.class), context);
+                            pool, context.getBean(R2dbcConverter.class), context, bounded);
             probe = new R2dbcRepositoryFactory(persistence.operations()).getRepository(Probe.class);
             var authority =
                     new ProductDefinitionCommandAuthorizationImpl(
@@ -170,14 +180,48 @@ final class ProductDefinitionCommandDatabaseFixture implements AutoCloseable {
                                                                     : Mono.just(Decision.permit())),
                             Clock.systemUTC(),
                             Set.of(ISSUER),
-                            ProductDefinitionCommandAuthorization.POLICY_PROFILE);
-            commands = new ProductDefinitionLifecycleServiceImpl(authority, persistence);
-            costReads = new ProductDefinitionCostReadServiceImpl(authority, persistence);
+                            backend.policyProfile(), backend);
+            commands = bounded
+                    ? new ProductDefinitionLifecycleServiceImpl(authority, persistence, backend,
+                            Clock.systemUTC(), System::nanoTime)
+                    : new ProductDefinitionLifecycleServiceImpl(authority, persistence);
+            costReads = bounded
+                    ? new ProductDefinitionCostReadServiceImpl(authority, persistence, backend,
+                            Clock.systemUTC(), System::nanoTime)
+                    : new ProductDefinitionCostReadServiceImpl(authority, persistence);
+            selectionReads = bounded
+                    ? new ProductDefinitionReviewReadServiceImpl(authority, persistence, backend,
+                            Clock.systemUTC(), System::nanoTime)
+                    : new ProductDefinitionReviewReadServiceImpl(authority, persistence);
         } catch (RuntimeException | Error failure) {
             if (pool != null) pool.dispose();
             context.close();
             throw failure;
         }
+    }
+
+    Mono<ProductDefinitionLifecycleMessages.Receipt> execute(
+            UUID tenant, UUID root, ProductDefinitionCommand command, String body) {
+        return commands.execute(tenant, root, command, body)
+                .contextWrite(c -> c.put(SecurityPrincipal.class,
+                        actor(tenant, Instant.now().plusSeconds(300))));
+    }
+
+    Mono<ProductDefinitionLifecycleMessages.Receipt> executeAs(UUID tenant, UUID root,
+            ProductDefinitionCommand command, String body, String subject, Set<String> scopes) {
+        return commands.execute(tenant, root, command, body)
+                .contextWrite(c -> c.put(SecurityPrincipal.class, scopedActor(tenant, subject, scopes)));
+    }
+
+    Mono<ProductDefinitionReviewSelectionView> selection(UUID tenant, UUID root, String subject) {
+        return selectionReads.readCurrentSelection(tenant, root)
+                .contextWrite(c -> c.put(SecurityPrincipal.class, scopedActor(tenant, subject,
+                        Set.of("product:definitions:review", "product:definitions:cost:read"))));
+    }
+
+    private static SecurityPrincipal scopedActor(UUID tenant, String subject, Set<String> scopes) {
+        return SecurityPrincipal.builder().issuer(ISSUER).subject(subject).tenantId(tenant.toString())
+                .scopes(scopes).claims(Map.of("exp", Instant.now().plusSeconds(300))).build();
     }
 
     AnnotationConfigApplicationContext context() {

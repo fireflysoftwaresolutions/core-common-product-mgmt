@@ -16,8 +16,12 @@ final class ProductPublicationMigrationFixture {
         if (!postgres.isRunning()) {
             throw new IllegalStateException("Fresh running test container required");
         }
+        migrate(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword(), postgres.getDatabaseName());
+    }
+
+    static void migrate(String jdbcUrl, String owner, String ownerPassword, String database) throws Exception {
         Flyway.configure()
-                .dataSource(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword())
+                .dataSource(jdbcUrl, owner, ownerPassword)
                 .locations("classpath:db/migration")
                 .target("20")
                 .load()
@@ -25,16 +29,18 @@ final class ProductPublicationMigrationFixture {
         String installer = "definition_publication_migrator";
         String password = UUID.randomUUID().toString();
         try (var connection = DriverManager.getConnection(
-                postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword());
+                jdbcUrl, owner, ownerPassword);
                 var statement = connection.createStatement()) {
             try (var identity = statement.executeQuery("SELECT current_user,session_user,current_database()")) {
-                if (!identity.next() || !postgres.getUsername().equals(identity.getString(1))
-                        || !postgres.getUsername().equals(identity.getString(2))
-                        || !postgres.getDatabaseName().equals(identity.getString(3))) {
+                if (!identity.next() || !owner.equals(identity.getString(1))
+                        || !owner.equals(identity.getString(2))
+                        || !database.equals(identity.getString(3))) {
                     throw new IllegalStateException("Exact fresh test administrator required");
                 }
             }
             statement.execute("CREATE ROLE firefly_product_definition_publication_read NOLOGIN NOINHERIT"
+                    + " NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOREPLICATION");
+            statement.execute("CREATE ROLE firefly_product_definition_insurance_quote_read NOLOGIN NOINHERIT"
                     + " NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOREPLICATION");
             statement.execute(transaction("prepare-publication-metadata-owners.sql.template"));
             String bootstrap = transaction("bootstrap-publication-installer.sql.template");
@@ -46,14 +52,14 @@ final class ProductPublicationMigrationFixture {
             bootstrap = bootstrap.substring(0, assertion) + "\nCOMMIT;";
             bootstrap = bootstrap.replace(":\"publication_migrator_login\"", identifier(installer))
                     .replace(":'publication_migrator_password'", literal(password))
-                    .replace(":\"publication_migrator_database\"", identifier(postgres.getDatabaseName()));
+                    .replace(":\"publication_migrator_database\"", identifier(database));
             if (bootstrap.contains(":\"") || bootstrap.contains(":'") || bootstrap.contains("\\")) {
                 throw new IllegalStateException("Unresolved publication installer fixture input");
             }
             statement.execute(bootstrap);
         }
         Flyway complete = Flyway.configure()
-                .dataSource(postgres.getJdbcUrl(), installer, password)
+                .dataSource(jdbcUrl, installer, password)
                 .locations("classpath:db/migration")
                 .load();
         complete.migrate();

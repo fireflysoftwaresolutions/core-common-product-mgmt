@@ -140,6 +140,57 @@ class ProductDefinitionDatabaseTest {
     }
 
     @Test
+    void termPcDraftUsesRealMappedCommandAndRetainsInsuranceIdentity() throws Exception {
+        try (var connection = owner()) {
+            verifyTermPcDraft(new ProductDefinitionCommandDatabaseFixture.Settings("127.0.0.1",
+                    postgres.getMappedPort(5432), postgres.getDatabaseName(),
+                    "definition_reader", READER_PASSWORD, "definition_commands", COMMAND_PASSWORD),
+                    category(), connection);
+        }
+    }
+
+    static void verifyTermPcDraft(ProductDefinitionCommandDatabaseFixture.Settings settings,
+            UUID category, Connection connection) throws Exception {
+        var tenant = UUID.randomUUID();
+        var root = UUID.randomUUID();
+        var body = new TermPcLifecycleProfileTest().body(
+                io.fireflysoftware.core.product.interfaces.dtos.definition.ProductDefinitionCommand.CREATE_DRAFT,
+                "insurance");
+        body.put("categoryId", category.toString());
+        ((com.fasterxml.jackson.databind.node.ObjectNode) body.at("/definition/common"))
+                .put("code", "TERM_PC_" + root.toString().replace("-", "").toUpperCase(Locale.ROOT));
+        try (var insurance = new ProductDefinitionCommandDatabaseFixture(settings,
+                GovernedDefinitionProfile.TERM_PC_INSURANCE)) {
+            var receipt = insurance.execute(tenant, root,
+                    io.fireflysoftware.core.product.interfaces.dtos.definition.ProductDefinitionCommand.CREATE_DRAFT,
+                    body.toString()).block(Duration.ofSeconds(10));
+            assertThat(receipt).isNotNull();
+            try (var statement = connection.prepareStatement(
+                    "SELECT business_area,profile_code,profile_version FROM public.product_definition_root WHERE tenant_id=? AND root_id=?")) {
+                statement.setObject(1, tenant); statement.setObject(2, root);
+                try (var row = statement.executeQuery()) {
+                    assertThat(row.next()).isTrue();
+                    assertThat(row.getString(1)).isEqualTo("INSURANCE");
+                    assertThat(row.getString(2)).isEqualTo("TERM_PC_INSURANCE_V1");
+                    assertThat(row.getInt(3)).isEqualTo(1);
+                    assertThat(row.next()).isFalse();
+                }
+            }
+            assertThat(insurance.currentCost(tenant, root).block(Duration.ofSeconds(10))).isNotNull();
+        }
+    }
+
+    @Test
+    void termPcLifecyclePublishesWithIndependentActorAndExactProfile() throws Exception {
+        try (var connection = owner()) {
+            TermPcNativeAssertions.lifecycle(new ProductDefinitionCommandDatabaseFixture.Settings("127.0.0.1",
+                    postgres.getMappedPort(5432), postgres.getDatabaseName(),
+                    "definition_reader", READER_PASSWORD, "definition_commands", COMMAND_PASSWORD),
+                    category(), connection);
+        }
+    }
+
+    @Test
     void nativeAggregateHasRealDurableTablesAndDefaultDenyRls() throws Exception {
         var observed = new TreeSet<String>();
         try (var c = owner();

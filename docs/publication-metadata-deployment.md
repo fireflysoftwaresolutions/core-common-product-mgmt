@@ -33,6 +33,14 @@ Preparation requires the expected database and original owner, `current_user = s
 
 Bootstrap scripts intentionally reject existing login names. Database and schema defaults must already satisfy their bounded privilege checks. They do not automatically revoke unrestricted public schema creation or database CREATE/TEMP privileges. Investigate failed preconditions rather than weakening checks or granting application superuser access.
 
+## TERM_PC forward migration
+
+[V22](../core-common-product-mgmt-models/src/main/resources/db/migration/V22__Governed_term_pc_purpose_read.sql) extends the native lifecycle to the exact `INSURANCE` / `TERM_PC_INSURANCE_V1` / version `1` definition. Its authority profile is `product-definition-term-pc-staff-v1`; the existing `BANKING` / `ACCOUNT_TARIFF_V1` profile remains bound to `product-definition-human-staff-v1`. A retained root or replay cannot switch authority profiles. Product creation, independent review, immutable actions, audit attribution, outbox writes, and transaction deadlines retain their existing owner checks. Publication remains `NOT_ADMITTED` for quoting, binding, issuing coverage, or financial execution.
+
+Preserve applied V1–V21 bytes and Flyway history. After the V21 preparation above, run the existing [insurance quote reader bootstrap](../ops/database/insurance-quote-purpose/bootstrap-insurance-quote-reader.sql.template) through an explicitly authorized administrator connection. Supply `PRODUCT_INSURANCE_QUOTE_READ_USERNAME`, `PRODUCT_INSURANCE_QUOTE_READ_PASSWORD`, and `PRODUCT_INSURANCE_QUOTE_READ_DATABASE` through the deployment secret mechanism. The script creates the protected non-login purpose role and a distinct restricted reader login. Then apply V22 through the same restricted installer and validate the complete migration chain. Its required role preparation applies even when application features are disabled; feature flags do not bypass Flyway preconditions.
+
+The existing `product.definitions.term-pc.enabled` and `product.definitions.insurance-quote-read.enabled` switches remain disabled by default. Enabling the TERM_PC runtime additionally requires command configuration and the exact policy profile above. Quote-purpose reads use their own credentials and current application authority; they expose a bounded product prerequisite, not a successful customer quote. Native tests use controlled principal/PDP inputs and actual PostgreSQL persistence. Genuine signed HTTP, external reference-owner observations, and the downstream quote/bind/issue journey require separate qualification.
+
 ## Administrator inputs
 
 Supply these environment variables through the deployment secret mechanism. Use normal psql connection configuration for the administrator connection. Never place passwords in command arguments, the repository, or a SQL rendering step.
