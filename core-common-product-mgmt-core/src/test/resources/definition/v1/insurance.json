@@ -1,0 +1,264 @@
+{
+  "common": {
+    "schemaVersion": 1,
+    "businessArea": "INSURANCE",
+    "profileCode": "TERM_PC_INSURANCE_V1",
+    "profileVersion": 1,
+    "code": "TERM_PC_INSURANCE_V1_DEMO",
+    "name": "Synthetic definition",
+    "description": "Synthetic exact definition fixture",
+    "portfolioCode": "RETAIL",
+    "legalEntityId": "44444444-4444-4444-4444-444444444444",
+    "market": {
+      "jurisdiction": "US",
+      "channel": "BRANCH",
+      "customerSegment": "RETAIL",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "effectiveFrom": "2026-11-01T00:00:00.000Z",
+    "effectiveTo": "2027-11-01T00:00:00.000Z",
+    "requirements": {
+      "facts": [
+        {
+          "code": "INSURED_OBJECT",
+          "sourceOwner": "core-common-customer-mgmt",
+          "factContract": "INSURED_OBJECT_V1",
+          "version": 1,
+          "contractDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "kind": "STRING",
+          "operator": "PRESENT",
+          "values": [],
+          "maxAgeSeconds": 3600,
+          "evidenceRequired": true
+        },
+        {
+          "code": "UNDERWRITING_APPROVAL",
+          "sourceOwner": "core-common-customer-mgmt",
+          "factContract": "UNDERWRITING_APPROVAL_V1",
+          "version": 1,
+          "contractDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "kind": "STRING",
+          "operator": "PRESENT",
+          "values": [],
+          "maxAgeSeconds": 3600,
+          "evidenceRequired": true
+        },
+        {
+          "code": "REFERRAL_AUTHORITY",
+          "sourceOwner": "core-common-customer-mgmt",
+          "factContract": "REFERRAL_AUTHORITY_V1",
+          "version": 1,
+          "contractDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "kind": "STRING",
+          "operator": "PRESENT",
+          "values": [],
+          "maxAgeSeconds": 3600,
+          "evidenceRequired": true
+        }
+      ],
+      "documents": [
+        {
+          "code": "CONTRACT",
+          "documentType": "CONTRACT",
+          "mandatory": true,
+          "template": {
+            "owner": "core-common-reference-master-data",
+            "kind": "DOCUMENT_TEMPLATE",
+            "id": "33333333-3333-3333-3333-333333333333",
+            "version": 1,
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "issuer": {
+            "owner": "core-common-reference-master-data",
+            "kind": "DOCUMENT_ISSUER",
+            "id": "33333333-3333-3333-3333-333333333333",
+            "version": 1,
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "layout": {
+            "owner": "core-common-reference-master-data",
+            "kind": "DOCUMENT_LAYOUT",
+            "id": "33333333-3333-3333-3333-333333333333",
+            "version": 1,
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "locale": "en-US"
+        }
+      ],
+      "dependencies": [
+        {
+          "code": "EXECUTION",
+          "capability": "TERM_PC_INSURANCE_V1",
+          "owner": "domain-product-catalog",
+          "requiredForLaunch": true
+        }
+      ]
+    }
+  },
+  "terms": {
+    "riskKind": "PROPERTY",
+    "minimumCoverageDays": 1,
+    "maximumCoverageDays": 366,
+    "premiumBasis": "FIXED_PER_POLICY",
+    "paymentSchedule": "SINGLE_PREMIUM",
+    "basePremium": {
+      "minorUnits": "10000",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "taxComponents": [
+      {
+        "code": "TAX",
+        "amount": {
+          "minorUnits": "1000",
+          "currencyPolicy": {
+            "policyId": "11111111-1111-1111-1111-111111111111",
+            "currencyId": "22222222-2222-2222-2222-222222222222",
+            "isoCode": "USD",
+            "version": 1,
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+          }
+        },
+        "policy": {
+          "owner": "core-common-reference-master-data",
+          "kind": "PREMIUM_TAX",
+          "id": "33333333-3333-3333-3333-333333333333",
+          "version": 1,
+          "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    ],
+    "totalPremium": {
+      "minorUnits": "11000",
+      "currencyPolicy": {
+        "policyId": "11111111-1111-1111-1111-111111111111",
+        "currencyId": "22222222-2222-2222-2222-222222222222",
+        "isoCode": "USD",
+        "version": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+      }
+    },
+    "coverages": [
+      {
+        "code": "BUILDING",
+        "wording": {
+          "owner": "core-common-reference-master-data",
+          "kind": "COVERAGE_WORDING",
+          "id": "33333333-3333-3333-3333-333333333333",
+          "version": 1,
+          "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "perOccurrenceLimit": {
+          "minorUnits": "10000000",
+          "currencyPolicy": {
+            "policyId": "11111111-1111-1111-1111-111111111111",
+            "currencyId": "22222222-2222-2222-2222-222222222222",
+            "isoCode": "USD",
+            "version": 1,
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+          }
+        },
+        "aggregateLimit": {
+          "minorUnits": "20000000",
+          "currencyPolicy": {
+            "policyId": "11111111-1111-1111-1111-111111111111",
+            "currencyId": "22222222-2222-2222-2222-222222222222",
+            "isoCode": "USD",
+            "version": 1,
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+          }
+        },
+        "deductible": {
+          "minorUnits": "100000",
+          "currencyPolicy": {
+            "policyId": "11111111-1111-1111-1111-111111111111",
+            "currencyId": "22222222-2222-2222-2222-222222222222",
+            "isoCode": "USD",
+            "version": 1,
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+          }
+        },
+        "groupCode": "OCCURRENCE"
+      },
+      {
+        "code": "CONTENTS",
+        "wording": {
+          "owner": "core-common-reference-master-data",
+          "kind": "COVERAGE_WORDING",
+          "id": "33333333-3333-3333-3333-333333333333",
+          "version": 1,
+          "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "perOccurrenceLimit": {
+          "minorUnits": "2000000",
+          "currencyPolicy": {
+            "policyId": "11111111-1111-1111-1111-111111111111",
+            "currencyId": "22222222-2222-2222-2222-222222222222",
+            "isoCode": "USD",
+            "version": 1,
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+          }
+        },
+        "aggregateLimit": {
+          "minorUnits": "4000000",
+          "currencyPolicy": {
+            "policyId": "11111111-1111-1111-1111-111111111111",
+            "currencyId": "22222222-2222-2222-2222-222222222222",
+            "isoCode": "USD",
+            "version": 1,
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+          }
+        },
+        "deductible": {
+          "minorUnits": "50000",
+          "currencyPolicy": {
+            "policyId": "11111111-1111-1111-1111-111111111111",
+            "currencyId": "22222222-2222-2222-2222-222222222222",
+            "isoCode": "USD",
+            "version": 1,
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "encodingVersion": "MASTERS_CURRENCY_POLICY_V1"
+          }
+        },
+        "groupCode": "OCCURRENCE"
+      }
+    ],
+    "deductibleGroups": [
+      {
+        "code": "OCCURRENCE",
+        "mode": "SHARED_MAX_ONCE_PER_OCCURRENCE"
+      }
+    ],
+    "exclusions": [
+      {
+        "owner": "core-common-reference-master-data",
+        "kind": "EXCLUSION_WORDING",
+        "id": "33333333-3333-3333-3333-333333333333",
+        "version": 1,
+        "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    ],
+    "territory": "US",
+    "cancellationRefundPolicy": "PRO_RATA_UNEARNED"
+  }
+}

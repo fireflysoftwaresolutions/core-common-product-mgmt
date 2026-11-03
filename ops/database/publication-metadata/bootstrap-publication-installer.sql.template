@@ -1,0 +1,43 @@
+-- Explicit administrator setup after original V1-V20, separate from the reader and application runtime.
+\set ON_ERROR_STOP on
+\getenv publication_migrator_login PRODUCT_PUBLICATION_MIGRATOR_USERNAME
+\getenv publication_migrator_password PRODUCT_PUBLICATION_MIGRATOR_PASSWORD
+\getenv publication_migrator_database PRODUCT_PUBLICATION_MIGRATOR_DATABASE
+\if :{?publication_migrator_login}
+\else
+DO $missing$ BEGIN RAISE EXCEPTION 'PUBLICATION_INSTALLER_INPUTS_REQUIRED' USING ERRCODE='22023'; END $missing$;
+\endif
+\if :{?publication_migrator_password}
+\else
+DO $missing$ BEGIN RAISE EXCEPTION 'PUBLICATION_INSTALLER_INPUTS_REQUIRED' USING ERRCODE='22023'; END $missing$;
+\endif
+\if :{?publication_migrator_database}
+\else
+DO $missing$ BEGIN RAISE EXCEPTION 'PUBLICATION_INSTALLER_INPUTS_REQUIRED' USING ERRCODE='22023'; END $missing$;
+\endif
+SELECT length(:'publication_migrator_login')>0 AND length(:'publication_migrator_password')>0
+   AND current_database()=:'publication_migrator_database' AS publication_installer_inputs_ok
+\gset
+\if :publication_installer_inputs_ok
+\else
+DO $missing$ BEGIN RAISE EXCEPTION 'PUBLICATION_INSTALLER_INPUTS_REQUIRED' USING ERRCODE='22023'; END $missing$;
+\endif
+BEGIN;
+CREATE ROLE :"publication_migrator_login" LOGIN NOINHERIT NOSUPERUSER NOBYPASSRLS
+    NOCREATEDB NOCREATEROLE NOREPLICATION PASSWORD :'publication_migrator_password';
+GRANT firefly_product_definition_metadata_owner TO :"publication_migrator_login"
+    WITH INHERIT TRUE, SET FALSE, ADMIN FALSE;
+GRANT firefly_product_definition_guard TO :"publication_migrator_login"
+    WITH INHERIT TRUE, SET TRUE, ADMIN FALSE;
+GRANT CONNECT ON DATABASE :"publication_migrator_database" TO :"publication_migrator_login";
+GRANT USAGE ON SCHEMA public TO :"publication_migrator_login";
+GRANT CREATE ON SCHEMA public TO :"publication_migrator_login" WITH GRANT OPTION;
+GRANT SELECT,INSERT ON public.flyway_schema_history TO :"publication_migrator_login";
+SELECT NOT pg_catalog.has_database_privilege(:'publication_migrator_login',current_database(),'CREATE,TEMPORARY')
+   AS publication_installer_defaults_bounded
+\gset
+\if :publication_installer_defaults_bounded
+\else
+DO $missing$ BEGIN RAISE EXCEPTION 'PUBLICATION_INSTALLER_DATABASE_DEFAULTS_REQUIRED' USING ERRCODE='42501'; END $missing$;
+\endif
+COMMIT;

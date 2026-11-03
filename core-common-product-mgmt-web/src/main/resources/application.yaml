@@ -19,12 +19,13 @@ spring:
 
   flyway:
     enabled: true
-    baseline-on-migrate: true
-    repair-on-migrate: true
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    clean-disabled: true
     locations: classpath:db/migration
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslMode=${DB_SSL_MODE}
-    user: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=${DB_SSL_MODE}
+    user: ${FLYWAY_USERNAME:${DB_USERNAME}}
+    password: ${FLYWAY_PASSWORD:${DB_PASSWORD}}
 
   threads:
     virtual:
@@ -72,3 +73,23 @@ logging:
     io.fireflysoftware: DEBUG
     org.springframework.r2dbc: DEBUG
     org.flywaydb: DEBUG
+
+firefly:
+  openapi:
+    instant-scalar:
+      enabled: true
+  security:
+    resource-server:
+      issuer: ${PRODUCT_DEFINITION_ISSUER:}
+      audiences: ${PRODUCT_DEFINITION_AUDIENCE:}
+      jwk-set-uri: ${PRODUCT_DEFINITION_JWKS_URI:}
+      tenant-claim-paths: [tenant_id]
+      tenant-required: true
+      scope-claim-paths: [scope, scp]
+      strict-policy: true
+
+product:
+  definitions:
+    serving:
+      policy-base-url: ${PRODUCT_DEFINITION_POLICY_URL:}
+      policy-path: ${PRODUCT_DEFINITION_POLICY_PATH:}

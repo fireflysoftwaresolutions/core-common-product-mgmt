@@ -1,0 +1,2791 @@
+{
+  "adapters": [],
+  "ci_jdks": [
+    "25",
+    "25"
+  ],
+  "conditions": [],
+  "config_files": [
+    "core-common-product-mgmt-sdk/src/main/resources/api-spec/openapi.yml",
+    "core-common-product-mgmt-sdk/src/main/resources/openapi.yml",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/ProductManagementApplication.java",
+    "core-common-product-mgmt-web/src/main/resources/application.yaml"
+  ],
+  "docs": [
+    {
+      "path": "docs/governed-product-definitions.md",
+      "title": "Governed product definitions and native storage"
+    }
+  ],
+  "editorial_sha256": "d7cfd3e6ae768f538876ba04a917b23816682932ee7029f8128b2b141c40b3be",
+  "errors": [
+    {
+      "evidence": "new RuntimeException(\"Error parsing product marketing_features JSON\", e);",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductMapper.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Error serialising product marketing_features\", e);",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductMapper.java"
+    },
+    {
+      "evidence": "new IllegalArgumentException(\"COST_DEFINITION_INVALID\");",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRules.java"
+    },
+    {
+      "evidence": "new IllegalStateException(\"SHA-256 unavailable\", e);",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonical.java"
+    },
+    {
+      "evidence": "new IllegalArgumentException(\"DEFINITION_SHAPE\");",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonical.java"
+    },
+    {
+      "evidence": "new IllegalArgumentException(\"CHECKER_IDENTITY_REQUIRED\");",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRules.java"
+    },
+    {
+      "evidence": "new IllegalArgumentException(\"HUMAN_CHECKER_REQUIRED\");",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRules.java"
+    },
+    {
+      "evidence": "new IllegalArgumentException(\"REVIEW_CONTRIBUTORS_REQUIRED\");",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRules.java"
+    },
+    {
+      "evidence": "new IllegalArgumentException(\"INDEPENDENT_CHECKER_REQUIRED\");",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRules.java"
+    },
+    {
+      "evidence": "new IllegalArgumentException(\"DEFINITION_RULE at \" + path);",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRules.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Parent category not found with ID: \" + parentCategoryId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Category not found with ID: \" + categoryId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Category not found with ID: \" + categoryId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"A category cannot be its own parent\"));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Category not found with ID: \" + categoryId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Cannot delete category with ID \" + categoryId + \" because it has child categories\"));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Parent category not found with ID: \" + parentCategoryId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Circular reference detected: category cannot be an ancestor of itself\"));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Configuration not found with ID: \" + configId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductConfigurationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Configuration with ID \" + configId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductConfigurationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Configuration not found for product \" + productId + \" with key \" + configKey)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductConfigurationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Configuration not found with ID: \" + configId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductConfigurationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Configuration with ID \" + configId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductConfigurationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Configuration not found with ID: \" + configId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductConfigurationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Configuration with ID \" + configId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductConfigurationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation requirement not found with ID: \" + requirementId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationRequirementServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation requirement with ID \" + requirementId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationRequirementServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation requirement not found for product \" + productId + \" with type \" + docType)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationRequirementServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation requirement not found with ID: \" + requirementId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationRequirementServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation requirement with ID \" + requirementId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationRequirementServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation requirement not found with ID: \" + requirementId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationRequirementServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation requirement with ID \" + requirementId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationRequirementServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation not found with ID: \" + documentationId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation with ID \" + documentationId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation not found with ID: \" + documentationId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation with ID \" + documentationId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation not found with ID: \" + documentationId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Documentation with ID \" + documentationId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Localization not found with ID: \" + localizationId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductLocalizationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Localization with ID \" + localizationId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductLocalizationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Localization not found with ID: \" + localizationId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductLocalizationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Localization with ID \" + localizationId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductLocalizationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Localization not found with ID: \" + localizationId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductLocalizationServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Localization with ID \" + localizationId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductLocalizationServiceImpl.java"
+    },
+    {
+      "evidence": "new BusinessException(",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductPricingAggregatorServiceImpl.java"
+    },
+    {
+      "evidence": "HttpStatus.NOT_FOUND",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductPricingAggregatorServiceImpl.java"
+    },
+    {
+      "evidence": "new BusinessException(",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductPricingAggregatorServiceImpl.java"
+    },
+    {
+      "evidence": "HttpStatus.BAD_GATEWAY",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductPricingAggregatorServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"A product cannot be related to itself\"));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Relationship not found with ID: \" + relationshipId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Relationship with ID \" + relationshipId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Relationship not found with ID: \" + relationshipId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Relationship with ID \" + relationshipId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"A product cannot be related to itself\"));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Relationship not found with ID: \" + relationshipId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Relationship with ID \" + relationshipId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Product not found with ID: \" + productId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Product not found with ID: \" + productId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Product not found with ID: \" + productId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Product version not found with ID: \" + versionId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductVersionServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Product version with ID \" + versionId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductVersionServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Product version not found with ID: \" + versionId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductVersionServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Product version with ID \" + versionId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductVersionServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Product version not found with ID: \" + versionId)))",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductVersionServiceImpl.java"
+    },
+    {
+      "evidence": "new RuntimeException(\"Product version with ID \" + versionId + \" does not belong to product \" + productId));",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductVersionServiceImpl.java"
+    },
+    {
+      "evidence": "HttpStatus.CREATED",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductCategoryController.java"
+    },
+    {
+      "evidence": "HttpStatus.CREATED",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductConfigurationController.java"
+    },
+    {
+      "evidence": "HttpStatus.CREATED",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java"
+    },
+    {
+      "evidence": "HttpStatus.CREATED",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java"
+    },
+    {
+      "evidence": "HttpStatus.CREATED",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationRequirementController.java"
+    },
+    {
+      "evidence": "HttpStatus.CREATED",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductLocalizationController.java"
+    },
+    {
+      "evidence": "HttpStatus.CREATED",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductRelationshipController.java"
+    },
+    {
+      "evidence": "HttpStatus.CREATED",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductVersionController.java"
+    }
+  ],
+  "files": {
+    ".github/workflows/maven-central.yml": "218190fe5d86c50917537998330b6c742eeafdff4dd703b1935887bf3a1339d2",
+    ".github/workflows/release.yml": "bc6a62808ec0784a3ee8b66a667705f2186589edd9c43a6d86e6ebfd02600fe0",
+    ".idea/compiler.xml": "2ac2d590c09e58ca896551d1fd68a46418b545df5bf7e2ce48665c2260e27711",
+    ".idea/encodings.xml": "653c6e6997ec925e2d34e9d1d9c496a83ea9870e09ae103434ce8a1b9ea82df9",
+    ".idea/jarRepositories.xml": "1cfca68ff758325f104b2d4cab5f9966f095240a1d8cb6d64a0d1be41a316784",
+    ".idea/misc.xml": "0a94383fa65a27ad035f565ad7eb3b688764eed96ebce15f2768f658c0543a6e",
+    ".idea/vcs.xml": "6323e12648862a0a96fc0d7877672817d6cd91e2c2a3c3d78f1090db23c6e88e",
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "core-common-product-mgmt-core/pom.xml": "fa05ee808abd4871ad8d78615810d253444e88c5c7c384b85751b6d91fcc2d7a",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductCategoryMapper.java": "848fc191b5c0934315ac20566efd4ac1fc1a5e25817ff900ddd64eb532e7f0ea",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductConfigurationMapper.java": "eec8d3cc74a6bc48310c33cfa787d60878de29c40b4ce0a7354d21486cf49bcc",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductDocumentationMapper.java": "0097389bc43245183bd5a2d0d8bce0ae9f7cb749e4c520777227f60ecc02f144",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductDocumentationRequirementMapper.java": "81331fbd4e66bf3b9d8cce1d690f60e6db51af94f430f01efac7236c6fb57bda",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductLocalizationMapper.java": "882985e667641db40c9e0d21d06d950e65941149282ab1f5aa690cd182d893b8",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductMapper.java": "ba5188a56350aed882064221fbf6395897010cdaea480b0ce3e67455b6a64df6",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductRelationshipMapper.java": "e5cef2f20b80cdb6cc7d0833ce5be314abe5ea27b7ccfb6a3899ac4dfe2b367c",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/mappers/ProductVersionMapper.java": "a7e8abdf27831a8aa35ddf0efc858da8c89c539ff02dcbc02993b034e3aef12a",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductCategoryService.java": "8f0eae9528493e6dde84e57f6588205d54fb330bc9591abba4d1eb089ac3e503",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductConfigurationService.java": "1e976af4bf8f65f38592dc9dcb453cae199f85922324c5fe1ea580cf8f9c5b24",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductDocumentationRequirementService.java": "233bfa555cbbb7b0215fd6a77ebe2aade9e32a6dc82b143ba2f03c16ce37e1ef",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductDocumentationService.java": "be5975e5e9cb6f4ae65bef21e208dd0a0753b13997391cbf9d4e40c182ad43ca",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductLocalizationService.java": "51e380ed3f753508e4bbf18142718ee8809036960070d342daf8a81ad06a4eac",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductPricingAggregatorService.java": "7bed4ef7c2788c03cd91e7f571e1569b3e96948149fbc84c2961570012573d1a",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductRelationshipService.java": "d6aa5a78b793b0852815f9ced0c3f43f60702e6d3d61bf35738453b1120af40e",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductService.java": "b6ce437fe41adf4f09db4354939517874eb22d70f1cb7e37d3fc7dd458435e84",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductVersionService.java": "1e74b5acfe423a6ca38714bf8b3ba5f8cc480e0e161c3f4634da88c62e546adb",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/AccountTariffRules.java": "cea47b77c4030fdc88934d02c24b54c2b60a9c6cb94c4c75feb68eb5859e6d8a",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRules.java": "3b356085de41fca28b6eb55ecd5d1db0394cd020b439c912a967a27ab6040cf8",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonical.java": "3d5bf121899e04ecf8050f06de610c899e4de7fac431c91bfe75e733717d8570",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionEnvelopeRules.java": "fe41c30dd2d0ed4705ce491de6e7a48dd94fe2ff61ce71f69fc60713113617ed",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionProfileSupport.java": "6a5bd67c141575a7b8423d3b148eaed31c8928f78b0c1719c22b59aaf62741e4",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionProfiles.java": "8d4ca1270c8dffe8d17d8a50107ce5d0c13f9d2443a8dab769a91a1636974b8d",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRules.java": "a589b975a27d8ef5cbf0ec85e591c1fad47ce452231ad1f397a1687bb577a7bf",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRules.java": "fe96ac7c5f7a89030e91f7516fe96137355c888eb989eb015fe99841d671b557",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/FixedRateInstallmentLoanRules.java": "5f3ff6c54944a60e1b83b5e44501a5991443e0bd601be08b223cfea10272831f",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/definition/v1/TermPcInsuranceRules.java": "bd9a11907aeb4d3e3600c035b0bdbfc256ba0eab43467ee98148b3f723517a25",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductCategoryServiceImpl.java": "4c3ad2c346ee57e8adf2b60bec3209b44b254089a3a3a28c8a2f93e024a19871",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductConfigurationServiceImpl.java": "ae01d775e7ba8eaa8992c1d1397ef08dcbf6ae263a1dfaa13a2f50010afd9ec8",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationRequirementServiceImpl.java": "f6f0da209b1cd241b544cc8fd13e670b613e1156e40b7a6c1f81253101c2c74d",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductDocumentationServiceImpl.java": "45f6b8931ddf78171b29002bd57008948bf55633416369853fc6b3f559f1fa5b",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductLocalizationServiceImpl.java": "ed9998f976b0e2de4943dadc6e83e44a990218f12b818526a2b578d84c5324b5",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductPricingAggregatorServiceImpl.java": "f42c64e8773b2b17fede7cdc22029e56c18437fe8212b0dcbb9b1b146e93d5df",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImpl.java": "e4786d9a112001b1ebdfbcf11e4e33a75447f8ddf7bd90917436495f9e1a465d",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductScope.java": "efd6edff7a92ff56bfde3dc760aff146672a9c5072a860d609dd0b1893234eeb",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImpl.java": "fbf9a0e2223cb1e05b167642c00cffe8dfc1f422937ff150b75e901764fc2f31",
+    "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/impl/ProductVersionServiceImpl.java": "088c95d35e5c6a55bb5a220def3d87b7cded4347dbc0a3dffb4c7df5e854ac7f",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/README.md": "de0da50dee0c3ef4784f94f6d7f8417875d89a7dfbb55b38ba4a5d3d632dee94",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java": "61ba7f2c788cddbd4524b39a3112bc177e4e435432a3316122b862ededecdda8",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java": "8ddcc4d0e0716644d553394688e0e56eea880d74cb483f3ef6ab3f991ff777df",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/AccountTariffRulesTest.java": "b98bff7a21551962825cf829ce4aa1ef2c6a8ff02a3bbf7b3f87d9503795f444",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRulesTest.java": "f286e216ecaa37c3267bb4f2f9ca26fa4db05e08424ff2568fbe2280b5f7f2b0",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonicalTest.java": "f96eecc6c10fbbe693d335cf95667078002455151524066ce2178f3410e6c1a1",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionEnvelopeRulesTest.java": "ec8ca09888919228d6d853e9fb487f3937157b052883de571bd527a45e35d786",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRulesTest.java": "5b912db9d070106fee8b2ff238bcf37196fe9470b589c88180e0322c6fa8c204",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java": "1807125aad360b209de3026cc3a889604f9abb27a15e1660ba79d1c6788e624e",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/FixedRateInstallmentLoanRulesTest.java": "1e2e128f6a46e614c87febb921a6656f75568241b1c1c5d0c421de3232d31dc3",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java": "353d4ee4abd510e39979dab3e4b464ef19c4478ba9c8b7f1dc9d71cbec2fe390",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProfileFixtures.java": "bfd0e8b2b36728f3f931123a04488f59cbdc8883e23c06041cbca606f3a55491",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/TermPcInsuranceRulesTest.java": "682ce34aafedf03aa3d8b777fb2bf0bbaa9b28e9471a82ea440a72087d5c0dc5",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImplTest.java": "d74bb2ad5c58898008f0fddfe88e2ce2295e171e9d6a3509d2aa4ab07125b448",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImplTest.java": "681bc4a1ef571fbd117ee7fb7ee6618e173e56a057c4a70b5bb9c17d176f1438",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java": "2338cb13b78717f39479a70ec7dd0385d7913ab1b9458dcdaf59da2015bb5e2d",
+    "core-common-product-mgmt-core/src/test/resources/definition/v1/account.json": "f1f136c246b4cb308a8f10c26fe4ca916f4b3489fe539e4ebbf6ce3e2142b94a",
+    "core-common-product-mgmt-core/src/test/resources/definition/v1/insurance.json": "d798c655e714f1aa5e4a431d1eb850d6950d8af8fe9f9cd524a8a840812a9e7f",
+    "core-common-product-mgmt-core/src/test/resources/definition/v1/loan.json": "3a178af837842ce37b626f726a04e84af3878390737ab25bfb6b289683ee03fa",
+    "core-common-product-mgmt-interfaces/pom.xml": "5d89d5c384f6f7e04321588763f395632760c65938ab5af4b35639e8be8c746e",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/BaseDTO.java": "316cc05ba7e37851ff1ce4adbf04605583a0bc67098bd77845598b9e789d8391",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/FeeDefinitionDTO.java": "12e2c4def8d2778c2ff9fbdf522676041cfd52e4d2cddf897f444ed51174ee09",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/InterestRateBracketDTO.java": "ca74c055d59c4cd3d65f20f3245ac0a671b603986da31d35b7a6f5f26a536539",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductCategoryDTO.java": "30a65b8a272df064d22da4acccfdd13735824795ceed6b91817c5aef7facd642",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductConfigurationDTO.java": "53c27b0079e36a0a4ca2f4b1d17c2d1e607f765803c05033aa52094ad08ff0ef",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductDTO.java": "201b1a2ff3495de55805938f3e21e30d43651167dac0a79deed93215455056b6",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductDocumentationDTO.java": "cdb7af51317b78ae131bb7bb03dce5f1c24d4a9e3044ac0771812d22aecfa161",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductDocumentationRequirementDTO.java": "5e5d6e827939c1dc9241b7d9024cf82b66ff8b2a67851c05d6beb19ad2cc8843",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductLocalizationDTO.java": "d6d9e2afb232854900fd18e6b8ac0b3052a9a46b6eb09583b59649431fa4799e",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductPricingDTO.java": "8a2af4d5b5839b3a659caf0c69e1ac9272b8e9bb125238bc8307f23750ad4d3f",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductRelationshipDTO.java": "5386641730fc767bbdbaa3017f73c42d885c14b5dc960c4a24865e0c9596bdb8",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductVersionDTO.java": "6f7500dfdcaab1afcb1c2a941b797c00174c6c8f41dc1e016c5c2d8126c51205",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/AccountTariffTerms.java": "99e3510cde46522066c10352436848c8febd3541d03e3d9e6b28d0711546bfdf",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/CostTerms.java": "0ef2a65dccf185d50da4ff59c3a2867b4ebef7e7e417c8a3fd845d5d9aa3ab20",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/DefinitionContracts.java": "276f0279cfc54d468db6f9f9f9ce672b51d62a4027029c9f62712613696e01b2",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/FixedRateInstallmentLoanTerms.java": "0e1960694bb96e6bcc0173e60896bac1e70f408e7adcd92254accb823d7d0c44",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/TermPcInsuranceTerms.java": "93446657f032bb9b9e882ed8b2ac7be702fec757cbcbc68c0518d598a684362c",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/enums/BundleStatusEnum.java": "f9ca2f7e2090f87b3d47ff9aef5d9a8f82dddde887994ec7f95fe357ee02ff60",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/enums/ContractingDocTypeEnum.java": "4b68550f717ed82b46804b2335c467716b2186f3bb045f1a8962e19fe4ec40af",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/enums/DocTypeEnum.java": "b2ffe4fec7487fd4e0ee15e1d76bc80ab240b351e5e1da5477977f0d72b8df93",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/enums/ProductConfigTypeEnum.java": "0ff89237b31e22b7ea750b17fd1ff0b47bb2c01767344f7764366ee6ee55f714",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/enums/ProductStatusEnum.java": "d60dcbeb988fab4a76547c1fb47396d5c55f09ccc558a0d2aa9dda682e89ac7b",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/enums/ProductTypeEnum.java": "fbbf4fcb3326a82b57da3a801653292ed3b32817647daf2ce27f64f622df7f51",
+    "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/enums/RelationshipTypeEnum.java": "6ca2d5d62f57617dab80392ab296292f5694402c70c199a33ca9255f13843c3c",
+    "core-common-product-mgmt-models/pom.xml": "4552cef67d65ae6c0a0b2efe054873eb4a5dc634f88f74d0e7d97e89b2ce4a42",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/config/R2dbcConfiguration.java": "9cf20733ed53d9b962fbffa7d7fdb03714d6fbe6c415f1f9e0feca82a9ad795d",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/BaseEntity.java": "228de91ed31d5161fc5d47aafab3c920f27d2ce6cd5b6f416865e32de281185d",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/Product.java": "0cd4cac4425543fdef447a1d1d6399398a9d5753e55ac26a0a961bafc09dc820",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductCategory.java": "4b0b1359b4aefaf0e4a69c1d0b08caa732e644671f8c2705e308ced7ebc49dcc",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductConfiguration.java": "83e2ce3414f6c6cdf413067314139ce3d8a05e1e9c7b3f64e6ddf151820f2097",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductDocumentation.java": "49d9e26dedb54a355e23defc6a389409e9cfcaa83ddfbc617b47304da2ae12b5",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductDocumentationRequirement.java": "15e27e25e2d2066301a6b2448b00ea8b1e14fa76be9848d559937863a7ac3ad6",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductLocalization.java": "e0fc78004d9eb388b7b8cb198fc953684715610b631152ead9103a0c64415ab7",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductRelationship.java": "fec2c7a378e155204d40390c4d591424090ea5a948f57aaf88f4a7acd1a6c23c",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductVersion.java": "e4ed7d7d17ec69e4f5beee9de41294f886561c60f10c1c7ec545d519a5c48cf6",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/BaseRepository.java": "67025c683431f663d9cff5769addbfddfbe1ae1dd9f7e85b33ae9e485bdf43b9",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/ProductCategoryRepository.java": "cc3423dfb3ef0c97116f51bdd9a727addf462a0373e292b94b7c3b2be75cfa5a",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/ProductConfigurationRepository.java": "7c6570be8f42a5620d4a8338c57ee5f4f0226a30c997facf408b235af8d05b87",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/ProductDocumentationRepository.java": "2fedbc5c2ef1adf7448243e5b66f24ef6e5a677af687c3da0496cd319f7eaa2c",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/ProductDocumentationRequirementRepository.java": "56d01a23ac716b535c4f441b63a4dab9da009192e99bdf52bde155e254e97c93",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/ProductLocalizationRepository.java": "3d3c059fb5712248a82a6f8161ae1220938c64f4c74bcb2bfc3040d21359ea2d",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/ProductRelationshipRepository.java": "86c7f9b99603416dc1dbed51a326d0002c0edebd34f7491527bf82e458747722",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/ProductRepository.java": "f5c4311f2e27aa8dfe0fbcc07fa9c4226839947e598b0d1bfc5c0a278fb79c1f",
+    "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/repositories/ProductVersionRepository.java": "1dccaff92f16f459e275d3483dbcf66b79f2c41a3ed57178217e59490de6a6af",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V10__Create_product_configuration_table.sql": "faa5d34930345c37a83def5d67b3eb86009b9c87d1ac0d82deb1d7154c3988ad",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V11__Add_tenant_id_to_product.sql": "529b3ade75f4cff8425d62aa15c9cd878daf65d872f8985c7060f5031ada5e58",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V12__Seed_Demo_Lending_Products_Configuration.sql": "2fc88cbed86601728da493d2723209d371f16e971bba87d49aed35b788fb0cc2",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V13__Add_Marketing_Features_To_Product.sql": "b6a3be198f0ed960cb8d75c7d455f45b31aa320d88cb7a93126735e8d5b124b4",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V14__Add_jsonb_implicit_cast.sql": "6e1dc0be4b578973170d4f93481c373951891a5cfd07f0bb38f7f28c995869ed",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V15__Add_draft_product_status.sql": "d90271392c09b40d4b7e1a1e658da29a180eb63c97e4f0fba975c222ae101b6b",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V16__Cascade_product_children.sql": "605906eb4b554602bc8a2cd2604aca4ae34fe2c24bed6c64a8d2e4a7e8119967",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V17__Create_Casts_Product_Config_Type.sql": "8a25491693c6085d513ebf834e3e5e5b2556a0f730627a652acd90a0ebfa181e",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V18__Create_governed_product_definitions.sql": "a2a4f0c90fa06be935ffcb1ac1d9c5fc076d5fae42c1613b7f85322aa2ee4076",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V1__Create_enums.sql": "8779cbe3d07d2838974306608c2ef916b81bf35bddde5eaed9179e46a84380e9",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V2__Create_tables.sql": "5e56e83eb04eafdbd40e5aa0fa14ce183e94765f707b2d89cdc1500d79de6260",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V3__Create_casts.sql": "3fed50d14d8b8ccf1c590a8a9764e0405453f22c5c3b2e885f4d7d543cab997e",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V4__Add_contracting_doc_type.sql": "070c2a150d563515e1c49ca8cada5376a31137bc2897e01ca0533948dc693aa7",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V5__Create_Casts_Contracting_Doc_Type.sql": "4a0c1c88c29ba5f91325d91d21b0cabfadbee66f478af3b9a7849de1d4fe1bd7",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V6__Change_version_number_to_long.sql": "7a2ec5d3bfc2a9e570bc1d21011bb769fb739df4837fc3e17f22c3c07d8d5bd0",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V7__Remove_lifecycle_fees_features_pricing_limit.sql": "c927a7c0e2383afd005c9ca35eaddf964d1838cf055e90066621ed75802b7bfd",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V8__Refactor_category_hierarchy.sql": "718ce0980d4514d3649bc3467266ef10bd7d3a2752d7696de4202ad5ca657c12",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V9__Remove_product_bundle.sql": "e9375f9d474bb588e38a8be42c5702da222ac92e1f2c9a41ec11b0ef481b6ec2",
+    "core-common-product-mgmt-sdk/pom.xml": "fa95856db40c6ed660bc3b5b872413ae967f4d6edf0c8d9f07c20eddcb04ab2f",
+    "core-common-product-mgmt-sdk/src/main/resources/api-spec/openapi.yml": "4938ea4c81f9594f9b861035b27f53a393cb3631b25d8c43e2df4585c2b10d8b",
+    "core-common-product-mgmt-sdk/src/main/resources/openapi.yml": "be68a9932684c422409503ece0d413edfa0ad84e3695af38b19f2487b30329b1",
+    "core-common-product-mgmt-web/pom.xml": "179a26741880f32f0292904461a5296f9cebaf9c22b57cac0940119dbc874633",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/ProductManagementApplication.java": "39b2d0e20da36949b514f2f7b2ae13f3258e882db17b43f776706ebc6c24ed59",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductCategoryController.java": "eecfbc1c1a97b43756a3c224f485fae9a0c84070f48e3c213026b5135b1e6856",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductConfigurationController.java": "203a71ddb4a41c9f324a9af8eb62c881d56de29bccbd5957f018e949d4fcbaa3",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java": "a33312d4571745f02019226297d0e3328e06fd7e78dda8387db25b0c20cf5242",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java": "a18112aee23b260dfe98bf07214ed9d6e87867addbfee82caa708a453e51d0dc",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationRequirementController.java": "392fb864de7f67c8da17d6bf568c8d602f61273651b165d0f29d40f36d945f07",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductLocalizationController.java": "1416fdab3b678e548ef844c233e2b8a4982e1ec27584a798fa80fe5c8aabb2a6",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductPricingAggregatorController.java": "59b6c2a31cffdf9356421551cab231388fc1759048d98009e540f072e2a14af8",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductRelationshipController.java": "5953e0ca3cc31170d621aa6753e83c4ce374e41159fc50abdcd46584e0f600c2",
+    "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductVersionController.java": "ef5595fd154d1159e757ce75b47a307e80316e89472ec389b627d0bffb2f4fed",
+    "core-common-product-mgmt-web/src/main/resources/application.yaml": "0f6385830db2143fe7348825b4959a71345c3a858bcf67b1aa46ab849fcaddc6",
+    "core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductPricingAggregatorControllerTest.java": "228651f0672dd618f74ad65cea62a3c2e7deeb14ccee1d08a984dc2ce02267e1",
+    "core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/openapi/OpenApiGenApplication.java": "e2121eec4c8b488ca6c2694621253b84683618e4e1ba4414e64eb3054e7b3abd",
+    "docs/governed-product-definitions.md": "4faa43739a2934895d389f0291e5de60969cb1866d0e266843933ef8a542ad8c",
+    "pom.xml": "100b9a0a9e768d660bc52a5688ab3f02709b87c031124a859b0472a228c68fc7"
+  },
+  "migrations": [
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V10__Create_product_configuration_table.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V11__Add_tenant_id_to_product.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V12__Seed_Demo_Lending_Products_Configuration.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V13__Add_Marketing_Features_To_Product.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V14__Add_jsonb_implicit_cast.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V15__Add_draft_product_status.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V16__Cascade_product_children.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V17__Create_Casts_Product_Config_Type.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V18__Create_governed_product_definitions.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V1__Create_enums.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V2__Create_tables.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V3__Create_casts.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V4__Add_contracting_doc_type.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V5__Create_Casts_Contracting_Doc_Type.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V6__Change_version_number_to_long.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V7__Remove_lifecycle_fees_features_pricing_limit.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V8__Refactor_category_hierarchy.sql",
+    "core-common-product-mgmt-models/src/main/resources/db/migration/V9__Remove_product_bundle.sql"
+  ],
+  "modules": [
+    "core-common-product-mgmt-core",
+    "core-common-product-mgmt-interfaces",
+    "core-common-product-mgmt-models",
+    "core-common-product-mgmt-web",
+    "core-common-product-mgmt-sdk"
+  ],
+  "operations": [
+    {
+      "abstract": false,
+      "mapping": "\"/{categoryId}\"",
+      "method": "getCategoryById",
+      "owner": "ProductCategoryController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductCategoryController.java",
+      "route": "/api/v1/categories/{categoryId}",
+      "signature": "public Mono<ResponseEntity<ProductCategoryDTO>> getCategoryById( @Parameter(description = \"Unique identifier of the product category\", required = true) @PathVariable UUID categoryId)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/filter\"",
+      "method": "filterCategories",
+      "owner": "ProductCategoryController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductCategoryController.java",
+      "route": "/api/v1/categories/filter",
+      "signature": "public Mono<ResponseEntity<PaginationResponse<ProductCategoryDTO>>> filterCategories( @Parameter(description = \"Filter criteria for categories\", required = true) @Valid @RequestBody FilterRequest<ProductCategoryDTO> filterRequest)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "",
+      "method": "createCategory",
+      "owner": "ProductCategoryController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductCategoryController.java",
+      "route": "/api/v1/categories",
+      "signature": "public Mono<ResponseEntity<ProductCategoryDTO>> createCategory( @Parameter(description = \"Category data to create\", required = true) @Valid @RequestBody ProductCategoryDTO categoryDTO)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{categoryId}\"",
+      "method": "updateCategory",
+      "owner": "ProductCategoryController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductCategoryController.java",
+      "route": "/api/v1/categories/{categoryId}",
+      "signature": "public Mono<ResponseEntity<ProductCategoryDTO>> updateCategory( @Parameter(description = \"Unique identifier of the product category\", required = true) @PathVariable UUID categoryId, @Parameter(description = \"Updated category data\", required = true) @Valid @RequestBody ProductCategoryDTO categoryDTO)",
+      "verb": "PUT"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{categoryId}\"",
+      "method": "deleteCategory",
+      "owner": "ProductCategoryController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductCategoryController.java",
+      "route": "/api/v1/categories/{categoryId}",
+      "signature": "public Mono<ResponseEntity<Void>> deleteCategory( @Parameter(description = \"Unique identifier of the product category\", required = true) @PathVariable UUID categoryId)",
+      "verb": "DELETE"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{configId}\"",
+      "method": "getConfigurationById",
+      "owner": "ProductConfigurationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductConfigurationController.java",
+      "route": "/api/v1/products/{productId}/configurations/{configId}",
+      "signature": "public Mono<ResponseEntity<ProductConfigurationDTO>> getConfigurationById( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the product configuration\", required = true) @PathVariable UUID configId)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/by-key/{configKey}\"",
+      "method": "getConfigurationByKey",
+      "owner": "ProductConfigurationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductConfigurationController.java",
+      "route": "/api/v1/products/{productId}/configurations/by-key/{configKey}",
+      "signature": "public Mono<ResponseEntity<ProductConfigurationDTO>> getConfigurationByKey( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Configuration key\", required = true) @PathVariable String configKey)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/by-type/{configType}\"",
+      "method": "getConfigurationsByType",
+      "owner": "ProductConfigurationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductConfigurationController.java",
+      "route": "/api/v1/products/{productId}/configurations/by-type/{configType}",
+      "signature": "public Flux<ProductConfigurationDTO> getConfigurationsByType( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Configuration type\", required = true) @PathVariable ProductConfigTypeEnum configType)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/filter\"",
+      "method": "filterConfigurations",
+      "owner": "ProductConfigurationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductConfigurationController.java",
+      "route": "/api/v1/products/{productId}/configurations/filter",
+      "signature": "public Mono<ResponseEntity<PaginationResponse<ProductConfigurationDTO>>> filterConfigurations( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Filter criteria for configurations\", required = true) @Valid @RequestBody FilterRequest<ProductConfigurationDTO> filterRequest)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "",
+      "method": "createConfiguration",
+      "owner": "ProductConfigurationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductConfigurationController.java",
+      "route": "/api/v1/products/{productId}/configurations",
+      "signature": "public Mono<ResponseEntity<ProductConfigurationDTO>> createConfiguration( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Configuration data to create\", required = true) @Valid @RequestBody ProductConfigurationDTO configDTO)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{configId}\"",
+      "method": "updateConfiguration",
+      "owner": "ProductConfigurationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductConfigurationController.java",
+      "route": "/api/v1/products/{productId}/configurations/{configId}",
+      "signature": "public Mono<ResponseEntity<ProductConfigurationDTO>> updateConfiguration( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the product configuration\", required = true) @PathVariable UUID configId, @Parameter(description = \"Updated configuration data\", required = true) @Valid @RequestBody ProductConfigurationDTO configDTO)",
+      "verb": "PUT"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{configId}\"",
+      "method": "deleteConfiguration",
+      "owner": "ProductConfigurationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductConfigurationController.java",
+      "route": "/api/v1/products/{productId}/configurations/{configId}",
+      "signature": "public Mono<ResponseEntity<Void>> deleteConfiguration( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the product configuration\", required = true) @PathVariable UUID configId)",
+      "verb": "DELETE"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{productId}\"",
+      "method": "getProductById",
+      "owner": "ProductController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java",
+      "route": "/api/v1/products/{productId}",
+      "signature": "public Mono<ResponseEntity<ProductDTO>> getProductById( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/filter\"",
+      "method": "filterProducts",
+      "owner": "ProductController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java",
+      "route": "/api/v1/products/filter",
+      "signature": "public Mono<ResponseEntity<PaginationResponse<ProductDTO>>> filterProducts( @Parameter(description = \"Filter criteria for products\", required = true) @Valid @RequestBody FilterRequest<ProductDTO> filterRequest)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "",
+      "method": "createProduct",
+      "owner": "ProductController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java",
+      "route": "/api/v1/products",
+      "signature": "public Mono<ResponseEntity<ProductDTO>> createProduct( @Parameter(description = \"Product data to create\", required = true) @Valid @RequestBody ProductDTO productDTO)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{productId}\"",
+      "method": "updateProduct",
+      "owner": "ProductController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java",
+      "route": "/api/v1/products/{productId}",
+      "signature": "public Mono<ResponseEntity<ProductDTO>> updateProduct( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Updated product data\", required = true) @Valid @RequestBody ProductDTO productDTO)",
+      "verb": "PUT"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{productId}\"",
+      "method": "deleteProduct",
+      "owner": "ProductController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductController.java",
+      "route": "/api/v1/products/{productId}",
+      "signature": "public Mono<ResponseEntity<Void>> deleteProduct( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId)",
+      "verb": "DELETE"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{docId}\"",
+      "method": "getDocumentationById",
+      "owner": "ProductDocumentationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java",
+      "route": "/api/v1/products/{productId}/documentation/{docId}",
+      "signature": "public Mono<ResponseEntity<ProductDocumentationDTO>> getDocumentationById( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the documentation item\", required = true) @PathVariable UUID docId)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/filter\"",
+      "method": "filterDocumentation",
+      "owner": "ProductDocumentationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java",
+      "route": "/api/v1/products/{productId}/documentation/filter",
+      "signature": "public Mono<ResponseEntity<PaginationResponse<ProductDocumentationDTO>>> filterDocumentation( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Filter criteria for documentation\", required = true) @Valid @RequestBody FilterRequest<ProductDocumentationDTO> filterRequest)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "",
+      "method": "createDocumentation",
+      "owner": "ProductDocumentationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java",
+      "route": "/api/v1/products/{productId}/documentation",
+      "signature": "public Mono<ResponseEntity<ProductDocumentationDTO>> createDocumentation( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Documentation data to create\", required = true) @Valid @RequestBody ProductDocumentationDTO documentationDTO)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{docId}\"",
+      "method": "updateDocumentation",
+      "owner": "ProductDocumentationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java",
+      "route": "/api/v1/products/{productId}/documentation/{docId}",
+      "signature": "public Mono<ResponseEntity<ProductDocumentationDTO>> updateDocumentation( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the documentation item\", required = true) @PathVariable UUID docId, @Parameter(description = \"Updated documentation data\", required = true) @Valid @RequestBody ProductDocumentationDTO documentationDTO)",
+      "verb": "PUT"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{docId}\"",
+      "method": "deleteDocumentation",
+      "owner": "ProductDocumentationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationController.java",
+      "route": "/api/v1/products/{productId}/documentation/{docId}",
+      "signature": "public Mono<ResponseEntity<Void>> deleteDocumentation( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the documentation item\", required = true) @PathVariable UUID docId)",
+      "verb": "DELETE"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{requirementId}\"",
+      "method": "getDocumentationRequirementById",
+      "owner": "ProductDocumentationRequirementController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationRequirementController.java",
+      "route": "/api/v1/products/{productId}/documentation-requirements/{requirementId}",
+      "signature": "public Mono<ResponseEntity<ProductDocumentationRequirementDTO>> getDocumentationRequirementById( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the documentation requirement\", required = true) @PathVariable UUID requirementId)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/by-type/{docType}\"",
+      "method": "getDocumentationRequirementByType",
+      "owner": "ProductDocumentationRequirementController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationRequirementController.java",
+      "route": "/api/v1/products/{productId}/documentation-requirements/by-type/{docType}",
+      "signature": "public Mono<ResponseEntity<ProductDocumentationRequirementDTO>> getDocumentationRequirementByType( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Type of document\", required = true) @PathVariable ContractingDocTypeEnum docType)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/mandatory\"",
+      "method": "getMandatoryDocumentationRequirements",
+      "owner": "ProductDocumentationRequirementController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationRequirementController.java",
+      "route": "/api/v1/products/{productId}/documentation-requirements/mandatory",
+      "signature": "public Mono<ResponseEntity<Flux<ProductDocumentationRequirementDTO>>> getMandatoryDocumentationRequirements( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/filter\"",
+      "method": "filterDocumentationRequirements",
+      "owner": "ProductDocumentationRequirementController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationRequirementController.java",
+      "route": "/api/v1/products/{productId}/documentation-requirements/filter",
+      "signature": "public Mono<ResponseEntity<PaginationResponse<ProductDocumentationRequirementDTO>>> filterDocumentationRequirements( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Filter criteria for documentation requirements\", required = true) @Valid @RequestBody FilterRequest<ProductDocumentationRequirementDTO> filterRequest)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "",
+      "method": "createDocumentationRequirement",
+      "owner": "ProductDocumentationRequirementController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationRequirementController.java",
+      "route": "/api/v1/products/{productId}/documentation-requirements",
+      "signature": "public Mono<ResponseEntity<ProductDocumentationRequirementDTO>> createDocumentationRequirement( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Documentation requirement data to create\", required = true) @Valid @RequestBody ProductDocumentationRequirementDTO requirementDTO)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{requirementId}\"",
+      "method": "updateDocumentationRequirement",
+      "owner": "ProductDocumentationRequirementController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationRequirementController.java",
+      "route": "/api/v1/products/{productId}/documentation-requirements/{requirementId}",
+      "signature": "public Mono<ResponseEntity<ProductDocumentationRequirementDTO>> updateDocumentationRequirement( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the documentation requirement\", required = true) @PathVariable UUID requirementId, @Parameter(description = \"Updated documentation requirement data\", required = true) @Valid @RequestBody ProductDocumentationRequirementDTO requirementDTO)",
+      "verb": "PUT"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{requirementId}\"",
+      "method": "deleteDocumentationRequirement",
+      "owner": "ProductDocumentationRequirementController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductDocumentationRequirementController.java",
+      "route": "/api/v1/products/{productId}/documentation-requirements/{requirementId}",
+      "signature": "public Mono<ResponseEntity<Void>> deleteDocumentationRequirement( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the documentation requirement\", required = true) @PathVariable UUID requirementId)",
+      "verb": "DELETE"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{localizationId}\"",
+      "method": "getLocalizationById",
+      "owner": "ProductLocalizationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductLocalizationController.java",
+      "route": "/api/v1/products/{productId}/localizations/{localizationId}",
+      "signature": "public Mono<ResponseEntity<ProductLocalizationDTO>> getLocalizationById( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the localization record\", required = true) @PathVariable UUID localizationId)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/filter\"",
+      "method": "filterLocalizations",
+      "owner": "ProductLocalizationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductLocalizationController.java",
+      "route": "/api/v1/products/{productId}/localizations/filter",
+      "signature": "public Mono<ResponseEntity<PaginationResponse<ProductLocalizationDTO>>> filterLocalizations( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Filter criteria for localizations\", required = true) @Valid @RequestBody FilterRequest<ProductLocalizationDTO> filterRequest)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "",
+      "method": "createLocalization",
+      "owner": "ProductLocalizationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductLocalizationController.java",
+      "route": "/api/v1/products/{productId}/localizations",
+      "signature": "public Mono<ResponseEntity<ProductLocalizationDTO>> createLocalization( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Localization data to create\", required = true) @Valid @RequestBody ProductLocalizationDTO localizationDTO)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{localizationId}\"",
+      "method": "updateLocalization",
+      "owner": "ProductLocalizationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductLocalizationController.java",
+      "route": "/api/v1/products/{productId}/localizations/{localizationId}",
+      "signature": "public Mono<ResponseEntity<ProductLocalizationDTO>> updateLocalization( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the localization record\", required = true) @PathVariable UUID localizationId, @Parameter(description = \"Updated localization data\", required = true) @Valid @RequestBody ProductLocalizationDTO localizationDTO)",
+      "verb": "PUT"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{localizationId}\"",
+      "method": "deleteLocalization",
+      "owner": "ProductLocalizationController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductLocalizationController.java",
+      "route": "/api/v1/products/{productId}/localizations/{localizationId}",
+      "signature": "public Mono<ResponseEntity<Void>> deleteLocalization( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the localization record\", required = true) @PathVariable UUID localizationId)",
+      "verb": "DELETE"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{productId}/pricing\"",
+      "method": "getProductPricing",
+      "owner": "ProductPricingAggregatorController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductPricingAggregatorController.java",
+      "route": "/api/v1/products/{productId}/pricing",
+      "signature": "public Mono<ResponseEntity<ProductPricingDTO>> getProductPricing( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/with-pricing\"",
+      "method": "listProductsWithPricing",
+      "owner": "ProductPricingAggregatorController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductPricingAggregatorController.java",
+      "route": "/api/v1/products/with-pricing",
+      "signature": "public Flux<ProductPricingDTO> listProductsWithPricing( @Parameter(description = \"Optional derived product-type label (e.g. PERSONAL_LOAN, LEASING)\", required = false) @RequestParam(value = \"productType\", required = false) String productType)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{relationshipId}\"",
+      "method": "getRelationshipById",
+      "owner": "ProductRelationshipController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductRelationshipController.java",
+      "route": "/api/v1/products/{productId}/relationships/{relationshipId}",
+      "signature": "public Mono<ResponseEntity<ProductRelationshipDTO>> getRelationshipById( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the relationship record\", required = true) @PathVariable UUID relationshipId)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/filter\"",
+      "method": "filterRelationships",
+      "owner": "ProductRelationshipController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductRelationshipController.java",
+      "route": "/api/v1/products/{productId}/relationships/filter",
+      "signature": "public Mono<ResponseEntity<PaginationResponse<ProductRelationshipDTO>>> filterRelationships( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Filter criteria for relationships\", required = true) @Valid @RequestBody FilterRequest<ProductRelationshipDTO> filterRequest)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "",
+      "method": "createRelationship",
+      "owner": "ProductRelationshipController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductRelationshipController.java",
+      "route": "/api/v1/products/{productId}/relationships",
+      "signature": "public Mono<ResponseEntity<ProductRelationshipDTO>> createRelationship( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Relationship data to create\", required = true) @Valid @RequestBody ProductRelationshipDTO productRelationshipDTO)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{relationshipId}\"",
+      "method": "updateRelationship",
+      "owner": "ProductRelationshipController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductRelationshipController.java",
+      "route": "/api/v1/products/{productId}/relationships/{relationshipId}",
+      "signature": "public Mono<ResponseEntity<ProductRelationshipDTO>> updateRelationship( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the relationship record\", required = true) @PathVariable UUID relationshipId, @Parameter(description = \"Updated relationship data\", required = true) @Valid @RequestBody ProductRelationshipDTO productRelationshipDTO)",
+      "verb": "PUT"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{relationshipId}\"",
+      "method": "deleteRelationship",
+      "owner": "ProductRelationshipController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductRelationshipController.java",
+      "route": "/api/v1/products/{productId}/relationships/{relationshipId}",
+      "signature": "public Mono<ResponseEntity<Void>> deleteRelationship( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the relationship record\", required = true) @PathVariable UUID relationshipId)",
+      "verb": "DELETE"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{versionId}\"",
+      "method": "getProductVersionById",
+      "owner": "ProductVersionController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductVersionController.java",
+      "route": "/api/v1/products/{productId}/versions/{versionId}",
+      "signature": "public Mono<ResponseEntity<ProductVersionDTO>> getProductVersionById( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the product version\", required = true) @PathVariable UUID versionId)",
+      "verb": "GET"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/filter\"",
+      "method": "filterProductVersions",
+      "owner": "ProductVersionController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductVersionController.java",
+      "route": "/api/v1/products/{productId}/versions/filter",
+      "signature": "public Mono<ResponseEntity<PaginationResponse<ProductVersionDTO>>> filterProductVersions( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Filter criteria for versions\", required = true) @Valid @RequestBody FilterRequest<ProductVersionDTO> filterRequest)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "",
+      "method": "createProductVersion",
+      "owner": "ProductVersionController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductVersionController.java",
+      "route": "/api/v1/products/{productId}/versions",
+      "signature": "public Mono<ResponseEntity<ProductVersionDTO>> createProductVersion( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Version data to create\", required = true) @Valid @RequestBody ProductVersionDTO productVersionDTO)",
+      "verb": "POST"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{versionId}\"",
+      "method": "updateProductVersion",
+      "owner": "ProductVersionController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductVersionController.java",
+      "route": "/api/v1/products/{productId}/versions/{versionId}",
+      "signature": "public Mono<ResponseEntity<ProductVersionDTO>> updateProductVersion( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the product version\", required = true) @PathVariable UUID versionId, @Parameter(description = \"Updated version data\", required = true) @Valid @RequestBody ProductVersionDTO productVersionDTO)",
+      "verb": "PUT"
+    },
+    {
+      "abstract": false,
+      "mapping": "\"/{versionId}\"",
+      "method": "deleteProductVersion",
+      "owner": "ProductVersionController",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/controllers/ProductVersionController.java",
+      "route": "/api/v1/products/{productId}/versions/{versionId}",
+      "signature": "public Mono<ResponseEntity<Void>> deleteProductVersion( @Parameter(description = \"Unique identifier of the product\", required = true) @PathVariable UUID productId, @Parameter(description = \"Unique identifier of the product version\", required = true) @PathVariable UUID versionId)",
+      "verb": "DELETE"
+    }
+  ],
+  "poms": [
+    {
+      "artifact": "core-common-product-mgmt-core",
+      "dependencies": [
+        "io.fireflysoftware:core-common-product-mgmt-interfaces:",
+        "io.fireflysoftware:core-common-product-mgmt-models:",
+        "org.fireflyframework:fireflyframework-starter-core:",
+        "org.fireflyframework:fireflyframework-web:",
+        "org.springframework.boot:spring-boot-starter-webflux:",
+        "org.mapstruct:mapstruct:",
+        "org.projectlombok:lombok:",
+        "org.springframework.boot:spring-boot-starter-test:",
+        "io.projectreactor:reactor-test:",
+        "org.testcontainers:testcontainers-postgresql:",
+        "org.testcontainers:testcontainers-junit-jupiter:",
+        "org.flywaydb:flyway-database-postgresql:"
+      ],
+      "group": "io.fireflysoftware",
+      "java": "",
+      "parent": "io.fireflysoftware:core-common-product-mgmt:26.10.6",
+      "path": "core-common-product-mgmt-core/pom.xml",
+      "plugins": [
+        "maven-compiler-plugin"
+      ],
+      "version": "26.10.6"
+    },
+    {
+      "artifact": "core-common-product-mgmt-interfaces",
+      "dependencies": [
+        "org.springframework.boot:spring-boot-starter-validation:",
+        "io.swagger.core.v3:swagger-annotations:",
+        "org.projectlombok:lombok:",
+        "com.fasterxml.jackson.core:jackson-databind:",
+        "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:"
+      ],
+      "group": "io.fireflysoftware",
+      "java": "",
+      "parent": "io.fireflysoftware:core-common-product-mgmt:26.10.6",
+      "path": "core-common-product-mgmt-interfaces/pom.xml",
+      "plugins": [],
+      "version": "26.10.6"
+    },
+    {
+      "artifact": "core-common-product-mgmt-models",
+      "dependencies": [
+        "io.fireflysoftware:core-common-product-mgmt-interfaces:",
+        "org.fireflyframework:fireflyframework-r2dbc:",
+        "org.springframework.boot:spring-boot-starter-data-r2dbc:",
+        "org.postgresql:r2dbc-postgresql:",
+        "org.postgresql:postgresql:",
+        "org.flywaydb:flyway-core:",
+        "org.projectlombok:lombok:"
+      ],
+      "group": "io.fireflysoftware",
+      "java": "",
+      "parent": "io.fireflysoftware:core-common-product-mgmt:26.10.6",
+      "path": "core-common-product-mgmt-models/pom.xml",
+      "plugins": [],
+      "version": "26.10.6"
+    },
+    {
+      "artifact": "core-common-product-mgmt-sdk",
+      "dependencies": [
+        "io.fireflysoftware:core-common-product-mgmt-web:",
+        "io.swagger.core.v3:swagger-annotations:",
+        "com.fasterxml.jackson.core:jackson-databind:",
+        "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:",
+        "jakarta.annotation:jakarta.annotation-api:",
+        "org.projectlombok:lombok:",
+        "com.squareup.okhttp3:okhttp:",
+        "com.squareup.okhttp3:logging-interceptor:",
+        "org.openapitools:jackson-databind-nullable:0.2.8",
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:",
+        "javax.annotation:javax.annotation-api:1.3.2",
+        "org.springframework:spring-webflux:"
+      ],
+      "group": "io.fireflysoftware",
+      "java": "",
+      "parent": "io.fireflysoftware:core-common-product-mgmt:26.10.6",
+      "path": "core-common-product-mgmt-sdk/pom.xml",
+      "plugins": [
+        "openapi-generator-maven-plugin"
+      ],
+      "version": "26.10.6"
+    },
+    {
+      "artifact": "core-common-product-mgmt-web",
+      "dependencies": [
+        "io.fireflysoftware:core-common-product-mgmt-core:",
+        "io.fireflysoftware:core-common-product-mgmt-interfaces:",
+        "org.fireflyframework:fireflyframework-web:",
+        "org.springframework.boot:spring-boot-starter-webflux:",
+        "org.springframework.boot:spring-boot-starter-actuator:",
+        "org.springframework.boot:spring-boot-starter-validation:",
+        "org.springdoc:springdoc-openapi-starter-webflux-ui:",
+        "io.micrometer:micrometer-registry-prometheus:",
+        "org.projectlombok:lombok:",
+        "org.springframework.boot:spring-boot-starter-test:",
+        "io.projectreactor:reactor-test:"
+      ],
+      "group": "io.fireflysoftware",
+      "java": "",
+      "parent": "io.fireflysoftware:core-common-product-mgmt:26.10.6",
+      "path": "core-common-product-mgmt-web/pom.xml",
+      "plugins": [
+        "maven-compiler-plugin",
+        "maven-resources-plugin",
+        "spring-boot-maven-plugin"
+      ],
+      "version": "26.10.6"
+    },
+    {
+      "artifact": "core-common-product-mgmt",
+      "dependencies": [
+        "io.fireflysoftware:core-common-product-mgmt-interfaces:${project.version}",
+        "io.fireflysoftware:core-common-product-mgmt-models:${project.version}",
+        "io.fireflysoftware:core-common-product-mgmt-core:${project.version}",
+        "io.fireflysoftware:core-common-product-mgmt-web:${project.version}"
+      ],
+      "group": "io.fireflysoftware",
+      "java": "25",
+      "parent": "io.fireflysoftware:firefly-parent:26.10.6",
+      "path": "pom.xml",
+      "plugins": [],
+      "version": "26.10.6"
+    }
+  ],
+  "ports": [
+    {
+      "boundary": false,
+      "boundary_evidence": [],
+      "methods": [
+        "Mono<PaginationResponse<ProductCategoryDTO>> filterRootCategories(FilterRequest<ProductCategoryDTO> filterRequest)",
+        "Mono<PaginationResponse<ProductCategoryDTO>> filterChildCategories(UUID parentCategoryId, FilterRequest<ProductCategoryDTO> filterRequest)",
+        "Mono<PaginationResponse<ProductCategoryDTO>> filterCategoriesByName(String namePattern, FilterRequest<ProductCategoryDTO> filterRequest)",
+        "Mono<ProductCategoryDTO> createCategory(ProductCategoryDTO categoryDTO)",
+        "Mono<ProductCategoryDTO> getCategoryById(UUID categoryId)",
+        "Mono<ProductCategoryDTO> updateCategory(UUID categoryId, ProductCategoryDTO categoryDTO)",
+        "Mono<Void> deleteCategory(UUID categoryId)"
+      ],
+      "name": "ProductCategoryService",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductCategoryService.java"
+    },
+    {
+      "boundary": false,
+      "boundary_evidence": [],
+      "methods": [
+        "Mono<PaginationResponse<ProductConfigurationDTO>> filterConfigurations( UUID productId, FilterRequest<ProductConfigurationDTO> filterRequest)",
+        "Mono<ProductConfigurationDTO> createConfiguration(UUID productId, ProductConfigurationDTO configDTO)",
+        "Mono<ProductConfigurationDTO> getConfigurationById(UUID productId, UUID configId)",
+        "Mono<ProductConfigurationDTO> getConfigurationByKey(UUID productId, String configKey)",
+        "Flux<ProductConfigurationDTO> getConfigurationsByType(UUID productId, ProductConfigTypeEnum configType)",
+        "Mono<ProductConfigurationDTO> updateConfiguration( UUID productId, UUID configId, ProductConfigurationDTO configDTO)",
+        "Mono<Void> deleteConfiguration(UUID productId, UUID configId)"
+      ],
+      "name": "ProductConfigurationService",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductConfigurationService.java"
+    },
+    {
+      "boundary": false,
+      "boundary_evidence": [],
+      "methods": [
+        "Mono<PaginationResponse<ProductDocumentationRequirementDTO>> filterDocumentationRequirements( UUID productId, FilterRequest<ProductDocumentationRequirementDTO> filterRequest)",
+        "Mono<ProductDocumentationRequirementDTO> createDocumentationRequirement( UUID productId, ProductDocumentationRequirementDTO requirementDTO)",
+        "Mono<ProductDocumentationRequirementDTO> getDocumentationRequirementById( UUID productId, UUID requirementId)",
+        "Mono<ProductDocumentationRequirementDTO> getDocumentationRequirementByType( UUID productId, ContractingDocTypeEnum docType)",
+        "Mono<ProductDocumentationRequirementDTO> updateDocumentationRequirement( UUID productId, UUID requirementId, ProductDocumentationRequirementDTO requirementDTO)",
+        "Mono<Void> deleteDocumentationRequirement(UUID productId, UUID requirementId)",
+        "Flux<ProductDocumentationRequirementDTO> filterMandatoryDocumentationRequirements(UUID productId)"
+      ],
+      "name": "ProductDocumentationRequirementService",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductDocumentationRequirementService.java"
+    },
+    {
+      "boundary": false,
+      "boundary_evidence": [],
+      "methods": [
+        "Mono<PaginationResponse<ProductDocumentationDTO>> filterDocumentations(UUID productId, FilterRequest<ProductDocumentationDTO> filterRequest)",
+        "Mono<ProductDocumentationDTO> createDocumentation(UUID productId, ProductDocumentationDTO documentationDTO)",
+        "Mono<ProductDocumentationDTO> getDocumentationById(UUID productId, UUID documentationId)",
+        "Mono<ProductDocumentationDTO> updateDocumentation(UUID productId, UUID documentationId, ProductDocumentationDTO documentationDTO)",
+        "Mono<Void> deleteDocumentation(UUID productId, UUID documentationId)"
+      ],
+      "name": "ProductDocumentationService",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductDocumentationService.java"
+    },
+    {
+      "boundary": false,
+      "boundary_evidence": [],
+      "methods": [
+        "Mono<PaginationResponse<ProductLocalizationDTO>> filterLocalizations(UUID productId, FilterRequest<ProductLocalizationDTO> filterRequest)",
+        "Mono<ProductLocalizationDTO> createLocalization(UUID productId, ProductLocalizationDTO localizationDTO)",
+        "Mono<ProductLocalizationDTO> getLocalizationById(UUID productId, UUID localizationId)",
+        "Mono<ProductLocalizationDTO> updateLocalization(UUID productId, UUID localizationId, ProductLocalizationDTO localizationDTO)",
+        "Mono<Void> deleteLocalization(UUID productId, UUID localizationId)"
+      ],
+      "name": "ProductLocalizationService",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductLocalizationService.java"
+    },
+    {
+      "boundary": false,
+      "boundary_evidence": [],
+      "methods": [
+        "Mono<ProductPricingDTO> getProductPricing(UUID productId)",
+        "Flux<ProductPricingDTO> listProductsWithPricing(String productType)"
+      ],
+      "name": "ProductPricingAggregatorService",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductPricingAggregatorService.java"
+    },
+    {
+      "boundary": false,
+      "boundary_evidence": [],
+      "methods": [
+        "Mono<PaginationResponse<ProductRelationshipDTO>> filterRelationships(UUID productId, FilterRequest<ProductRelationshipDTO> filterRequest)",
+        "Mono<ProductRelationshipDTO> createRelationship(UUID productId, ProductRelationshipDTO relationshipDTO)",
+        "Mono<ProductRelationshipDTO> getRelationshipById(UUID productId, UUID relationshipId)",
+        "Mono<ProductRelationshipDTO> updateRelationship(UUID productId, UUID relationshipId, ProductRelationshipDTO relationshipDTO)",
+        "Mono<Void> deleteRelationship(UUID productId, UUID relationshipId)"
+      ],
+      "name": "ProductRelationshipService",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductRelationshipService.java"
+    },
+    {
+      "boundary": false,
+      "boundary_evidence": [],
+      "methods": [
+        "Mono<PaginationResponse<ProductDTO>> filterProducts(FilterRequest<ProductDTO> filterRequest)",
+        "Mono<ProductDTO> createProduct(ProductDTO productDTO)",
+        "Mono<ProductDTO> getProductById(UUID productId)",
+        "Flux<ProductDTO> getProductsByTenantId(UUID tenantId)",
+        "Mono<ProductDTO> updateProduct(UUID productId, ProductDTO productDTO)",
+        "Mono<Void> deleteProduct(UUID productId)"
+      ],
+      "name": "ProductService",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductService.java"
+    },
+    {
+      "boundary": false,
+      "boundary_evidence": [],
+      "methods": [
+        "Mono<PaginationResponse<ProductVersionDTO>> filterProductVersions(UUID productId, FilterRequest<ProductVersionDTO> filterRequest)",
+        "Mono<ProductVersionDTO> createProductVersion(UUID productId, ProductVersionDTO productVersionDTO)",
+        "Mono<ProductVersionDTO> getProductVersionById(UUID productId, UUID versionId)",
+        "Mono<ProductVersionDTO> updateProductVersion(UUID productId, UUID versionId, ProductVersionDTO productVersionDTO)",
+        "Mono<Void> deleteProductVersion(UUID productId, UUID versionId)"
+      ],
+      "name": "ProductVersionService",
+      "path": "core-common-product-mgmt-core/src/main/java/io/fireflysoftware/core/product/core/services/ProductVersionService.java"
+    }
+  ],
+  "repository": "core-common-product-mgmt",
+  "routes": [],
+  "schema": 1,
+  "settings": [
+    {
+      "default": "localhost",
+      "key": "DB_HOST",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/config/R2dbcConfiguration.java"
+    },
+    {
+      "default": "5432",
+      "key": "DB_PORT",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/config/R2dbcConfiguration.java"
+    },
+    {
+      "default": "postgres",
+      "key": "DB_NAME",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/config/R2dbcConfiguration.java"
+    },
+    {
+      "default": "postgres",
+      "key": "DB_USERNAME",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/config/R2dbcConfiguration.java"
+    },
+    {
+      "default": "[redacted]",
+      "key": "DB_PASSWORD",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/config/R2dbcConfiguration.java"
+    },
+    {
+      "default": "disable",
+      "key": "DB_SSL_MODE",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/config/R2dbcConfiguration.java"
+    },
+    {
+      "default": null,
+      "key": "spring.application.name",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/ProductManagementApplication.java"
+    },
+    {
+      "default": null,
+      "key": "spring.application.version",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/ProductManagementApplication.java"
+    },
+    {
+      "default": null,
+      "key": "spring.application.description",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/ProductManagementApplication.java"
+    },
+    {
+      "default": null,
+      "key": "spring.application.team.name",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/ProductManagementApplication.java"
+    },
+    {
+      "default": null,
+      "key": "spring.application.team.email",
+      "path": "core-common-product-mgmt-web/src/main/java/io/fireflysoftware/core/product/web/ProductManagementApplication.java"
+    },
+    {
+      "default": null,
+      "key": "DB_HOST",
+      "path": "core-common-product-mgmt-web/src/main/resources/application.yaml"
+    },
+    {
+      "default": null,
+      "key": "DB_PORT",
+      "path": "core-common-product-mgmt-web/src/main/resources/application.yaml"
+    },
+    {
+      "default": null,
+      "key": "DB_NAME",
+      "path": "core-common-product-mgmt-web/src/main/resources/application.yaml"
+    },
+    {
+      "default": null,
+      "key": "DB_SSL_MODE",
+      "path": "core-common-product-mgmt-web/src/main/resources/application.yaml"
+    },
+    {
+      "default": null,
+      "key": "DB_USERNAME",
+      "path": "core-common-product-mgmt-web/src/main/resources/application.yaml"
+    },
+    {
+      "default": null,
+      "key": "DB_PASSWORD",
+      "path": "core-common-product-mgmt-web/src/main/resources/application.yaml"
+    },
+    {
+      "default": "localhost",
+      "key": "SERVER_ADDRESS",
+      "path": "core-common-product-mgmt-web/src/main/resources/application.yaml"
+    },
+    {
+      "default": "8080",
+      "key": "SERVER_PORT",
+      "path": "core-common-product-mgmt-web/src/main/resources/application.yaml"
+    }
+  ],
+  "test_cases": [
+    {
+      "name": "getCategoryById_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "getCategoryById_NotFound",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "create_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "createCategory_RootCategory_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "createCategory_Error",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "update_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "updateCategory_CircularReference_SelfParent",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "updateCategory_NotFound",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "updateCategory_Error",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "deleteCategory_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "deleteCategory_HasChildren",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "deleteCategory_NotFound",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "deleteCategory_Error",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "deleteCategory_HasProducts",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java"
+    },
+    {
+      "name": "createConfiguration_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "createConfiguration_Error",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "getConfigurationById_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "getConfigurationById_NotFound",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "getConfigurationById_WrongProduct",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "getConfigurationByKey_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "getConfigurationByKey_NotFound",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "getConfigurationsByType_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "getConfigurationsByType_Empty",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "updateConfiguration_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "updateConfiguration_NotFound",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "updateConfiguration_WrongProduct",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "deleteConfiguration_Success",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "deleteConfiguration_NotFound",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "deleteConfiguration_WrongProduct",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java"
+    },
+    {
+      "name": "retainsExplicitFreeAndFixedAccountTariffs",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/AccountTariffRulesTest.java"
+    },
+    {
+      "name": "rejectsUnsupportedIncompleteOrInconsistentAccountTerms",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/AccountTariffRulesTest.java"
+    },
+    {
+      "name": "sameCurrencyIncludesWholePolicyIdentity",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/AccountTariffRulesTest.java"
+    },
+    {
+      "name": "duplicateTariffCannotMasqueradeAsFullEventCoverage",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/AccountTariffRulesTest.java"
+    },
+    {
+      "name": "requiredNamedEligibilityFactsCannotDisappear",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/AccountTariffRulesTest.java"
+    },
+    {
+      "name": "eachFamilyKeepsPrivateCostCanonicalSeparateFromPublicTerms",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRulesTest.java"
+    },
+    {
+      "name": "incompatibleFamilyAndSameCodeDuplicatesAreRejected",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRulesTest.java"
+    },
+    {
+      "name": "missingCostBasisCannotLeakRejectedPrivateValue",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRulesTest.java"
+    },
+    {
+      "name": "explicitlyNoCostsIsDifferentFromIncompleteDefinedCosts",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRulesTest.java"
+    },
+    {
+      "name": "privateRatiosUseTheSameCanonicalRatioEncoding",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRulesTest.java"
+    },
+    {
+      "name": "objectOrderIsStableWhileArrayOrderIsMeaningful",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonicalTest.java"
+    },
+    {
+      "name": "rejectsDuplicateTrailingNonobjectAndFloatingTokens",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonicalTest.java"
+    },
+    {
+      "name": "closedShapeRejectsUnknownFieldsWithoutEchoingPrivateInput",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonicalTest.java"
+    },
+    {
+      "name": "safeDigestSeparatesNamespaces",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonicalTest.java"
+    },
+    {
+      "name": "exactPublicCanonicalBytesHaveIndependentSha256Vector",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonicalTest.java"
+    },
+    {
+      "name": "rejectsUnknownInvalidOrCallerAuthorityFields",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionEnvelopeRulesTest.java"
+    },
+    {
+      "name": "publicDefinitionCannotSmuggleCosts",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionEnvelopeRulesTest.java"
+    },
+    {
+      "name": "documentLocaleMustBeWellFormed",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionEnvelopeRulesTest.java"
+    },
+    {
+      "name": "ratioFactConstraintsCanonicalizeWithoutChangingArrayOrder",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionEnvelopeRulesTest.java"
+    },
+    {
+      "name": "typedListsCannotBeChangedAfterDecode",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionEnvelopeRulesTest.java"
+    },
+    {
+      "name": "makerCannotApproveOwnSubmittedContribution",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRulesTest.java"
+    },
+    {
+      "name": "sameActorDifferentIssuerIsASeparateIdentity",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRulesTest.java"
+    },
+    {
+      "name": "serviceCannotBecomeHumanChecker",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRulesTest.java"
+    },
+    {
+      "name": "missingContributorCannotPassAnEmptyStream",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRulesTest.java"
+    },
+    {
+      "name": "currentCheckerHasStableIdentityNotDisplayName",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRulesTest.java"
+    },
+    {
+      "name": "acceptsExactBoundedMinorUnitStrings",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java"
+    },
+    {
+      "name": "rejectsNoncanonicalOrOverflowMoney",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java"
+    },
+    {
+      "name": "acceptsDecimalRatioWithoutPercentAmbiguity",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java"
+    },
+    {
+      "name": "rejectsPercentExponentAndOutOfBoundsRatio",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java"
+    },
+    {
+      "name": "exactStateVersionRejectsCoercions",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java"
+    },
+    {
+      "name": "stateVersionKeepsZeroAndMaximum",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java"
+    },
+    {
+      "name": "rejectsNoncanonicalAndUnownedZeroIds",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java"
+    },
+    {
+      "name": "acceptsCanonicalId",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java"
+    },
+    {
+      "name": "textRejectsUnpairedUnicodeAndBoundaryWhitespace",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java"
+    },
+    {
+      "name": "effectiveWindowIsExactUtcAndHalfOpen",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java"
+    },
+    {
+      "name": "retainsExactFixedLoanTermsAndCanonicalRatio",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/FixedRateInstallmentLoanRulesTest.java"
+    },
+    {
+      "name": "rejectsUnsupportedOrIncompleteLoanSemantics",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/FixedRateInstallmentLoanRulesTest.java"
+    },
+    {
+      "name": "principalMinimumCannotExceedMaximum",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/FixedRateInstallmentLoanRulesTest.java"
+    },
+    {
+      "name": "zeroInterestIsExplicitValidFixedRate",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/FixedRateInstallmentLoanRulesTest.java"
+    },
+    {
+      "name": "migrate",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "nativeAggregateHasRealDurableTablesAndDefaultDenyRls",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "confidentialCostBytesAreNotStoredInPublicDefinitionRelations",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "nativeScopeRuntimeCannotOwnBypassOrCreateSchemaObjects",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "freshProductAndBothSectionHeadsCanBeCreatedInOneTransaction",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "unscopedRuntimeCannotReadRealPublicOrPrivateRows",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "committedLegacyProductCannotBeAdoptedAsANewGovernedProduct",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "noOpUpdateDoesNotTurnACommittedLegacyProductIntoANewInsert",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "retainedPublicRevisionCannotBeRewritten",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "legacyProductMutationCannotRewriteManagedIdentityOrTerms",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "unmanagedProductsRetainIdentityUpdateDeleteAndIdReuseBehavior",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "nonownerRuntimeRetainsOrdinaryLegacyCreateUpdateDeleteWithoutPrivateSchemaAccess",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "retainedPrivateCostRevisionCannotBeRewrittenWithDifferentValidCosts",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "governedRootCodeCannotBeChanged",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "legacyChildrenCannotAddTermsToEitherManagedEndpoint",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "managedCategoryCannotBeReparented",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "nativeCreateLocksEveryAncestorBeforeAcquiringProductForeignKeys",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "uncommittedNewParentCannotAuthorizeLegacyChildCreation",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "sameTransactionLegacyChildrenCannotBeAdoptedIntoNativeDefinition",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "skippedNativeInsertCannotRetroactivelyProveLegacyInsertWasNative",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "nativeProductCategoryChangeCannotReuseItsOriginalAncestorProof",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "categoryReparentOrCascadeWaitingForNativeCreateRechecksProtectedAncestors",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "ancestorCascadeWinningBeforeNativeCreateLeavesNoPartialProductOrRoot",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "childPassingBeforeEnrollmentCannotCommitAfterTheParentForeignKeyBarrier",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "nonownerUnmanagedChildCreateReparentAndDeleteRemainAvailable",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "insertLegacyChild",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "categories",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "scope",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "execute",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java"
+    },
+    {
+      "name": "retainsExactPremiumCoverageAndSharedOccurrenceDeductible",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/TermPcInsuranceRulesTest.java"
+    },
+    {
+      "name": "rejectsIncompleteCoverageUnknownRatingAndUnbalancedPremium",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/TermPcInsuranceRulesTest.java"
+    },
+    {
+      "name": "aggregateAndDeductibleAreBoundToTheirOwnCoverage",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/TermPcInsuranceRulesTest.java"
+    },
+    {
+      "name": "unmatchedOrDuplicateCoverageGroupsAreRejected",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/TermPcInsuranceRulesTest.java"
+    },
+    {
+      "name": "deductibleCannotExceedOccurrenceLimit",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/TermPcInsuranceRulesTest.java"
+    },
+    {
+      "name": "createRelationship_rejectsAProductRelatedToItself",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImplTest.java"
+    },
+    {
+      "name": "deleteProduct_keepsAnOfferedDefinition",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImplTest.java"
+    },
+    {
+      "name": "deleteProduct_keepsASuspendedDefinition",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImplTest.java"
+    },
+    {
+      "name": "deleteProduct_removesADraftThatWasNeverOffered",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImplTest.java"
+    },
+    {
+      "name": "getProductPricing_personalLoan_happyPath",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java"
+    },
+    {
+      "name": "getProductPricing_leasing_fourBrackets",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java"
+    },
+    {
+      "name": "getProductPricing_productNotFound_emitsError",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java"
+    },
+    {
+      "name": "getProductPricing_missingLimitsConfig_stillReturnsTheProduct",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java"
+    },
+    {
+      "name": "getProductPricing_withoutLendingRows_isStillAProduct",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java"
+    },
+    {
+      "name": "listProductsWithPricing_returnsOnlyActiveProducts",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java"
+    },
+    {
+      "name": "listProductsWithPricing_filtersByDerivedProductType",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java"
+    },
+    {
+      "name": "getProductPricing_malformedJson_emitsParseError",
+      "path": "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java"
+    },
+    {
+      "name": "getProductPricing_returns200_andExpectedShape",
+      "path": "core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductPricingAggregatorControllerTest.java"
+    },
+    {
+      "name": "getProductPricing_unknownProduct_returns500FromRuntimeException",
+      "path": "core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductPricingAggregatorControllerTest.java"
+    },
+    {
+      "name": "listProductsWithPricing_returns200_andStreamsResults",
+      "path": "core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductPricingAggregatorControllerTest.java"
+    }
+  ],
+  "tests": [
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/README.md",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/category/v1/ProductCategoryServiceImplTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/configuration/v1/ProductConfigurationServiceImplTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/AccountTariffRulesTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/CostRulesTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionCanonicalTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionEnvelopeRulesTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionReviewRulesTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/DefinitionRulesTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/FixedRateInstallmentLoanRulesTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProductDefinitionDatabaseTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/ProfileFixtures.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/definition/v1/TermPcInsuranceRulesTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductRelationshipServiceImplTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/impl/ProductServiceImplTest.java",
+    "core-common-product-mgmt-core/src/test/java/io/fireflysoftware/core/product/core/services/pricing/v1/ProductPricingAggregatorServiceImplTest.java",
+    "core-common-product-mgmt-core/src/test/resources/definition/v1/account.json",
+    "core-common-product-mgmt-core/src/test/resources/definition/v1/insurance.json",
+    "core-common-product-mgmt-core/src/test/resources/definition/v1/loan.json",
+    "core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/controllers/ProductPricingAggregatorControllerTest.java",
+    "core-common-product-mgmt-web/src/test/java/io/fireflysoftware/core/product/web/openapi/OpenApiGenApplication.java"
+  ],
+  "types": [
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "dateCreated",
+          "type": "LocalDateTime"
+        },
+        {
+          "constraints": [],
+          "name": "dateUpdated",
+          "type": "LocalDateTime"
+        }
+      ],
+      "name": "BaseDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/BaseDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "type",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "percentage",
+          "type": "BigDecimal"
+        },
+        {
+          "constraints": [],
+          "name": "fixed",
+          "type": "BigDecimal"
+        }
+      ],
+      "name": "FeeDefinitionDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/FeeDefinitionDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "minAmount",
+          "type": "BigDecimal"
+        },
+        {
+          "constraints": [],
+          "name": "maxAmount",
+          "type": "BigDecimal"
+        },
+        {
+          "constraints": [],
+          "name": "tin",
+          "type": "BigDecimal"
+        }
+      ],
+      "name": "InterestRateBracketDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/InterestRateBracketDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productCategoryId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "categoryName",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "categoryDescription",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "parentCategoryId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "level",
+          "type": "Integer"
+        }
+      ],
+      "name": "ProductCategoryDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductCategoryDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productConfigurationId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "configType",
+          "type": "ProductConfigTypeEnum"
+        },
+        {
+          "constraints": [],
+          "name": "configKey",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "configValue",
+          "type": "String"
+        }
+      ],
+      "name": "ProductConfigurationDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductConfigurationDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "tenantId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productCategoryId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productType",
+          "type": "ProductTypeEnum"
+        },
+        {
+          "constraints": [],
+          "name": "productName",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "productCode",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "productDescription",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "productStatus",
+          "type": "ProductStatusEnum"
+        },
+        {
+          "constraints": [],
+          "name": "launchDate",
+          "type": "LocalDate"
+        },
+        {
+          "constraints": [],
+          "name": "endDate",
+          "type": "LocalDate"
+        },
+        {
+          "constraints": [],
+          "name": "marketingFeatures",
+          "type": "List<String>"
+        }
+      ],
+      "name": "ProductDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productDocumentationId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "docType",
+          "type": "DocTypeEnum"
+        },
+        {
+          "constraints": [],
+          "name": "documentManagerRef",
+          "type": "Long"
+        },
+        {
+          "constraints": [],
+          "name": "dateAdded",
+          "type": "LocalDateTime"
+        }
+      ],
+      "name": "ProductDocumentationDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductDocumentationDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productDocRequirementId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "docType",
+          "type": "ContractingDocTypeEnum"
+        },
+        {
+          "constraints": [],
+          "name": "isMandatory",
+          "type": "Boolean"
+        },
+        {
+          "constraints": [],
+          "name": "description",
+          "type": "String"
+        }
+      ],
+      "name": "ProductDocumentationRequirementDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductDocumentationRequirementDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productLocalizationId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "languageCode",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "localizedName",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "localizedDescription",
+          "type": "String"
+        }
+      ],
+      "name": "ProductLocalizationDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductLocalizationDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productCode",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "productType",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "description",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "available",
+          "type": "Boolean"
+        },
+        {
+          "constraints": [],
+          "name": "features",
+          "type": "List<String>"
+        },
+        {
+          "constraints": [],
+          "name": "currency",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "minAmount",
+          "type": "BigDecimal"
+        },
+        {
+          "constraints": [],
+          "name": "maxAmount",
+          "type": "BigDecimal"
+        },
+        {
+          "constraints": [],
+          "name": "minTerm",
+          "type": "Integer"
+        },
+        {
+          "constraints": [],
+          "name": "maxTerm",
+          "type": "Integer"
+        },
+        {
+          "constraints": [],
+          "name": "interestRates",
+          "type": "List<InterestRateBracketDTO>"
+        },
+        {
+          "constraints": [],
+          "name": "fees",
+          "type": "List<FeeDefinitionDTO>"
+        }
+      ],
+      "name": "ProductPricingDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductPricingDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productRelationshipId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "relatedProductId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "relationshipType",
+          "type": "RelationshipTypeEnum"
+        },
+        {
+          "constraints": [],
+          "name": "description",
+          "type": "String"
+        }
+      ],
+      "name": "ProductRelationshipDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductRelationshipDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productVersionId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "versionNumber",
+          "type": "Long"
+        },
+        {
+          "constraints": [],
+          "name": "versionDescription",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "effectiveDate",
+          "type": "LocalDateTime"
+        }
+      ],
+      "name": "ProductVersionDTO",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/ProductVersionDTO.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "accountKind",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "ownershipKinds",
+          "type": "List<String>"
+        },
+        {
+          "constraints": [],
+          "name": "openingMinimum",
+          "type": "Money"
+        },
+        {
+          "constraints": [],
+          "name": "retainedMinimum",
+          "type": "Money"
+        },
+        {
+          "constraints": [],
+          "name": "perTransferLimit",
+          "type": "Money"
+        },
+        {
+          "constraints": [],
+          "name": "dailyTransferLimit",
+          "type": "Money"
+        },
+        {
+          "constraints": [],
+          "name": "interest",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "overdraft",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "tariffs",
+          "type": "List<FeeRule>"
+        }
+      ],
+      "name": "AccountTariffTerms",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/AccountTariffTerms.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "schemaVersion",
+          "type": "Integer"
+        },
+        {
+          "constraints": [],
+          "name": "businessArea",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "profileCode",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "mode",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "lines",
+          "type": "List<CostLine>"
+        }
+      ],
+      "name": "CostTerms",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/CostTerms.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "principalMinimum",
+          "type": "Money"
+        },
+        {
+          "constraints": [],
+          "name": "principalMaximum",
+          "type": "Money"
+        },
+        {
+          "constraints": [],
+          "name": "minimumMonths",
+          "type": "Integer"
+        },
+        {
+          "constraints": [],
+          "name": "maximumMonths",
+          "type": "Integer"
+        },
+        {
+          "constraints": [],
+          "name": "annualNominalRate",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "interestConvention",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "repaymentConvention",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "installmentRounding",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "finalInstallmentAdjustment",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "originationFee",
+          "type": "FeeRule"
+        },
+        {
+          "constraints": [],
+          "name": "earlyRepaymentPolicy",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "repaymentAllocation",
+          "type": "ExactReference"
+        },
+        {
+          "constraints": [],
+          "name": "calendar",
+          "type": "ExactReference"
+        }
+      ],
+      "name": "FixedRateInstallmentLoanTerms",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/FixedRateInstallmentLoanTerms.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "riskKind",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "minimumCoverageDays",
+          "type": "Integer"
+        },
+        {
+          "constraints": [],
+          "name": "maximumCoverageDays",
+          "type": "Integer"
+        },
+        {
+          "constraints": [],
+          "name": "premiumBasis",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "paymentSchedule",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "basePremium",
+          "type": "Money"
+        },
+        {
+          "constraints": [],
+          "name": "taxComponents",
+          "type": "List<TaxComponent>"
+        },
+        {
+          "constraints": [],
+          "name": "totalPremium",
+          "type": "Money"
+        },
+        {
+          "constraints": [],
+          "name": "coverages",
+          "type": "List<Coverage>"
+        },
+        {
+          "constraints": [],
+          "name": "deductibleGroups",
+          "type": "List<DeductibleGroup>"
+        },
+        {
+          "constraints": [],
+          "name": "exclusions",
+          "type": "List<ExactReference>"
+        },
+        {
+          "constraints": [],
+          "name": "territory",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "cancellationRefundPolicy",
+          "type": "String"
+        }
+      ],
+      "name": "TermPcInsuranceTerms",
+      "path": "core-common-product-mgmt-interfaces/src/main/java/io/fireflysoftware/core/product/interfaces/dtos/definition/v1/TermPcInsuranceTerms.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "dateCreated",
+          "type": "LocalDateTime"
+        },
+        {
+          "constraints": [],
+          "name": "dateUpdated",
+          "type": "LocalDateTime"
+        }
+      ],
+      "name": "BaseEntity",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/BaseEntity.java",
+      "persistent": false
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "tenantId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productCategoryId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productType",
+          "type": "ProductTypeEnum"
+        },
+        {
+          "constraints": [],
+          "name": "productName",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "productCode",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "productDescription",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "productStatus",
+          "type": "ProductStatusEnum"
+        },
+        {
+          "constraints": [],
+          "name": "launchDate",
+          "type": "LocalDate"
+        },
+        {
+          "constraints": [],
+          "name": "endDate",
+          "type": "LocalDate"
+        },
+        {
+          "constraints": [],
+          "name": "marketingFeatures",
+          "type": "Json"
+        }
+      ],
+      "name": "Product",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/Product.java",
+      "persistent": true
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productCategoryId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "categoryName",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "categoryDescription",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "parentCategoryId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "level",
+          "type": "Integer"
+        }
+      ],
+      "name": "ProductCategory",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductCategory.java",
+      "persistent": true
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productConfigurationId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "configType",
+          "type": "ProductConfigTypeEnum"
+        },
+        {
+          "constraints": [],
+          "name": "configKey",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "configValue",
+          "type": "String"
+        }
+      ],
+      "name": "ProductConfiguration",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductConfiguration.java",
+      "persistent": true
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productDocumentationId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "docType",
+          "type": "DocTypeEnum"
+        },
+        {
+          "constraints": [],
+          "name": "documentManagerRef",
+          "type": "Long"
+        },
+        {
+          "constraints": [],
+          "name": "dateAdded",
+          "type": "LocalDateTime"
+        }
+      ],
+      "name": "ProductDocumentation",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductDocumentation.java",
+      "persistent": true
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productDocRequirementId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "docType",
+          "type": "ContractingDocTypeEnum"
+        },
+        {
+          "constraints": [],
+          "name": "isMandatory",
+          "type": "Boolean"
+        },
+        {
+          "constraints": [],
+          "name": "description",
+          "type": "String"
+        }
+      ],
+      "name": "ProductDocumentationRequirement",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductDocumentationRequirement.java",
+      "persistent": true
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productLocalizationId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "languageCode",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "localizedName",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "localizedDescription",
+          "type": "String"
+        }
+      ],
+      "name": "ProductLocalization",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductLocalization.java",
+      "persistent": true
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productRelationshipId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "relatedProductId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "relationshipType",
+          "type": "RelationshipTypeEnum"
+        },
+        {
+          "constraints": [],
+          "name": "description",
+          "type": "String"
+        }
+      ],
+      "name": "ProductRelationship",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductRelationship.java",
+      "persistent": true
+    },
+    {
+      "constraints": [],
+      "fields": [
+        {
+          "constraints": [],
+          "name": "productVersionId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "productId",
+          "type": "UUID"
+        },
+        {
+          "constraints": [],
+          "name": "versionNumber",
+          "type": "Long"
+        },
+        {
+          "constraints": [],
+          "name": "versionDescription",
+          "type": "String"
+        },
+        {
+          "constraints": [],
+          "name": "effectiveDate",
+          "type": "LocalDateTime"
+        }
+      ],
+      "name": "ProductVersion",
+      "path": "core-common-product-mgmt-models/src/main/java/io/fireflysoftware/core/product/models/entities/ProductVersion.java",
+      "persistent": true
+    }
+  ],
+  "verification_hazards": [],
+  "workflows": [
+    ".github/workflows/maven-central.yml",
+    ".github/workflows/release.yml"
+  ]
+}

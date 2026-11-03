@@ -1,0 +1,61 @@
+-- Explicit administrator setup for a fresh dedicated login. Never run as application startup.
+\set ON_ERROR_STOP on
+\getenv publication_read_login PRODUCT_PUBLICATION_READ_USERNAME
+\getenv publication_read_password PRODUCT_PUBLICATION_READ_PASSWORD
+\getenv publication_read_database PRODUCT_PUBLICATION_READ_DATABASE
+\if :{?publication_read_login}
+\else
+\echo PRODUCT_PUBLICATION_READ_USERNAME is required
+DO $missing$ BEGIN RAISE EXCEPTION 'PUBLICATION_BOOTSTRAP_INPUTS_REQUIRED' USING ERRCODE='22023'; END $missing$;
+\endif
+\if :{?publication_read_password}
+\else
+\echo PRODUCT_PUBLICATION_READ_PASSWORD is required
+DO $missing$ BEGIN RAISE EXCEPTION 'PUBLICATION_BOOTSTRAP_INPUTS_REQUIRED' USING ERRCODE='22023'; END $missing$;
+\endif
+\if :{?publication_read_database}
+\else
+\echo PRODUCT_PUBLICATION_READ_DATABASE is required
+DO $missing$ BEGIN RAISE EXCEPTION 'PUBLICATION_BOOTSTRAP_INPUTS_REQUIRED' USING ERRCODE='22023'; END $missing$;
+\endif
+SELECT length(:'publication_read_login')>0 AND length(:'publication_read_password')>0
+   AND current_database()=:'publication_read_database' AS publication_setup_inputs_ok
+\gset
+\if :publication_setup_inputs_ok
+\else
+\echo Nonempty fresh credentials and the exact connected database are required
+DO $missing$ BEGIN RAISE EXCEPTION 'PUBLICATION_BOOTSTRAP_INPUTS_REQUIRED' USING ERRCODE='22023'; END $missing$;
+\endif
+BEGIN;
+DO $bootstrap$
+DECLARE role_row RECORD;
+BEGIN
+    SELECT * INTO role_row FROM pg_catalog.pg_roles WHERE rolname='firefly_product_definition_publication_read';
+    IF NOT FOUND THEN
+        CREATE ROLE firefly_product_definition_publication_read NOLOGIN NOINHERIT
+            NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOREPLICATION;
+    END IF;
+    SELECT * INTO role_row FROM pg_catalog.pg_roles WHERE rolname='firefly_product_definition_publication_read';
+    IF NOT FOUND OR role_row.rolcanlogin OR role_row.rolinherit OR role_row.rolsuper OR role_row.rolbypassrls
+       OR role_row.rolcreatedb OR role_row.rolcreaterole OR role_row.rolreplication
+       OR EXISTS (SELECT 1 FROM pg_catalog.pg_auth_members WHERE member=role_row.oid) THEN
+        RAISE EXCEPTION USING ERRCODE='42501', MESSAGE='EXACT_PUBLICATION_METADATA_ROLE_REQUIRED';
+    END IF;
+END
+$bootstrap$;
+GRANT USAGE ON SCHEMA public TO firefly_product_definition_publication_read;
+CREATE ROLE :"publication_read_login" LOGIN INHERIT NOSUPERUSER NOBYPASSRLS
+    NOCREATEDB NOCREATEROLE NOREPLICATION PASSWORD :'publication_read_password';
+GRANT firefly_product_definition_publication_read TO :"publication_read_login"
+    WITH INHERIT TRUE, SET FALSE, ADMIN FALSE;
+GRANT CONNECT ON DATABASE :"publication_read_database" TO :"publication_read_login";
+SELECT NOT pg_catalog.has_database_privilege(:'publication_read_login',current_database(),'CREATE,TEMPORARY')
+   AND NOT pg_catalog.has_schema_privilege(:'publication_read_login','public','CREATE')
+   AS publication_setup_defaults_bounded
+\gset
+\if :publication_setup_defaults_bounded
+\else
+\echo Existing database/schema PUBLIC defaults must already meet the reviewed bounded database contract
+DO $missing$ BEGIN RAISE EXCEPTION 'PUBLICATION_BOOTSTRAP_DEFAULTS_REQUIRED' USING ERRCODE='42501'; END $missing$;
+\endif
+COMMIT;
