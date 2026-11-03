@@ -44,6 +44,8 @@ public class OpenApiGenApplication {
                         "true",
                         "product.definitions.deposit.enabled",
                         "true",
+                        "product.definitions.debit-card.enabled",
+                        "true",
                         "product.definitions.insurance-quote-read.enabled",
                         "true",
                         "firefly.openapi.instant-scalar.enabled",

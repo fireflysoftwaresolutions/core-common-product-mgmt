@@ -114,7 +114,8 @@ final class DefinitionEnvelopeRules {
         unique(r.documents(), 1, 50, DocumentRequirement::code, "/common/requirements/documents");
         boolean contract = false;
         boolean opaqueDocuments=("INSURANCE".equals(c.businessArea()) && "TERM_PC_INSURANCE_V1".equals(c.profileCode()))
-                || ("BANKING".equals(c.businessArea()) && "DEPOSIT_ACCOUNT_V1".equals(c.profileCode()));
+                || ("BANKING".equals(c.businessArea()) && "DEPOSIT_ACCOUNT_V1".equals(c.profileCode()))
+                || ("BANKING".equals(c.businessArea()) && "DEBIT_CARD_V1".equals(c.profileCode()));
         for (var doc : r.documents()) {
             String path = "/common/requirements/documents";
             code(doc.documentType(), path + "/documentType");

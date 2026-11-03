@@ -56,7 +56,7 @@ public final class CardEnrollmentCapabilityRules {
                 || evidence.validUntilEpochMillis() <= now) {
             reason = Reason.EVIDENCE_NOT_CURRENT;
         } else {
-            // CARD is absent from the governed profile decoder and native admission contract.
+            // This pure supplied-evidence comparison cannot invoke a governed owner observation.
             reason = Reason.GOVERNED_CARD_UNSUPPORTED;
         }
         return assessment(request, selected, Capability.UNKNOWN, reason, now);

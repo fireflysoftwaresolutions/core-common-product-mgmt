@@ -23,6 +23,7 @@ import java.util.Objects;
 public enum GovernedDefinitionProfile {
     ACCOUNT_TARIFF("BANKING","ACCOUNT_TARIFF_V1","product-definition-human-staff-v1"),
     DEPOSIT_ACCOUNT("BANKING","DEPOSIT_ACCOUNT_V1","product-definition-deposit-staff-v1"),
+    DEBIT_CARD("BANKING","DEBIT_CARD_V1","product-definition-debit-card-staff-v1"),
     TERM_PC_INSURANCE("INSURANCE","TERM_PC_INSURANCE_V1","product-definition-term-pc-staff-v1");
     private final String businessArea,profileCode,policyProfile;
     GovernedDefinitionProfile(String businessArea,String profileCode,String policyProfile){this.businessArea=businessArea;this.profileCode=profileCode;this.policyProfile=policyProfile;}

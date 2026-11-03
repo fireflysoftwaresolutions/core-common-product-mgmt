@@ -191,6 +191,16 @@ class ProductDefinitionDatabaseTest {
     }
 
     @Test
+    void debitCardLifecyclePublishesOnlyItsExactProfileWithIndependentChecker() throws Exception {
+        try (var connection = owner()) {
+            DebitCardNativeAssertions.lifecycle(new ProductDefinitionCommandDatabaseFixture.Settings("127.0.0.1",
+                    postgres.getMappedPort(5432), postgres.getDatabaseName(),
+                    "definition_reader", READER_PASSWORD, "definition_commands", COMMAND_PASSWORD),
+                    category(), connection);
+        }
+    }
+
+    @Test
     void nativeAggregateHasRealDurableTablesAndDefaultDenyRls() throws Exception {
         var observed = new TreeSet<String>();
         try (var c = owner();

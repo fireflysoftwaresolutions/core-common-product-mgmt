@@ -12,6 +12,8 @@ import org.springframework.boot.env.YamlPropertySourceLoader;
 /** Actual Spring classpath discovery only; no Flyway installation or native catalogue is implied. */
 class ProductDocumentReferenceMigrationDiscoveryTest {
     private static final Map<String,String> PUBLISHED=Map.ofEntries(
+        Map.entry("V22__Governed_term_pc_purpose_read.sql","73dc0e5b49aebb3ce0dbb6d4a52a6fb8b7cdfaa382284d98566d424b5f79ccf7"),
+        Map.entry("V26__Governed_debit_card_definition.sql","516af670ffe2d99bf8286f7baed355231f12ff9f9f90c4af4be670103048dbbf"),
         Map.entry("V10__Create_product_configuration_table.sql","faa5d34930345c37a83def5d67b3eb86009b9c87d1ac0d82deb1d7154c3988ad"),
         Map.entry("V11__Add_tenant_id_to_product.sql","529b3ade75f4cff8425d62aa15c9cd878daf65d872f8985c7060f5031ada5e58"),
         Map.entry("V12__Seed_Demo_Lending_Products_Configuration.sql","2fc88cbed86601728da493d2723209d371f16e971bba87d49aed35b788fb0cc2"),
@@ -58,7 +60,8 @@ class ProductDocumentReferenceMigrationDiscoveryTest {
             var file=root.resolve("ops/database/purpose-activation").resolve(entry.getKey());
             assertTrue(Files.isRegularFile(file),"The staged source migration must remain available outside runtime discovery");
             assertEquals(entry.getValue(),digest(Files.readAllBytes(file)));
-            assertEquals(0,new PathMatchingResourcePatternResolver().getResources("classpath*:db/migration/"+entry.getKey()).length);
+            assertEquals(PUBLISHED.containsKey(entry.getKey()) ? 1 : 0,
+                    new PathMatchingResourcePatternResolver().getResources("classpath*:db/migration/"+entry.getKey()).length);
         }
     }
 }

@@ -133,10 +133,11 @@ public final class DefinitionContracts {
                 AccountTariffTerms.class,
                 DepositAccountTerms.class,
                 FixedRateInstallmentLoanTerms.class,
-                TermPcInsuranceTerms.class
+                TermPcInsuranceTerms.class,
+                DebitCardTerms.class
             })
     public sealed interface ProfileTerms
-            permits AccountTariffTerms, DepositAccountTerms, FixedRateInstallmentLoanTerms, TermPcInsuranceTerms {}
+            permits AccountTariffTerms, DepositAccountTerms, FixedRateInstallmentLoanTerms, TermPcInsuranceTerms, DebitCardTerms {}
 
     public record ProductDefinition(Common common, ProfileTerms terms) {}
 

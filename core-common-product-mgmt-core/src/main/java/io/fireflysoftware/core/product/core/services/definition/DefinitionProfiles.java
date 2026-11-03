@@ -49,6 +49,12 @@ public final class DefinitionProfiles {
                 DepositAccountRules.validate(t, common);
                 terms = t;
             }
+            case "DEBIT_CARD_V1" -> {
+                require("BANKING".equals(common.businessArea()), "/common/businessArea");
+                var t = DefinitionCanonical.read(node.get("terms"), DebitCardTerms.class);
+                DebitCardRules.validate(t, common);
+                terms = t;
+            }
             case "FIXED_RATE_INSTALLMENT_LOAN_V1" -> {
                 require("LENDING".equals(common.businessArea()), "/common/businessArea");
                 var t =
