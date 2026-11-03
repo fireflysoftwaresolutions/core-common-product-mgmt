@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("openapi-gen")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@SpringBootTest(classes=OpenApiGenApplication.class,webEnvironment=SpringBootTest.WebEnvironment.MOCK,properties={"spring.main.web-application-type=reactive","springdoc.api-docs.enabled=true","springdoc.api-docs.version=OPENAPI_3_0","firefly.openapi.instant-scalar.enabled=true","product.definitions.commands.enabled=true","product.definitions.publication-read.enabled=true","product.definitions.term-pc.enabled=true","product.definitions.deposit.enabled=true","product.definitions.debit-card.enabled=true","product.definitions.insurance-quote-read.enabled=true"})
+@SpringBootTest(classes=OpenApiGenApplication.class,webEnvironment=SpringBootTest.WebEnvironment.MOCK,properties={"spring.main.web-application-type=reactive","springdoc.api-docs.enabled=true","springdoc.api-docs.version=OPENAPI_3_0","firefly.openapi.instant-scalar.enabled=true","product.definitions.commands.enabled=true","product.definitions.publication-read.enabled=true","product.definitions.term-pc.enabled=true","product.definitions.deposit.enabled=true","product.definitions.debit-card.enabled=true","product.definitions.insurance-quote-read.enabled=true","product.definitions.debit-card-read.enabled=true"})
 class InsuranceQuoteCanonicalProducerTest {
     @Autowired ApplicationContext context;
     record Operation(String path,String verb,String id) {}
@@ -32,6 +32,7 @@ class InsuranceQuoteCanonicalProducerTest {
         expected.add(new Operation(prefix+"/staff-cost/debit-card/current","get","readCurrentDebitCardDefinitionCost"));
         expected.add(new Operation(prefix+"/staff-review/debit-card/selection/current","get","readCurrentDebitCardDefinitionSelection"));
         expected.add(new Operation(prefix+"/staff-review/debit-card/selections/{submissionId}","get","readDebitCardDefinitionSelection"));
+        expected.add(new Operation(prefix+"/debit-card-configurations/{productId}/revisions/{revisionId}/publications/{publicationId}","get","observeCurrentDebitCardDefinition"));
         assertEquals(expected,actual);assertEquals(actual.size(),actual.stream().map(Operation::id).distinct().count());
     }
     void schema(JsonNode doc){

@@ -48,6 +48,8 @@ public class OpenApiGenApplication {
                         "true",
                         "product.definitions.insurance-quote-read.enabled",
                         "true",
+                        "product.definitions.debit-card-read.enabled",
+                        "true",
                         "firefly.openapi.instant-scalar.enabled",
                         "true"));
         application.run(args);

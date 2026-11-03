@@ -42,6 +42,8 @@ final class ProductPublicationMigrationFixture {
                     + " NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOREPLICATION");
             statement.execute("CREATE ROLE firefly_product_definition_insurance_quote_read NOLOGIN NOINHERIT"
                     + " NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOREPLICATION");
+            statement.execute("CREATE ROLE firefly_product_definition_debit_card_read NOLOGIN NOINHERIT"
+                    + " NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE NOREPLICATION");
             statement.execute(transaction("prepare-publication-metadata-owners.sql.template"));
             String bootstrap = transaction("bootstrap-publication-installer.sql.template");
             int assertion = bootstrap.indexOf("\nSELECT NOT pg_catalog.has_database_privilege");

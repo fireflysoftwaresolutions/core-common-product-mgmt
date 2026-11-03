@@ -201,6 +201,17 @@ class ProductDefinitionDatabaseTest {
     }
 
     @Test
+    void debitPurposeUsesRestrictedMappedReadAndPreservesPhysicalGraph() throws Exception {
+        try (var connection = owner()) {
+            var settings = new ProductDefinitionCommandDatabaseFixture.Settings("127.0.0.1",
+                    postgres.getMappedPort(5432), postgres.getDatabaseName(),
+                    "definition_reader", READER_PASSWORD, "definition_commands", COMMAND_PASSWORD);
+            var scope = DebitCardNativeAssertions.lifecycle(settings, category(), connection);
+            DebitCardPurposeNativeAssertions.read(settings, connection, scope);
+        }
+    }
+
+    @Test
     void nativeAggregateHasRealDurableTablesAndDefaultDenyRls() throws Exception {
         var observed = new TreeSet<String>();
         try (var c = owner();

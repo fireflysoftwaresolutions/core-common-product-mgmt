@@ -12,6 +12,7 @@ import org.springframework.boot.env.YamlPropertySourceLoader;
 /** Actual Spring classpath discovery only; no Flyway installation or native catalogue is implied. */
 class ProductDocumentReferenceMigrationDiscoveryTest {
     private static final Map<String,String> PUBLISHED=Map.ofEntries(
+        Map.entry("V27__Current_debit_card_configuration_read.sql","739dd04ba54b2c7c74b7ae047f78aa349126c8dfe55c0903b06e75abcf4a5882"),
         Map.entry("V22__Governed_term_pc_purpose_read.sql","73dc0e5b49aebb3ce0dbb6d4a52a6fb8b7cdfaa382284d98566d424b5f79ccf7"),
         Map.entry("V26__Governed_debit_card_definition.sql","516af670ffe2d99bf8286f7baed355231f12ff9f9f90c4af4be670103048dbbf"),
         Map.entry("V10__Create_product_configuration_table.sql","faa5d34930345c37a83def5d67b3eb86009b9c87d1ac0d82deb1d7154c3988ad"),

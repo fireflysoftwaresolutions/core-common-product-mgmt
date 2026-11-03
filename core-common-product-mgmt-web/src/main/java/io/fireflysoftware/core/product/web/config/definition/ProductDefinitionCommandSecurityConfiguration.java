@@ -56,7 +56,8 @@ public class ProductDefinitionCommandSecurityConfiguration {
                                 "/api/v1/tenants/*/product-definitions/*/staff-review/**",
                                 "/api/v1/tenants/*/product-definitions/*/staff-cost/**",
                                 "/api/v1/tenants/*/product-definitions/*/staff-publication/**",
-                                "/api/v1/tenants/*/product-definitions/*/insurance-quote-configurations/**"))
+                                "/api/v1/tenants/*/product-definitions/*/insurance-quote-configurations/**",
+                                "/api/v1/tenants/*/product-definitions/*/debit-card-configurations/**"))
                 .addFilterAt(
                         (exchange, chain) -> {
                             exchange.getResponse()

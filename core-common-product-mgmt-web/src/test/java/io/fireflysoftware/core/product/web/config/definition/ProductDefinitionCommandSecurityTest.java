@@ -289,4 +289,18 @@ class ProductDefinitionCommandSecurityTest {
                 .valueMatches("Cache-Control", ".*no-store.*");
         assertThat(decisions.get()).isZero();
     }
+    @Test
+    void currentDebitPurposeRouteUsesSignedChainBeforeLegacyFallback() throws Exception {
+        var client = client(commands());
+        String current = "/api/v1/tenants/" + tenant + "/product-definitions/" + root
+                + "/debit-card-configurations/" + UUID.randomUUID() + "/revisions/"
+                + UUID.randomUUID() + "/publications/" + UUID.randomUUID();
+        client.get().uri(current).exchange().expectStatus().isUnauthorized()
+                .expectHeader().valueMatches("Cache-Control", ".*no-store.*");
+        assertThat(decodes.get()).isZero();
+        client.get().uri(current).headers(headers -> headers.setBearerAuth("invalid"))
+                .exchange().expectStatus().isUnauthorized();
+        assertThat(decodes.get()).isEqualTo(1);
+        assertThat(decisions.get()).isZero();
+    }
 }

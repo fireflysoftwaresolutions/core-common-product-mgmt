@@ -14,7 +14,7 @@ final class DebitCardNativeAssertions {
     private static final Duration WAIT = Duration.ofSeconds(10);
     private DebitCardNativeAssertions() {}
 
-    static void lifecycle(ProductDefinitionCommandDatabaseFixture.Settings settings,
+    static io.fireflysoftware.core.product.interfaces.dtos.definition.DebitCardPurposeContracts.Scope lifecycle(ProductDefinitionCommandDatabaseFixture.Settings settings,
             UUID category, Connection owner) throws Exception {
         UUID tenant = UUID.randomUUID(), root = UUID.randomUUID();
         var create = DebitCardLifecycleProfileTest.body(CREATE_DRAFT);
@@ -76,6 +76,13 @@ final class DebitCardNativeAssertions {
                     }
                 }
                 assertThat(rows).isEqualTo(4);
+            }
+            try (var query = owner.prepareStatement("SELECT product_id FROM public.product_definition_root WHERE tenant_id=? AND root_id=?")) {
+                query.setObject(1, tenant); query.setObject(2, root);
+                try (var row = query.executeQuery()) {
+                    assertThat(row.next()).isTrue(); var product = row.getObject(1, UUID.class); assertThat(row.next()).isFalse();
+                    return new io.fireflysoftware.core.product.interfaces.dtos.definition.DebitCardPurposeContracts.Scope(tenant, root, product, published.revisionId(), published.publicationId());
+                }
             }
         }
     }

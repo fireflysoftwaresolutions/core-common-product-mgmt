@@ -45,3 +45,5 @@ The native application store, same-connection authorization context, current ten
 Customer simulation, accepted offers, contracts, account/card origination, lending, policy issuance, and financial accounting each need their own current authority and retained owner outcomes. Missing integration must be reported explicitly; it cannot become a synthetic approval.
 
 Read-only serving for retained account-tariff metadata is described in [governed definition reads](governed-product-definition-reads.md). It does not create the authorized lifecycle or operational admission described above.
+
+The opt-in [current debit-card configuration read](debit-card-current-purpose.md) describes its exact Product metadata, current document/currency reference checks, and separate applicant and issuer prerequisites.
